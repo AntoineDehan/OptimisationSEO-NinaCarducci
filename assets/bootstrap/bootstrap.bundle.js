@@ -2,5029 +2,2743 @@
  * Bootstrap v5.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
-(function (global, factory) {
-  typeof exports === "object" && typeof module !== "undefined"
-    ? (module.exports = factory())
-    : typeof define === "function" && define.amd
-    ? define(factory)
-    : ((global =
-        typeof globalThis !== "undefined" ? globalThis : global || self),
-      (global.bootstrap = factory()));
+ */ !(function (e, t) {
+  "object" == typeof exports && "undefined" != typeof module
+    ? (module.exports = t())
+    : "function" == typeof define && define.amd
+    ? define(t)
+    : ((e =
+        "undefined" != typeof globalThis ? globalThis : e || self).bootstrap =
+        t());
 })(this, function () {
   "use strict";
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  const MAX_UID = 1000000;
-  const MILLISECONDS_MULTIPLIER = 1000;
-  const TRANSITION_END = "transitionend"; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
-
-  const toType = (obj) => {
-    if (obj === null || obj === undefined) {
-      return `${obj}`;
-    }
-
-    return {}.toString
-      .call(obj)
-      .match(/\s([a-z]+)/i)[1]
-      .toLowerCase();
-  };
-  /**
-   * --------------------------------------------------------------------------
-   * Public Util Api
-   * --------------------------------------------------------------------------
-   */
-
-  const getUID = (prefix) => {
-    do {
-      prefix += Math.floor(Math.random() * MAX_UID);
-    } while (document.getElementById(prefix));
-
-    return prefix;
-  };
-
-  const getSelector = (element) => {
-    let selector = element.getAttribute("data-bs-target");
-
-    if (!selector || selector === "#") {
-      let hrefAttr = element.getAttribute("href"); // The only valid content that could double as a selector are IDs or classes,
-      // so everything starting with `#` or `.`. If a "real" URL is used as the selector,
-      // `document.querySelector` will rightfully complain it is invalid.
-      // See https://github.com/twbs/bootstrap/issues/32273
-
-      if (!hrefAttr || (!hrefAttr.includes("#") && !hrefAttr.startsWith("."))) {
-        return null;
-      } // Just in case some CMS puts out a full URL with the anchor appended
-
-      if (hrefAttr.includes("#") && !hrefAttr.startsWith("#")) {
-        hrefAttr = `#${hrefAttr.split("#")[1]}`;
+  let e = "transitionend",
+    t = (e) =>
+      null == e
+        ? `${e}`
+        : {}.toString
+            .call(e)
+            .match(/\s([a-z]+)/i)[1]
+            .toLowerCase(),
+    i = (e) => {
+      let t = e.getAttribute("data-bs-target");
+      if (!t || "#" === t) {
+        let i = e.getAttribute("href");
+        if (!i || (!i.includes("#") && !i.startsWith("."))) return null;
+        i.includes("#") && !i.startsWith("#") && (i = `#${i.split("#")[1]}`),
+          (t = i && "#" !== i ? i.trim() : null);
       }
-
-      selector = hrefAttr && hrefAttr !== "#" ? hrefAttr.trim() : null;
-    }
-
-    return selector;
-  };
-
-  const getSelectorFromElement = (element) => {
-    const selector = getSelector(element);
-
-    if (selector) {
-      return document.querySelector(selector) ? selector : null;
-    }
-
-    return null;
-  };
-
-  const getElementFromSelector = (element) => {
-    const selector = getSelector(element);
-    return selector ? document.querySelector(selector) : null;
-  };
-
-  const getTransitionDurationFromElement = (element) => {
-    if (!element) {
-      return 0;
-    } // Get transition-duration of the element
-
-    let { transitionDuration, transitionDelay } =
-      window.getComputedStyle(element);
-    const floatTransitionDuration = Number.parseFloat(transitionDuration);
-    const floatTransitionDelay = Number.parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
-
-    if (!floatTransitionDuration && !floatTransitionDelay) {
-      return 0;
-    } // If multiple durations are defined, take the first
-
-    transitionDuration = transitionDuration.split(",")[0];
-    transitionDelay = transitionDelay.split(",")[0];
-    return (
-      (Number.parseFloat(transitionDuration) +
-        Number.parseFloat(transitionDelay)) *
-      MILLISECONDS_MULTIPLIER
-    );
-  };
-
-  const triggerTransitionEnd = (element) => {
-    element.dispatchEvent(new Event(TRANSITION_END));
-  };
-
-  const isElement$1 = (obj) => {
-    if (!obj || typeof obj !== "object") {
-      return false;
-    }
-
-    if (typeof obj.jquery !== "undefined") {
-      obj = obj[0];
-    }
-
-    return typeof obj.nodeType !== "undefined";
-  };
-
-  const getElement = (obj) => {
-    if (isElement$1(obj)) {
-      // it's a jQuery object or a node element
-      return obj.jquery ? obj[0] : obj;
-    }
-
-    if (typeof obj === "string" && obj.length > 0) {
-      return document.querySelector(obj);
-    }
-
-    return null;
-  };
-
-  const typeCheckConfig = (componentName, config, configTypes) => {
-    Object.keys(configTypes).forEach((property) => {
-      const expectedTypes = configTypes[property];
-      const value = config[property];
-      const valueType = value && isElement$1(value) ? "element" : toType(value);
-
-      if (!new RegExp(expectedTypes).test(valueType)) {
-        throw new TypeError(
-          `${componentName.toUpperCase()}: Option "${property}" provided type "${valueType}" but expected type "${expectedTypes}".`
-        );
+      return t;
+    },
+    n = (e) => {
+      let t = i(e);
+      return t && document.querySelector(t) ? t : null;
+    },
+    s = (e) => {
+      let t = i(e);
+      return t ? document.querySelector(t) : null;
+    },
+    r = (e) => {
+      if (!e) return 0;
+      let { transitionDuration: t, transitionDelay: i } =
+          window.getComputedStyle(e),
+        n = Number.parseFloat(t),
+        s = Number.parseFloat(i);
+      return n || s
+        ? ((t = t.split(",")[0]),
+          (i = i.split(",")[0]),
+          (Number.parseFloat(t) + Number.parseFloat(i)) * 1e3)
+        : 0;
+    },
+    o = (t) => {
+      t.dispatchEvent(new Event(e));
+    },
+    a = (e) =>
+      !!e &&
+      "object" == typeof e &&
+      (void 0 !== e.jquery && (e = e[0]), void 0 !== e.nodeType),
+    l = (e) =>
+      a(e)
+        ? e.jquery
+          ? e[0]
+          : e
+        : "string" == typeof e && e.length > 0
+        ? document.querySelector(e)
+        : null,
+    c = (e, i, n) => {
+      Object.keys(n).forEach((s) => {
+        let r = n[s],
+          o = i[s],
+          l = o && a(o) ? "element" : t(o);
+        if (!RegExp(r).test(l))
+          throw TypeError(
+            `${e.toUpperCase()}: Option "${s}" provided type "${l}" but expected type "${r}".`
+          );
+      });
+    },
+    f = (e) =>
+      !!a(e) &&
+      0 !== e.getClientRects().length &&
+      "visible" === getComputedStyle(e).getPropertyValue("visibility"),
+    u = (e) =>
+      !!(
+        !e ||
+        e.nodeType !== Node.ELEMENT_NODE ||
+        e.classList.contains("disabled")
+      ) ||
+      (void 0 !== e.disabled
+        ? e.disabled
+        : e.hasAttribute("disabled") && "false" !== e.getAttribute("disabled")),
+    h = (e) => {
+      if (!document.documentElement.attachShadow) return null;
+      if ("function" == typeof e.getRootNode) {
+        let t = e.getRootNode();
+        return t instanceof ShadowRoot ? t : null;
       }
-    });
-  };
-
-  const isVisible = (element) => {
-    if (!isElement$1(element) || element.getClientRects().length === 0) {
-      return false;
-    }
-
-    return (
-      getComputedStyle(element).getPropertyValue("visibility") === "visible"
-    );
-  };
-
-  const isDisabled = (element) => {
-    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
-      return true;
-    }
-
-    if (element.classList.contains("disabled")) {
-      return true;
-    }
-
-    if (typeof element.disabled !== "undefined") {
-      return element.disabled;
-    }
-
-    return (
-      element.hasAttribute("disabled") &&
-      element.getAttribute("disabled") !== "false"
-    );
-  };
-
-  const findShadowRoot = (element) => {
-    if (!document.documentElement.attachShadow) {
-      return null;
-    } // Can find the shadow root otherwise it'll return the document
-
-    if (typeof element.getRootNode === "function") {
-      const root = element.getRootNode();
-      return root instanceof ShadowRoot ? root : null;
-    }
-
-    if (element instanceof ShadowRoot) {
-      return element;
-    } // when we don't find a shadow root
-
-    if (!element.parentNode) {
-      return null;
-    }
-
-    return findShadowRoot(element.parentNode);
-  };
-
-  const noop = () => {};
-  /**
-   * Trick to restart an element's animation
-   *
-   * @param {HTMLElement} element
-   * @return void
-   *
-   * @see https://www.charistheo.io/blog/2021/02/restart-a-css-animation-with-javascript/#restarting-a-css-animation
-   */
-
-  const reflow = (element) => {
-    // eslint-disable-next-line no-unused-expressions
-    element.offsetHeight;
-  };
-
-  const getjQuery = () => {
-    const { jQuery } = window;
-
-    if (jQuery && !document.body.hasAttribute("data-bs-no-jquery")) {
-      return jQuery;
-    }
-
-    return null;
-  };
-
-  const DOMContentLoadedCallbacks = [];
-
-  const onDOMContentLoaded = (callback) => {
-    if (document.readyState === "loading") {
-      // add listener on the first call when the document is in loading state
-      if (!DOMContentLoadedCallbacks.length) {
-        document.addEventListener("DOMContentLoaded", () => {
-          DOMContentLoadedCallbacks.forEach((callback) => callback());
-        });
-      }
-
-      DOMContentLoadedCallbacks.push(callback);
-    } else {
-      callback();
-    }
-  };
-
-  const isRTL = () => document.documentElement.dir === "rtl";
-
-  const defineJQueryPlugin = (plugin) => {
-    onDOMContentLoaded(() => {
-      const $ = getjQuery();
-      /* istanbul ignore if */
-
-      if ($) {
-        const name = plugin.NAME;
-        const JQUERY_NO_CONFLICT = $.fn[name];
-        $.fn[name] = plugin.jQueryInterface;
-        $.fn[name].Constructor = plugin;
-
-        $.fn[name].noConflict = () => {
-          $.fn[name] = JQUERY_NO_CONFLICT;
-          return plugin.jQueryInterface;
-        };
-      }
-    });
-  };
-
-  const execute = (callback) => {
-    if (typeof callback === "function") {
-      callback();
-    }
-  };
-
-  const executeAfterTransition = (
-    callback,
-    transitionElement,
-    waitForTransition = true
-  ) => {
-    if (!waitForTransition) {
-      execute(callback);
-      return;
-    }
-
-    const durationPadding = 5;
-    const emulatedDuration =
-      getTransitionDurationFromElement(transitionElement) + durationPadding;
-    let called = false;
-
-    const handler = ({ target }) => {
-      if (target !== transitionElement) {
-        return;
-      }
-
-      called = true;
-      transitionElement.removeEventListener(TRANSITION_END, handler);
-      execute(callback);
-    };
-
-    transitionElement.addEventListener(TRANSITION_END, handler);
-    setTimeout(() => {
-      if (!called) {
-        triggerTransitionEnd(transitionElement);
-      }
-    }, emulatedDuration);
-  };
-  /**
-   * Return the previous/next element of a list.
-   *
-   * @param {array} list    The list of elements
-   * @param activeElement   The active element
-   * @param shouldGetNext   Choose to get next or previous element
-   * @param isCycleAllowed
-   * @return {Element|elem} The proper element
-   */
-
-  const getNextActiveElement = (
-    list,
-    activeElement,
-    shouldGetNext,
-    isCycleAllowed
-  ) => {
-    let index = list.indexOf(activeElement); // if the element does not exist in the list return an element depending on the direction and if cycle is allowed
-
-    if (index === -1) {
-      return list[!shouldGetNext && isCycleAllowed ? list.length - 1 : 0];
-    }
-
-    const listLength = list.length;
-    index += shouldGetNext ? 1 : -1;
-
-    if (isCycleAllowed) {
-      index = (index + listLength) % listLength;
-    }
-
-    return list[Math.max(0, Math.min(index, listLength - 1))];
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/event-handler.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const namespaceRegex = /[^.]*(?=\..*)\.|.*/;
-  const stripNameRegex = /\..*/;
-  const stripUidRegex = /::\d+$/;
-  const eventRegistry = {}; // Events storage
-
-  let uidEvent = 1;
-  const customEvents = {
-    mouseenter: "mouseover",
-    mouseleave: "mouseout",
-  };
-  const customEventsRegex = /^(mouseenter|mouseleave)/i;
-  const nativeEvents = new Set([
-    "click",
-    "dblclick",
-    "mouseup",
-    "mousedown",
-    "contextmenu",
-    "mousewheel",
-    "DOMMouseScroll",
-    "mouseover",
-    "mouseout",
-    "mousemove",
-    "selectstart",
-    "selectend",
-    "keydown",
-    "keypress",
-    "keyup",
-    "orientationchange",
-    "touchstart",
-    "touchmove",
-    "touchend",
-    "touchcancel",
-    "pointerdown",
-    "pointermove",
-    "pointerup",
-    "pointerleave",
-    "pointercancel",
-    "gesturestart",
-    "gesturechange",
-    "gestureend",
-    "focus",
-    "blur",
-    "change",
-    "reset",
-    "select",
-    "submit",
-    "focusin",
-    "focusout",
-    "load",
-    "unload",
-    "beforeunload",
-    "resize",
-    "move",
-    "DOMContentLoaded",
-    "readystatechange",
-    "error",
-    "abort",
-    "scroll",
-  ]);
-  /**
-   * ------------------------------------------------------------------------
-   * Private methods
-   * ------------------------------------------------------------------------
-   */
-
-  function getUidEvent(element, uid) {
-    return (uid && `${uid}::${uidEvent++}`) || element.uidEvent || uidEvent++;
-  }
-
-  function getEvent(element) {
-    const uid = getUidEvent(element);
-    element.uidEvent = uid;
-    eventRegistry[uid] = eventRegistry[uid] || {};
-    return eventRegistry[uid];
-  }
-
-  function bootstrapHandler(element, fn) {
-    return function handler(event) {
-      event.delegateTarget = element;
-
-      if (handler.oneOff) {
-        EventHandler.off(element, event.type, fn);
-      }
-
-      return fn.apply(element, [event]);
-    };
-  }
-
-  function bootstrapDelegationHandler(element, selector, fn) {
-    return function handler(event) {
-      const domElements = element.querySelectorAll(selector);
-
-      for (
-        let { target } = event;
-        target && target !== this;
-        target = target.parentNode
-      ) {
-        for (let i = domElements.length; i--; ) {
-          if (domElements[i] === target) {
-            event.delegateTarget = target;
-
-            if (handler.oneOff) {
-              EventHandler.off(element, event.type, selector, fn);
-            }
-
-            return fn.apply(target, [event]);
-          }
+      return e instanceof ShadowRoot
+        ? e
+        : e.parentNode
+        ? h(e.parentNode)
+        : null;
+    },
+    d = (e) => {
+      e.offsetHeight;
+    },
+    p = () => {
+      let { jQuery: e } = window;
+      return e && !document.body.hasAttribute("data-bs-no-jquery") ? e : null;
+    },
+    m = [],
+    g = (e) => {
+      "loading" === document.readyState
+        ? (m.length ||
+            document.addEventListener("DOMContentLoaded", () => {
+              m.forEach((e) => e());
+            }),
+          m.push(e))
+        : e();
+    },
+    v = () => "rtl" === document.documentElement.dir,
+    b = (e) => {
+      g(() => {
+        let t = p();
+        if (t) {
+          let i = e.NAME,
+            n = t.fn[i];
+          (t.fn[i] = e.jQueryInterface),
+            (t.fn[i].Constructor = e),
+            (t.fn[i].noConflict = () => ((t.fn[i] = n), e.jQueryInterface));
         }
-      } // To please ESLint
-
-      return null;
-    };
-  }
-
-  function findHandler(events, handler, delegationSelector = null) {
-    const uidEventList = Object.keys(events);
-
-    for (let i = 0, len = uidEventList.length; i < len; i++) {
-      const event = events[uidEventList[i]];
-
-      if (
-        event.originalHandler === handler &&
-        event.delegationSelector === delegationSelector
-      ) {
-        return event;
-      }
-    }
-
-    return null;
-  }
-
-  function normalizeParams(originalTypeEvent, handler, delegationFn) {
-    const delegation = typeof handler === "string";
-    const originalHandler = delegation ? delegationFn : handler;
-    let typeEvent = getTypeEvent(originalTypeEvent);
-    const isNative = nativeEvents.has(typeEvent);
-
-    if (!isNative) {
-      typeEvent = originalTypeEvent;
-    }
-
-    return [delegation, originalHandler, typeEvent];
-  }
-
-  function addHandler(
-    element,
-    originalTypeEvent,
-    handler,
-    delegationFn,
-    oneOff
-  ) {
-    if (typeof originalTypeEvent !== "string" || !element) {
-      return;
-    }
-
-    if (!handler) {
-      handler = delegationFn;
-      delegationFn = null;
-    } // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
-    // this prevents the handler from being dispatched the same way as mouseover or mouseout does
-
-    if (customEventsRegex.test(originalTypeEvent)) {
-      const wrapFn = (fn) => {
-        return function (event) {
-          if (
-            !event.relatedTarget ||
-            (event.relatedTarget !== event.delegateTarget &&
-              !event.delegateTarget.contains(event.relatedTarget))
-          ) {
-            return fn.call(this, event);
-          }
-        };
-      };
-
-      if (delegationFn) {
-        delegationFn = wrapFn(delegationFn);
-      } else {
-        handler = wrapFn(handler);
-      }
-    }
-
-    const [delegation, originalHandler, typeEvent] = normalizeParams(
-      originalTypeEvent,
-      handler,
-      delegationFn
-    );
-    const events = getEvent(element);
-    const handlers = events[typeEvent] || (events[typeEvent] = {});
-    const previousFn = findHandler(
-      handlers,
-      originalHandler,
-      delegation ? handler : null
-    );
-
-    if (previousFn) {
-      previousFn.oneOff = previousFn.oneOff && oneOff;
-      return;
-    }
-
-    const uid = getUidEvent(
-      originalHandler,
-      originalTypeEvent.replace(namespaceRegex, "")
-    );
-    const fn = delegation
-      ? bootstrapDelegationHandler(element, handler, delegationFn)
-      : bootstrapHandler(element, handler);
-    fn.delegationSelector = delegation ? handler : null;
-    fn.originalHandler = originalHandler;
-    fn.oneOff = oneOff;
-    fn.uidEvent = uid;
-    handlers[uid] = fn;
-    element.addEventListener(typeEvent, fn, delegation);
-  }
-
-  function removeHandler(
-    element,
-    events,
-    typeEvent,
-    handler,
-    delegationSelector
-  ) {
-    const fn = findHandler(events[typeEvent], handler, delegationSelector);
-
-    if (!fn) {
-      return;
-    }
-
-    element.removeEventListener(typeEvent, fn, Boolean(delegationSelector));
-    delete events[typeEvent][fn.uidEvent];
-  }
-
-  function removeNamespacedHandlers(element, events, typeEvent, namespace) {
-    const storeElementEvent = events[typeEvent] || {};
-    Object.keys(storeElementEvent).forEach((handlerKey) => {
-      if (handlerKey.includes(namespace)) {
-        const event = storeElementEvent[handlerKey];
-        removeHandler(
-          element,
-          events,
-          typeEvent,
-          event.originalHandler,
-          event.delegationSelector
-        );
-      }
-    });
-  }
-
-  function getTypeEvent(event) {
-    // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
-    event = event.replace(stripNameRegex, "");
-    return customEvents[event] || event;
-  }
-
-  const EventHandler = {
-    on(element, event, handler, delegationFn) {
-      addHandler(element, event, handler, delegationFn, false);
+      });
     },
-
-    one(element, event, handler, delegationFn) {
-      addHandler(element, event, handler, delegationFn, true);
+    y = (e) => {
+      "function" == typeof e && e();
     },
-
-    off(element, originalTypeEvent, handler, delegationFn) {
-      if (typeof originalTypeEvent !== "string" || !element) {
+    $ = (t, i, n = !0) => {
+      if (!n) {
+        y(t);
         return;
       }
-
-      const [delegation, originalHandler, typeEvent] = normalizeParams(
-        originalTypeEvent,
-        handler,
-        delegationFn
+      let s = r(i) + 5,
+        a = !1,
+        l = ({ target: n }) => {
+          n === i && ((a = !0), i.removeEventListener(e, l), y(t));
+        };
+      i.addEventListener(e, l),
+        setTimeout(() => {
+          a || o(i);
+        }, s);
+    },
+    E = (e, t, i, n) => {
+      let s = e.indexOf(t);
+      if (-1 === s) return e[!i && n ? e.length - 1 : 0];
+      let r = e.length;
+      return (
+        (s += i ? 1 : -1),
+        n && (s = (s + r) % r),
+        e[Math.max(0, Math.min(s, r - 1))]
       );
-      const inNamespace = typeEvent !== originalTypeEvent;
-      const events = getEvent(element);
-      const isNamespace = originalTypeEvent.startsWith(".");
-
-      if (typeof originalHandler !== "undefined") {
-        // Simplest case: handler is passed, remove that listener ONLY.
-        if (!events || !events[typeEvent]) {
+    },
+    w = /[^.]*(?=\..*)\.|.*/,
+    A = /\..*/,
+    x = /::\d+$/,
+    O = {},
+    L = 1,
+    k = { mouseenter: "mouseover", mouseleave: "mouseout" },
+    D = /^(mouseenter|mouseleave)/i,
+    T = new Set([
+      "click",
+      "dblclick",
+      "mouseup",
+      "mousedown",
+      "contextmenu",
+      "mousewheel",
+      "DOMMouseScroll",
+      "mouseover",
+      "mouseout",
+      "mousemove",
+      "selectstart",
+      "selectend",
+      "keydown",
+      "keypress",
+      "keyup",
+      "orientationchange",
+      "touchstart",
+      "touchmove",
+      "touchend",
+      "touchcancel",
+      "pointerdown",
+      "pointermove",
+      "pointerup",
+      "pointerleave",
+      "pointercancel",
+      "gesturestart",
+      "gesturechange",
+      "gestureend",
+      "focus",
+      "blur",
+      "change",
+      "reset",
+      "select",
+      "submit",
+      "focusin",
+      "focusout",
+      "load",
+      "unload",
+      "beforeunload",
+      "resize",
+      "move",
+      "DOMContentLoaded",
+      "readystatechange",
+      "error",
+      "abort",
+      "scroll",
+    ]);
+  function C(e, t) {
+    return (t && `${t}::${L++}`) || e.uidEvent || L++;
+  }
+  function I(e) {
+    let t = C(e);
+    return (e.uidEvent = t), (O[t] = O[t] || {}), O[t];
+  }
+  function _(e, t, i = null) {
+    let n = Object.keys(e);
+    for (let s = 0, r = n.length; s < r; s++) {
+      let o = e[n[s]];
+      if (o.originalHandler === t && o.delegationSelector === i) return o;
+    }
+    return null;
+  }
+  function N(e, t, i) {
+    let n = "string" == typeof t,
+      s = H(e),
+      r = T.has(s);
+    return r || (s = e), [n, n ? i : t, s];
+  }
+  function S(e, t, i, n, s) {
+    var r, o, a, l, c;
+    if ("string" != typeof t || !e) return;
+    if ((i || ((i = n), (n = null)), D.test(t))) {
+      let f = (e) =>
+        function (t) {
+          if (
+            !t.relatedTarget ||
+            (t.relatedTarget !== t.delegateTarget &&
+              !t.delegateTarget.contains(t.relatedTarget))
+          )
+            return e.call(this, t);
+        };
+      n ? (n = f(n)) : (i = f(i));
+    }
+    let [u, h, d] = N(t, i, n),
+      p = I(e),
+      m = p[d] || (p[d] = {}),
+      g = _(m, h, u ? i : null);
+    if (g) {
+      g.oneOff = g.oneOff && s;
+      return;
+    }
+    let v = C(h, t.replace(w, "")),
+      b = u
+        ? ((r = e),
+          (o = i),
+          (a = n),
+          function e(t) {
+            let i = r.querySelectorAll(o);
+            for (let { target: n } = t; n && n !== this; n = n.parentNode)
+              for (let s = i.length; s--; )
+                if (i[s] === n)
+                  return (
+                    (t.delegateTarget = n),
+                    e.oneOff && P.off(r, t.type, o, a),
+                    a.apply(n, [t])
+                  );
+            return null;
+          })
+        : ((l = e),
+          (c = i),
+          function e(t) {
+            return (
+              (t.delegateTarget = l),
+              e.oneOff && P.off(l, t.type, c),
+              c.apply(l, [t])
+            );
+          });
+    (b.delegationSelector = u ? i : null),
+      (b.originalHandler = h),
+      (b.oneOff = s),
+      (b.uidEvent = v),
+      (m[v] = b),
+      e.addEventListener(d, b, u);
+  }
+  function M(e, t, i, n, s) {
+    let r = _(t[i], n, s);
+    r && (e.removeEventListener(i, r, Boolean(s)), delete t[i][r.uidEvent]);
+  }
+  function H(e) {
+    return k[(e = e.replace(A, ""))] || e;
+  }
+  let P = {
+      on(e, t, i, n) {
+        S(e, t, i, n, !1);
+      },
+      one(e, t, i, n) {
+        S(e, t, i, n, !0);
+      },
+      off(e, t, i, n) {
+        if ("string" != typeof t || !e) return;
+        let [s, r, o] = N(t, i, n),
+          a = o !== t,
+          l = I(e),
+          c = t.startsWith(".");
+        if (void 0 !== r) {
+          if (!l || !l[o]) return;
+          M(e, l, o, r, s ? i : null);
           return;
         }
-
-        removeHandler(
-          element,
-          events,
-          typeEvent,
-          originalHandler,
-          delegation ? handler : null
-        );
-        return;
-      }
-
-      if (isNamespace) {
-        Object.keys(events).forEach((elementEvent) => {
-          removeNamespacedHandlers(
-            element,
-            events,
-            elementEvent,
-            originalTypeEvent.slice(1)
-          );
-        });
-      }
-
-      const storeElementEvent = events[typeEvent] || {};
-      Object.keys(storeElementEvent).forEach((keyHandlers) => {
-        const handlerKey = keyHandlers.replace(stripUidRegex, "");
-
-        if (!inNamespace || originalTypeEvent.includes(handlerKey)) {
-          const event = storeElementEvent[keyHandlers];
-          removeHandler(
-            element,
-            events,
-            typeEvent,
-            event.originalHandler,
-            event.delegationSelector
-          );
-        }
-      });
-    },
-
-    trigger(element, event, args) {
-      if (typeof event !== "string" || !element) {
-        return null;
-      }
-
-      const $ = getjQuery();
-      const typeEvent = getTypeEvent(event);
-      const inNamespace = event !== typeEvent;
-      const isNative = nativeEvents.has(typeEvent);
-      let jQueryEvent;
-      let bubbles = true;
-      let nativeDispatch = true;
-      let defaultPrevented = false;
-      let evt = null;
-
-      if (inNamespace && $) {
-        jQueryEvent = $.Event(event, args);
-        $(element).trigger(jQueryEvent);
-        bubbles = !jQueryEvent.isPropagationStopped();
-        nativeDispatch = !jQueryEvent.isImmediatePropagationStopped();
-        defaultPrevented = jQueryEvent.isDefaultPrevented();
-      }
-
-      if (isNative) {
-        evt = document.createEvent("HTMLEvents");
-        evt.initEvent(typeEvent, bubbles, true);
-      } else {
-        evt = new CustomEvent(event, {
-          bubbles,
-          cancelable: true,
-        });
-      } // merge custom information in our event
-
-      if (typeof args !== "undefined") {
-        Object.keys(args).forEach((key) => {
-          Object.defineProperty(evt, key, {
-            get() {
-              return args[key];
-            },
+        c &&
+          Object.keys(l).forEach((i) => {
+            !(function e(t, i, n, s) {
+              let r = i[n] || {};
+              Object.keys(r).forEach((e) => {
+                if (e.includes(s)) {
+                  let o = r[e];
+                  M(t, i, n, o.originalHandler, o.delegationSelector);
+                }
+              });
+            })(e, l, i, t.slice(1));
           });
+        let f = l[o] || {};
+        Object.keys(f).forEach((i) => {
+          let n = i.replace(x, "");
+          if (!a || t.includes(n)) {
+            let s = f[i];
+            M(e, l, o, s.originalHandler, s.delegationSelector);
+          }
         });
-      }
-
-      if (defaultPrevented) {
-        evt.preventDefault();
-      }
-
-      if (nativeDispatch) {
-        element.dispatchEvent(evt);
-      }
-
-      if (evt.defaultPrevented && typeof jQueryEvent !== "undefined") {
-        jQueryEvent.preventDefault();
-      }
-
-      return evt;
-    },
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/data.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-  const elementMap = new Map();
-  const Data = {
-    set(element, key, instance) {
-      if (!elementMap.has(element)) {
-        elementMap.set(element, new Map());
-      }
-
-      const instanceMap = elementMap.get(element); // make it clear we only want one instance per element
-      // can be removed later when multiple key/instances are fine to be used
-
-      if (!instanceMap.has(key) && instanceMap.size !== 0) {
-        // eslint-disable-next-line no-console
-        console.error(
-          `Bootstrap doesn't allow more than one instance per element. Bound instance: ${
-            Array.from(instanceMap.keys())[0]
-          }.`
+      },
+      trigger(e, t, i) {
+        if ("string" != typeof t || !e) return null;
+        let n = p(),
+          s = H(t),
+          r = T.has(s),
+          o,
+          a = !0,
+          l = !0,
+          c = !1,
+          f = null;
+        return (
+          t !== s &&
+            n &&
+            ((o = n.Event(t, i)),
+            n(e).trigger(o),
+            (a = !o.isPropagationStopped()),
+            (l = !o.isImmediatePropagationStopped()),
+            (c = o.isDefaultPrevented())),
+          r
+            ? (f = document.createEvent("HTMLEvents")).initEvent(s, a, !0)
+            : (f = new CustomEvent(t, { bubbles: a, cancelable: !0 })),
+          void 0 !== i &&
+            Object.keys(i).forEach((e) => {
+              Object.defineProperty(f, e, { get: () => i[e] });
+            }),
+          c && f.preventDefault(),
+          l && e.dispatchEvent(f),
+          f.defaultPrevented && void 0 !== o && o.preventDefault(),
+          f
         );
-        return;
-      }
-
-      instanceMap.set(key, instance);
+      },
     },
-
-    get(element, key) {
-      if (elementMap.has(element)) {
-        return elementMap.get(element).get(key) || null;
-      }
-
-      return null;
-    },
-
-    remove(element, key) {
-      if (!elementMap.has(element)) {
-        return;
-      }
-
-      const instanceMap = elementMap.get(element);
-      instanceMap.delete(key); // free up element references if there are no instances left for an element
-
-      if (instanceMap.size === 0) {
-        elementMap.delete(element);
-      }
-    },
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): base-component.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const VERSION = "5.1.3";
-
-  class BaseComponent {
-    constructor(element) {
-      element = getElement(element);
-
-      if (!element) {
-        return;
-      }
-
-      this._element = element;
-      Data.set(this._element, this.constructor.DATA_KEY, this);
+    W = new Map(),
+    R = {
+      set(e, t, i) {
+        W.has(e) || W.set(e, new Map());
+        let n = W.get(e);
+        if (!n.has(t) && 0 !== n.size) {
+          console.error(
+            `Bootstrap doesn't allow more than one instance per element. Bound instance: ${
+              Array.from(n.keys())[0]
+            }.`
+          );
+          return;
+        }
+        n.set(t, i);
+      },
+      get: (e, t) => (W.has(e) && W.get(e).get(t)) || null,
+      remove(e, t) {
+        if (!W.has(e)) return;
+        let i = W.get(e);
+        i.delete(t), 0 === i.size && W.delete(e);
+      },
+    };
+  class B {
+    constructor(e) {
+      if (!(e = l(e))) return;
+      (this._element = e),
+        R.set(this._element, this.constructor.DATA_KEY, this);
     }
-
     dispose() {
-      Data.remove(this._element, this.constructor.DATA_KEY);
-      EventHandler.off(this._element, this.constructor.EVENT_KEY);
-      Object.getOwnPropertyNames(this).forEach((propertyName) => {
-        this[propertyName] = null;
-      });
+      R.remove(this._element, this.constructor.DATA_KEY),
+        P.off(this._element, this.constructor.EVENT_KEY),
+        Object.getOwnPropertyNames(this).forEach((e) => {
+          this[e] = null;
+        });
     }
-
-    _queueCallback(callback, element, isAnimated = true) {
-      executeAfterTransition(callback, element, isAnimated);
+    _queueCallback(e, t, i = !0) {
+      $(e, t, i);
     }
-    /** Static */
-
-    static getInstance(element) {
-      return Data.get(getElement(element), this.DATA_KEY);
+    static getInstance(e) {
+      return R.get(l(e), this.DATA_KEY);
     }
-
-    static getOrCreateInstance(element, config = {}) {
+    static getOrCreateInstance(e, t = {}) {
       return (
-        this.getInstance(element) ||
-        new this(element, typeof config === "object" ? config : null)
+        this.getInstance(e) || new this(e, "object" == typeof t ? t : null)
       );
     }
-
     static get VERSION() {
-      return VERSION;
+      return "5.1.3";
     }
-
     static get NAME() {
-      throw new Error(
+      throw Error(
         'You have to implement the static method "NAME", for each component!'
       );
     }
-
     static get DATA_KEY() {
       return `bs.${this.NAME}`;
     }
-
     static get EVENT_KEY() {
       return `.${this.DATA_KEY}`;
     }
   }
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/component-functions.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-  const enableDismissTrigger = (component, method = "hide") => {
-    const clickEvent = `click.dismiss${component.EVENT_KEY}`;
-    const name = component.NAME;
-    EventHandler.on(
-      document,
-      clickEvent,
-      `[data-bs-dismiss="${name}"]`,
-      function (event) {
-        if (["A", "AREA"].includes(this.tagName)) {
-          event.preventDefault();
-        }
-
-        if (isDisabled(this)) {
-          return;
-        }
-
-        const target = getElementFromSelector(this) || this.closest(`.${name}`);
-        const instance = component.getOrCreateInstance(target); // Method argument is left, for Alert and only, as it doesn't implement the 'hide' method
-
-        instance[method]();
-      }
-    );
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): alert.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const NAME$d = "alert";
-  const DATA_KEY$c = "bs.alert";
-  const EVENT_KEY$c = `.${DATA_KEY$c}`;
-  const EVENT_CLOSE = `close${EVENT_KEY$c}`;
-  const EVENT_CLOSED = `closed${EVENT_KEY$c}`;
-  const CLASS_NAME_FADE$5 = "fade";
-  const CLASS_NAME_SHOW$8 = "show";
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
-
-  class Alert extends BaseComponent {
-    // Getters
-    static get NAME() {
-      return NAME$d;
-    } // Public
-
-    close() {
-      const closeEvent = EventHandler.trigger(this._element, EVENT_CLOSE);
-
-      if (closeEvent.defaultPrevented) {
-        return;
-      }
-
-      this._element.classList.remove(CLASS_NAME_SHOW$8);
-
-      const isAnimated = this._element.classList.contains(CLASS_NAME_FADE$5);
-
-      this._queueCallback(
-        () => this._destroyElement(),
-        this._element,
-        isAnimated
-      );
-    } // Private
-
-    _destroyElement() {
-      this._element.remove();
-
-      EventHandler.trigger(this._element, EVENT_CLOSED);
-      this.dispose();
-    } // Static
-
-    static jQueryInterface(config) {
-      return this.each(function () {
-        const data = Alert.getOrCreateInstance(this);
-
-        if (typeof config !== "string") {
-          return;
-        }
-
+  let j = (e, t = "hide") => {
+      let i = `click.dismiss${e.EVENT_KEY}`,
+        n = e.NAME;
+      P.on(document, i, `[data-bs-dismiss="${n}"]`, function (i) {
         if (
-          data[config] === undefined ||
-          config.startsWith("_") ||
-          config === "constructor"
-        ) {
-          throw new TypeError(`No method named "${config}"`);
+          (["A", "AREA"].includes(this.tagName) && i.preventDefault(), u(this))
+        )
+          return;
+        let r = s(this) || this.closest(`.${n}`),
+          o = e.getOrCreateInstance(r);
+        o[t]();
+      });
+    },
+    q = ".bs.alert",
+    V = `close${q}`,
+    X = `closed${q}`;
+  class F extends B {
+    static get NAME() {
+      return "alert";
+    }
+    close() {
+      let e = P.trigger(this._element, V);
+      if (e.defaultPrevented) return;
+      this._element.classList.remove("show");
+      let t = this._element.classList.contains("fade");
+      this._queueCallback(() => this._destroyElement(), this._element, t);
+    }
+    _destroyElement() {
+      this._element.remove(), P.trigger(this._element, X), this.dispose();
+    }
+    static jQueryInterface(e) {
+      return this.each(function () {
+        let t = F.getOrCreateInstance(this);
+        if ("string" == typeof e) {
+          if (void 0 === t[e] || e.startsWith("_") || "constructor" === e)
+            throw TypeError(`No method named "${e}"`);
+          t[e](this);
         }
-
-        data[config](this);
       });
     }
   }
-  /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
-   */
-
-  enableDismissTrigger(Alert, "close");
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Alert to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Alert);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): button.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const NAME$c = "button";
-  const DATA_KEY$b = "bs.button";
-  const EVENT_KEY$b = `.${DATA_KEY$b}`;
-  const DATA_API_KEY$7 = ".data-api";
-  const CLASS_NAME_ACTIVE$3 = "active";
-  const SELECTOR_DATA_TOGGLE$5 = '[data-bs-toggle="button"]';
-  const EVENT_CLICK_DATA_API$6 = `click${EVENT_KEY$b}${DATA_API_KEY$7}`;
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
-
-  class Button extends BaseComponent {
-    // Getters
+  j(F, "close"), b(F);
+  let K = '[data-bs-toggle="button"]',
+    z = "click.bs.button.data-api";
+  class Y extends B {
     static get NAME() {
-      return NAME$c;
-    } // Public
-
+      return "button";
+    }
     toggle() {
-      // Toggle class and sync the `aria-pressed` attribute with the return value of the `.toggle()` method
       this._element.setAttribute(
         "aria-pressed",
-        this._element.classList.toggle(CLASS_NAME_ACTIVE$3)
+        this._element.classList.toggle("active")
       );
-    } // Static
-
-    static jQueryInterface(config) {
+    }
+    static jQueryInterface(e) {
       return this.each(function () {
-        const data = Button.getOrCreateInstance(this);
-
-        if (config === "toggle") {
-          data[config]();
-        }
+        let t = Y.getOrCreateInstance(this);
+        "toggle" === e && t[e]();
       });
     }
   }
-  /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
-   */
-
-  EventHandler.on(
-    document,
-    EVENT_CLICK_DATA_API$6,
-    SELECTOR_DATA_TOGGLE$5,
-    (event) => {
-      event.preventDefault();
-      const button = event.target.closest(SELECTOR_DATA_TOGGLE$5);
-      const data = Button.getOrCreateInstance(button);
-      data.toggle();
-    }
-  );
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Button to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Button);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/manipulator.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  function normalizeData(val) {
-    if (val === "true") {
-      return true;
-    }
-
-    if (val === "false") {
-      return false;
-    }
-
-    if (val === Number(val).toString()) {
-      return Number(val);
-    }
-
-    if (val === "" || val === "null") {
-      return null;
-    }
-
-    return val;
+  function U(e) {
+    return (
+      "true" === e ||
+      ("false" !== e &&
+        (e === Number(e).toString()
+          ? Number(e)
+          : "" === e || "null" === e
+          ? null
+          : e))
+    );
   }
-
-  function normalizeDataKey(key) {
-    return key.replace(/[A-Z]/g, (chr) => `-${chr.toLowerCase()}`);
+  function Q(e) {
+    return e.replace(/[A-Z]/g, (e) => `-${e.toLowerCase()}`);
   }
-
-  const Manipulator = {
-    setDataAttribute(element, key, value) {
-      element.setAttribute(`data-bs-${normalizeDataKey(key)}`, value);
-    },
-
-    removeDataAttribute(element, key) {
-      element.removeAttribute(`data-bs-${normalizeDataKey(key)}`);
-    },
-
-    getDataAttributes(element) {
-      if (!element) {
-        return {};
-      }
-
-      const attributes = {};
-      Object.keys(element.dataset)
-        .filter((key) => key.startsWith("bs"))
-        .forEach((key) => {
-          let pureKey = key.replace(/^bs/, "");
-          pureKey =
-            pureKey.charAt(0).toLowerCase() + pureKey.slice(1, pureKey.length);
-          attributes[pureKey] = normalizeData(element.dataset[key]);
-        });
-      return attributes;
-    },
-
-    getDataAttribute(element, key) {
-      return normalizeData(
-        element.getAttribute(`data-bs-${normalizeDataKey(key)}`)
-      );
-    },
-
-    offset(element) {
-      const rect = element.getBoundingClientRect();
-      return {
-        top: rect.top + window.pageYOffset,
-        left: rect.left + window.pageXOffset,
-      };
-    },
-
-    position(element) {
-      return {
-        top: element.offsetTop,
-        left: element.offsetLeft,
-      };
-    },
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/selector-engine.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  const NODE_TEXT = 3;
-  const SelectorEngine = {
-    find(selector, element = document.documentElement) {
-      return [].concat(
-        ...Element.prototype.querySelectorAll.call(element, selector)
-      );
-    },
-
-    findOne(selector, element = document.documentElement) {
-      return Element.prototype.querySelector.call(element, selector);
-    },
-
-    children(element, selector) {
-      return []
-        .concat(...element.children)
-        .filter((child) => child.matches(selector));
-    },
-
-    parents(element, selector) {
-      const parents = [];
-      let ancestor = element.parentNode;
-
-      while (
-        ancestor &&
-        ancestor.nodeType === Node.ELEMENT_NODE &&
-        ancestor.nodeType !== NODE_TEXT
-      ) {
-        if (ancestor.matches(selector)) {
-          parents.push(ancestor);
-        }
-
-        ancestor = ancestor.parentNode;
-      }
-
-      return parents;
-    },
-
-    prev(element, selector) {
-      let previous = element.previousElementSibling;
-
-      while (previous) {
-        if (previous.matches(selector)) {
-          return [previous];
-        }
-
-        previous = previous.previousElementSibling;
-      }
-
-      return [];
-    },
-
-    next(element, selector) {
-      let next = element.nextElementSibling;
-
-      while (next) {
-        if (next.matches(selector)) {
-          return [next];
-        }
-
-        next = next.nextElementSibling;
-      }
-
-      return [];
-    },
-
-    focusableChildren(element) {
-      const focusables = [
-        "a",
-        "button",
-        "input",
-        "textarea",
-        "select",
-        "details",
-        "[tabindex]",
-        '[contenteditable="true"]',
-      ]
-        .map((selector) => `${selector}:not([tabindex^="-"])`)
-        .join(", ");
-      return this.find(focusables, element).filter(
-        (el) => !isDisabled(el) && isVisible(el)
-      );
-    },
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): carousel.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const NAME$b = "carousel";
-  const DATA_KEY$a = "bs.carousel";
-  const EVENT_KEY$a = `.${DATA_KEY$a}`;
-  const DATA_API_KEY$6 = ".data-api";
-  const ARROW_LEFT_KEY = "ArrowLeft";
-  const ARROW_RIGHT_KEY = "ArrowRight";
-  const TOUCHEVENT_COMPAT_WAIT = 500; // Time for mouse compat events to fire after touch
-
-  const SWIPE_THRESHOLD = 40;
-  const Default$a = {
-    interval: 5000,
-    keyboard: true,
-    slide: false,
-    pause: "hover",
-    wrap: true,
-    touch: true,
-  };
-  const DefaultType$a = {
-    interval: "(number|boolean)",
-    keyboard: "boolean",
-    slide: "(boolean|string)",
-    pause: "(string|boolean)",
-    wrap: "boolean",
-    touch: "boolean",
-  };
-  const ORDER_NEXT = "next";
-  const ORDER_PREV = "prev";
-  const DIRECTION_LEFT = "left";
-  const DIRECTION_RIGHT = "right";
-  const KEY_TO_DIRECTION = {
-    [ARROW_LEFT_KEY]: DIRECTION_RIGHT,
-    [ARROW_RIGHT_KEY]: DIRECTION_LEFT,
-  };
-  const EVENT_SLIDE = `slide${EVENT_KEY$a}`;
-  const EVENT_SLID = `slid${EVENT_KEY$a}`;
-  const EVENT_KEYDOWN = `keydown${EVENT_KEY$a}`;
-  const EVENT_MOUSEENTER = `mouseenter${EVENT_KEY$a}`;
-  const EVENT_MOUSELEAVE = `mouseleave${EVENT_KEY$a}`;
-  const EVENT_TOUCHSTART = `touchstart${EVENT_KEY$a}`;
-  const EVENT_TOUCHMOVE = `touchmove${EVENT_KEY$a}`;
-  const EVENT_TOUCHEND = `touchend${EVENT_KEY$a}`;
-  const EVENT_POINTERDOWN = `pointerdown${EVENT_KEY$a}`;
-  const EVENT_POINTERUP = `pointerup${EVENT_KEY$a}`;
-  const EVENT_DRAG_START = `dragstart${EVENT_KEY$a}`;
-  const EVENT_LOAD_DATA_API$2 = `load${EVENT_KEY$a}${DATA_API_KEY$6}`;
-  const EVENT_CLICK_DATA_API$5 = `click${EVENT_KEY$a}${DATA_API_KEY$6}`;
-  const CLASS_NAME_CAROUSEL = "carousel";
-  const CLASS_NAME_ACTIVE$2 = "active";
-  const CLASS_NAME_SLIDE = "slide";
-  const CLASS_NAME_END = "carousel-item-end";
-  const CLASS_NAME_START = "carousel-item-start";
-  const CLASS_NAME_NEXT = "carousel-item-next";
-  const CLASS_NAME_PREV = "carousel-item-prev";
-  const CLASS_NAME_POINTER_EVENT = "pointer-event";
-  const SELECTOR_ACTIVE$1 = ".active";
-  const SELECTOR_ACTIVE_ITEM = ".active.carousel-item";
-  const SELECTOR_ITEM = ".carousel-item";
-  const SELECTOR_ITEM_IMG = ".carousel-item img";
-  const SELECTOR_NEXT_PREV = ".carousel-item-next, .carousel-item-prev";
-  const SELECTOR_INDICATORS = ".carousel-indicators";
-  const SELECTOR_INDICATOR = "[data-bs-target]";
-  const SELECTOR_DATA_SLIDE = "[data-bs-slide], [data-bs-slide-to]";
-  const SELECTOR_DATA_RIDE = '[data-bs-ride="carousel"]';
-  const POINTER_TYPE_TOUCH = "touch";
-  const POINTER_TYPE_PEN = "pen";
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
-
-  class Carousel extends BaseComponent {
-    constructor(element, config) {
-      super(element);
-      this._items = null;
-      this._interval = null;
-      this._activeElement = null;
-      this._isPaused = false;
-      this._isSliding = false;
-      this.touchTimeout = null;
-      this.touchStartX = 0;
-      this.touchDeltaX = 0;
-      this._config = this._getConfig(config);
-      this._indicatorsElement = SelectorEngine.findOne(
-        SELECTOR_INDICATORS,
-        this._element
-      );
-      this._touchSupported =
-        "ontouchstart" in document.documentElement ||
-        navigator.maxTouchPoints > 0;
-      this._pointerEvent = Boolean(window.PointerEvent);
-
-      this._addEventListeners();
-    } // Getters
-
-    static get Default() {
-      return Default$a;
-    }
-
-    static get NAME() {
-      return NAME$b;
-    } // Public
-
-    next() {
-      this._slide(ORDER_NEXT);
-    }
-
-    nextWhenVisible() {
-      // Don't call next when the page isn't visible
-      // or the carousel or its parent isn't visible
-      if (!document.hidden && isVisible(this._element)) {
-        this.next();
-      }
-    }
-
-    prev() {
-      this._slide(ORDER_PREV);
-    }
-
-    pause(event) {
-      if (!event) {
-        this._isPaused = true;
-      }
-
-      if (SelectorEngine.findOne(SELECTOR_NEXT_PREV, this._element)) {
-        triggerTransitionEnd(this._element);
-        this.cycle(true);
-      }
-
-      clearInterval(this._interval);
-      this._interval = null;
-    }
-
-    cycle(event) {
-      if (!event) {
-        this._isPaused = false;
-      }
-
-      if (this._interval) {
-        clearInterval(this._interval);
-        this._interval = null;
-      }
-
-      if (this._config && this._config.interval && !this._isPaused) {
-        this._updateInterval();
-
-        this._interval = setInterval(
-          (document.visibilityState ? this.nextWhenVisible : this.next).bind(
-            this
-          ),
-          this._config.interval
-        );
-      }
-    }
-
-    to(index) {
-      this._activeElement = SelectorEngine.findOne(
-        SELECTOR_ACTIVE_ITEM,
-        this._element
-      );
-
-      const activeIndex = this._getItemIndex(this._activeElement);
-
-      if (index > this._items.length - 1 || index < 0) {
-        return;
-      }
-
-      if (this._isSliding) {
-        EventHandler.one(this._element, EVENT_SLID, () => this.to(index));
-        return;
-      }
-
-      if (activeIndex === index) {
-        this.pause();
-        this.cycle();
-        return;
-      }
-
-      const order = index > activeIndex ? ORDER_NEXT : ORDER_PREV;
-
-      this._slide(order, this._items[index]);
-    } // Private
-
-    _getConfig(config) {
-      config = {
-        ...Default$a,
-        ...Manipulator.getDataAttributes(this._element),
-        ...(typeof config === "object" ? config : {}),
-      };
-      typeCheckConfig(NAME$b, config, DefaultType$a);
-      return config;
-    }
-
-    _handleSwipe() {
-      const absDeltax = Math.abs(this.touchDeltaX);
-
-      if (absDeltax <= SWIPE_THRESHOLD) {
-        return;
-      }
-
-      const direction = absDeltax / this.touchDeltaX;
-      this.touchDeltaX = 0;
-
-      if (!direction) {
-        return;
-      }
-
-      this._slide(direction > 0 ? DIRECTION_RIGHT : DIRECTION_LEFT);
-    }
-
-    _addEventListeners() {
-      if (this._config.keyboard) {
-        EventHandler.on(this._element, EVENT_KEYDOWN, (event) =>
-          this._keydown(event)
-        );
-      }
-
-      if (this._config.pause === "hover") {
-        EventHandler.on(this._element, EVENT_MOUSEENTER, (event) =>
-          this.pause(event)
-        );
-        EventHandler.on(this._element, EVENT_MOUSELEAVE, (event) =>
-          this.cycle(event)
-        );
-      }
-
-      if (this._config.touch && this._touchSupported) {
-        this._addTouchEventListeners();
-      }
-    }
-
-    _addTouchEventListeners() {
-      const hasPointerPenTouch = (event) => {
+  P.on(document, z, K, (e) => {
+    e.preventDefault();
+    let t = e.target.closest(K),
+      i = Y.getOrCreateInstance(t);
+    i.toggle();
+  }),
+    b(Y);
+  let Z = {
+      setDataAttribute(e, t, i) {
+        e.setAttribute(`data-bs-${Q(t)}`, i);
+      },
+      removeDataAttribute(e, t) {
+        e.removeAttribute(`data-bs-${Q(t)}`);
+      },
+      getDataAttributes(e) {
+        if (!e) return {};
+        let t = {};
         return (
-          this._pointerEvent &&
-          (event.pointerType === POINTER_TYPE_PEN ||
-            event.pointerType === POINTER_TYPE_TOUCH)
+          Object.keys(e.dataset)
+            .filter((e) => e.startsWith("bs"))
+            .forEach((i) => {
+              let n = i.replace(/^bs/, "");
+              t[(n = n.charAt(0).toLowerCase() + n.slice(1, n.length))] = U(
+                e.dataset[i]
+              );
+            }),
+          t
         );
-      };
-
-      const start = (event) => {
-        if (hasPointerPenTouch(event)) {
-          this.touchStartX = event.clientX;
-        } else if (!this._pointerEvent) {
-          this.touchStartX = event.touches[0].clientX;
-        }
-      };
-
-      const move = (event) => {
-        // ensure swiping with one touch and not pinching
-        this.touchDeltaX =
-          event.touches && event.touches.length > 1
-            ? 0
-            : event.touches[0].clientX - this.touchStartX;
-      };
-
-      const end = (event) => {
-        if (hasPointerPenTouch(event)) {
-          this.touchDeltaX = event.clientX - this.touchStartX;
-        }
-
-        this._handleSwipe();
-
-        if (this._config.pause === "hover") {
-          // If it's a touch-enabled device, mouseenter/leave are fired as
-          // part of the mouse compatibility events on first tap - the carousel
-          // would stop cycling until user tapped out of it;
-          // here, we listen for touchend, explicitly pause the carousel
-          // (as if it's the second time we tap on it, mouseenter compat event
-          // is NOT fired) and after a timeout (to allow for mouse compatibility
-          // events to fire) we explicitly restart cycling
-          this.pause();
-
-          if (this.touchTimeout) {
-            clearTimeout(this.touchTimeout);
-          }
-
-          this.touchTimeout = setTimeout(
-            (event) => this.cycle(event),
-            TOUCHEVENT_COMPAT_WAIT + this._config.interval
-          );
-        }
-      };
-
-      SelectorEngine.find(SELECTOR_ITEM_IMG, this._element).forEach(
-        (itemImg) => {
-          EventHandler.on(itemImg, EVENT_DRAG_START, (event) =>
-            event.preventDefault()
-          );
-        }
-      );
-
-      if (this._pointerEvent) {
-        EventHandler.on(this._element, EVENT_POINTERDOWN, (event) =>
-          start(event)
-        );
-        EventHandler.on(this._element, EVENT_POINTERUP, (event) => end(event));
-
-        this._element.classList.add(CLASS_NAME_POINTER_EVENT);
-      } else {
-        EventHandler.on(this._element, EVENT_TOUCHSTART, (event) =>
-          start(event)
-        );
-        EventHandler.on(this._element, EVENT_TOUCHMOVE, (event) => move(event));
-        EventHandler.on(this._element, EVENT_TOUCHEND, (event) => end(event));
-      }
-    }
-
-    _keydown(event) {
-      if (/input|textarea/i.test(event.target.tagName)) {
-        return;
-      }
-
-      const direction = KEY_TO_DIRECTION[event.key];
-
-      if (direction) {
-        event.preventDefault();
-
-        this._slide(direction);
-      }
-    }
-
-    _getItemIndex(element) {
-      this._items =
-        element && element.parentNode
-          ? SelectorEngine.find(SELECTOR_ITEM, element.parentNode)
-          : [];
-      return this._items.indexOf(element);
-    }
-
-    _getItemByOrder(order, activeElement) {
-      const isNext = order === ORDER_NEXT;
-      return getNextActiveElement(
-        this._items,
-        activeElement,
-        isNext,
-        this._config.wrap
-      );
-    }
-
-    _triggerSlideEvent(relatedTarget, eventDirectionName) {
-      const targetIndex = this._getItemIndex(relatedTarget);
-
-      const fromIndex = this._getItemIndex(
-        SelectorEngine.findOne(SELECTOR_ACTIVE_ITEM, this._element)
-      );
-
-      return EventHandler.trigger(this._element, EVENT_SLIDE, {
-        relatedTarget,
-        direction: eventDirectionName,
-        from: fromIndex,
-        to: targetIndex,
-      });
-    }
-
-    _setActiveIndicatorElement(element) {
-      if (this._indicatorsElement) {
-        const activeIndicator = SelectorEngine.findOne(
-          SELECTOR_ACTIVE$1,
-          this._indicatorsElement
-        );
-        activeIndicator.classList.remove(CLASS_NAME_ACTIVE$2);
-        activeIndicator.removeAttribute("aria-current");
-        const indicators = SelectorEngine.find(
-          SELECTOR_INDICATOR,
-          this._indicatorsElement
-        );
-
-        for (let i = 0; i < indicators.length; i++) {
-          if (
-            Number.parseInt(
-              indicators[i].getAttribute("data-bs-slide-to"),
-              10
-            ) === this._getItemIndex(element)
-          ) {
-            indicators[i].classList.add(CLASS_NAME_ACTIVE$2);
-            indicators[i].setAttribute("aria-current", "true");
-            break;
-          }
-        }
-      }
-    }
-
-    _updateInterval() {
-      const element =
-        this._activeElement ||
-        SelectorEngine.findOne(SELECTOR_ACTIVE_ITEM, this._element);
-
-      if (!element) {
-        return;
-      }
-
-      const elementInterval = Number.parseInt(
-        element.getAttribute("data-bs-interval"),
-        10
-      );
-
-      if (elementInterval) {
-        this._config.defaultInterval =
-          this._config.defaultInterval || this._config.interval;
-        this._config.interval = elementInterval;
-      } else {
-        this._config.interval =
-          this._config.defaultInterval || this._config.interval;
-      }
-    }
-
-    _slide(directionOrOrder, element) {
-      const order = this._directionToOrder(directionOrOrder);
-
-      const activeElement = SelectorEngine.findOne(
-        SELECTOR_ACTIVE_ITEM,
-        this._element
-      );
-
-      const activeElementIndex = this._getItemIndex(activeElement);
-
-      const nextElement = element || this._getItemByOrder(order, activeElement);
-
-      const nextElementIndex = this._getItemIndex(nextElement);
-
-      const isCycling = Boolean(this._interval);
-      const isNext = order === ORDER_NEXT;
-      const directionalClassName = isNext ? CLASS_NAME_START : CLASS_NAME_END;
-      const orderClassName = isNext ? CLASS_NAME_NEXT : CLASS_NAME_PREV;
-
-      const eventDirectionName = this._orderToDirection(order);
-
-      if (nextElement && nextElement.classList.contains(CLASS_NAME_ACTIVE$2)) {
-        this._isSliding = false;
-        return;
-      }
-
-      if (this._isSliding) {
-        return;
-      }
-
-      const slideEvent = this._triggerSlideEvent(
-        nextElement,
-        eventDirectionName
-      );
-
-      if (slideEvent.defaultPrevented) {
-        return;
-      }
-
-      if (!activeElement || !nextElement) {
-        // Some weirdness is happening, so we bail
-        return;
-      }
-
-      this._isSliding = true;
-
-      if (isCycling) {
-        this.pause();
-      }
-
-      this._setActiveIndicatorElement(nextElement);
-
-      this._activeElement = nextElement;
-
-      const triggerSlidEvent = () => {
-        EventHandler.trigger(this._element, EVENT_SLID, {
-          relatedTarget: nextElement,
-          direction: eventDirectionName,
-          from: activeElementIndex,
-          to: nextElementIndex,
-        });
-      };
-
-      if (this._element.classList.contains(CLASS_NAME_SLIDE)) {
-        nextElement.classList.add(orderClassName);
-        reflow(nextElement);
-        activeElement.classList.add(directionalClassName);
-        nextElement.classList.add(directionalClassName);
-
-        const completeCallBack = () => {
-          nextElement.classList.remove(directionalClassName, orderClassName);
-          nextElement.classList.add(CLASS_NAME_ACTIVE$2);
-          activeElement.classList.remove(
-            CLASS_NAME_ACTIVE$2,
-            orderClassName,
-            directionalClassName
-          );
-          this._isSliding = false;
-          setTimeout(triggerSlidEvent, 0);
+      },
+      getDataAttribute: (e, t) => U(e.getAttribute(`data-bs-${Q(t)}`)),
+      offset(e) {
+        let t = e.getBoundingClientRect();
+        return {
+          top: t.top + window.pageYOffset,
+          left: t.left + window.pageXOffset,
         };
-
-        this._queueCallback(completeCallBack, activeElement, true);
-      } else {
-        activeElement.classList.remove(CLASS_NAME_ACTIVE$2);
-        nextElement.classList.add(CLASS_NAME_ACTIVE$2);
-        this._isSliding = false;
-        triggerSlidEvent();
-      }
-
-      if (isCycling) {
-        this.cycle();
-      }
-    }
-
-    _directionToOrder(direction) {
-      if (![DIRECTION_RIGHT, DIRECTION_LEFT].includes(direction)) {
-        return direction;
-      }
-
-      if (isRTL()) {
-        return direction === DIRECTION_LEFT ? ORDER_PREV : ORDER_NEXT;
-      }
-
-      return direction === DIRECTION_LEFT ? ORDER_NEXT : ORDER_PREV;
-    }
-
-    _orderToDirection(order) {
-      if (![ORDER_NEXT, ORDER_PREV].includes(order)) {
-        return order;
-      }
-
-      if (isRTL()) {
-        return order === ORDER_PREV ? DIRECTION_LEFT : DIRECTION_RIGHT;
-      }
-
-      return order === ORDER_PREV ? DIRECTION_RIGHT : DIRECTION_LEFT;
-    } // Static
-
-    static carouselInterface(element, config) {
-      const data = Carousel.getOrCreateInstance(element, config);
-      let { _config } = data;
-
-      if (typeof config === "object") {
-        _config = { ..._config, ...config };
-      }
-
-      const action = typeof config === "string" ? config : _config.slide;
-
-      if (typeof config === "number") {
-        data.to(config);
-      } else if (typeof action === "string") {
-        if (typeof data[action] === "undefined") {
-          throw new TypeError(`No method named "${action}"`);
-        }
-
-        data[action]();
-      } else if (_config.interval && _config.ride) {
-        data.pause();
-        data.cycle();
-      }
-    }
-
-    static jQueryInterface(config) {
-      return this.each(function () {
-        Carousel.carouselInterface(this, config);
-      });
-    }
-
-    static dataApiClickHandler(event) {
-      const target = getElementFromSelector(this);
-
-      if (!target || !target.classList.contains(CLASS_NAME_CAROUSEL)) {
-        return;
-      }
-
-      const config = {
-        ...Manipulator.getDataAttributes(target),
-        ...Manipulator.getDataAttributes(this),
-      };
-      const slideIndex = this.getAttribute("data-bs-slide-to");
-
-      if (slideIndex) {
-        config.interval = false;
-      }
-
-      Carousel.carouselInterface(target, config);
-
-      if (slideIndex) {
-        Carousel.getInstance(target).to(slideIndex);
-      }
-
-      event.preventDefault();
-    }
-  }
-  /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
-   */
-
-  EventHandler.on(
-    document,
-    EVENT_CLICK_DATA_API$5,
-    SELECTOR_DATA_SLIDE,
-    Carousel.dataApiClickHandler
-  );
-  EventHandler.on(window, EVENT_LOAD_DATA_API$2, () => {
-    const carousels = SelectorEngine.find(SELECTOR_DATA_RIDE);
-
-    for (let i = 0, len = carousels.length; i < len; i++) {
-      Carousel.carouselInterface(
-        carousels[i],
-        Carousel.getInstance(carousels[i])
-      );
-    }
-  });
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Carousel to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Carousel);
-
-  /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
-   */
-
-  EventHandler.on(
-    document,
-    EVENT_CLICK_DATA_API$4,
-    SELECTOR_DATA_TOGGLE$4,
-    function (event) {
-      // preventDefault only for <a> elements (which change the URL) not inside the collapsible element
-      if (
-        event.target.tagName === "A" ||
-        (event.delegateTarget && event.delegateTarget.tagName === "A")
-      ) {
-        event.preventDefault();
-      }
-
-      const selector = getSelectorFromElement(this);
-      const selectorElements = SelectorEngine.find(selector);
-      selectorElements.forEach((element) => {
-        Collapse.getOrCreateInstance(element, {
-          toggle: false,
-        }).toggle();
-      });
-    }
-  );
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Collapse to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Collapse);
-
-  var top = "top";
-  var bottom = "bottom";
-  var right = "right";
-  var left = "left";
-  var auto = "auto";
-  var basePlacements = [top, bottom, right, left];
-  var start = "start";
-  var end = "end";
-  var clippingParents = "clippingParents";
-  var viewport = "viewport";
-  var popper = "popper";
-  var reference = "reference";
-  var variationPlacements = /*#__PURE__*/ basePlacements.reduce(function (
-    acc,
-    placement
-  ) {
-    return acc.concat([placement + "-" + start, placement + "-" + end]);
-  },
-  []);
-  var placements = /*#__PURE__*/ []
-    .concat(basePlacements, [auto])
-    .reduce(function (acc, placement) {
-      return acc.concat([
-        placement,
-        placement + "-" + start,
-        placement + "-" + end,
-      ]);
-    }, []); // modifiers that need to read the DOM
-
-  var beforeRead = "beforeRead";
-  var read = "read";
-  var afterRead = "afterRead"; // pure-logic modifiers
-
-  var beforeMain = "beforeMain";
-  var main = "main";
-  var afterMain = "afterMain"; // modifier with the purpose to write to the DOM (or write into a framework state)
-
-  var beforeWrite = "beforeWrite";
-  var write = "write";
-  var afterWrite = "afterWrite";
-  var modifierPhases = [
-    beforeRead,
-    read,
-    afterRead,
-    beforeMain,
-    main,
-    afterMain,
-    beforeWrite,
-    write,
-    afterWrite,
-  ];
-
-  function getNodeName(element) {
-    return element ? (element.nodeName || "").toLowerCase() : null;
-  }
-
-  function getWindow(node) {
-    if (node == null) {
-      return window;
-    }
-
-    if (node.toString() !== "[object Window]") {
-      var ownerDocument = node.ownerDocument;
-      return ownerDocument ? ownerDocument.defaultView || window : window;
-    }
-
-    return node;
-  }
-
-  function isElement(node) {
-    var OwnElement = getWindow(node).Element;
-    return node instanceof OwnElement || node instanceof Element;
-  }
-
-  function isHTMLElement(node) {
-    var OwnElement = getWindow(node).HTMLElement;
-    return node instanceof OwnElement || node instanceof HTMLElement;
-  }
-
-  function isShadowRoot(node) {
-    // IE 11 has no ShadowRoot
-    if (typeof ShadowRoot === "undefined") {
-      return false;
-    }
-
-    var OwnElement = getWindow(node).ShadowRoot;
-    return node instanceof OwnElement || node instanceof ShadowRoot;
-  }
-
-  // and applies them to the HTMLElements such as popper and arrow
-
-  function applyStyles(_ref) {
-    var state = _ref.state;
-    Object.keys(state.elements).forEach(function (name) {
-      var style = state.styles[name] || {};
-      var attributes = state.attributes[name] || {};
-      var element = state.elements[name]; // arrow is optional + virtual elements
-
-      if (!isHTMLElement(element) || !getNodeName(element)) {
-        return;
-      } // Flow doesn't support to extend this property, but it's the most
-      // effective way to apply styles to an HTMLElement
-      // $FlowFixMe[cannot-write]
-
-      Object.assign(element.style, style);
-      Object.keys(attributes).forEach(function (name) {
-        var value = attributes[name];
-
-        if (value === false) {
-          element.removeAttribute(name);
-        } else {
-          element.setAttribute(name, value === true ? "" : value);
-        }
-      });
-    });
-  }
-
-  function effect$2(_ref2) {
-    var state = _ref2.state;
-    var initialStyles = {
-      popper: {
-        position: state.options.strategy,
-        left: "0",
-        top: "0",
-        margin: "0",
       },
-      arrow: {
-        position: "absolute",
+      position: (e) => ({ top: e.offsetTop, left: e.offsetLeft }),
+    },
+    G = {
+      find: (e, t = document.documentElement) =>
+        [].concat(...Element.prototype.querySelectorAll.call(t, e)),
+      findOne: (e, t = document.documentElement) =>
+        Element.prototype.querySelector.call(t, e),
+      children: (e, t) => [].concat(...e.children).filter((e) => e.matches(t)),
+      parents(e, t) {
+        let i = [],
+          n = e.parentNode;
+        for (; n && n.nodeType === Node.ELEMENT_NODE && 3 !== n.nodeType; )
+          n.matches(t) && i.push(n), (n = n.parentNode);
+        return i;
       },
-      reference: {},
-    };
-    Object.assign(state.elements.popper.style, initialStyles.popper);
-    state.styles = initialStyles;
-
-    if (state.elements.arrow) {
-      Object.assign(state.elements.arrow.style, initialStyles.arrow);
+      prev(e, t) {
+        let i = e.previousElementSibling;
+        for (; i; ) {
+          if (i.matches(t)) return [i];
+          i = i.previousElementSibling;
+        }
+        return [];
+      },
+      next(e, t) {
+        let i = e.nextElementSibling;
+        for (; i; ) {
+          if (i.matches(t)) return [i];
+          i = i.nextElementSibling;
+        }
+        return [];
+      },
+      focusableChildren(e) {
+        let t = [
+          "a",
+          "button",
+          "input",
+          "textarea",
+          "select",
+          "details",
+          "[tabindex]",
+          '[contenteditable="true"]',
+        ]
+          .map((e) => `${e}:not([tabindex^="-"])`)
+          .join(", ");
+        return this.find(t, e).filter((e) => !u(e) && f(e));
+      },
+    },
+    J = "carousel",
+    ee = ".bs.carousel",
+    et = ".data-api",
+    ei = {
+      interval: 5e3,
+      keyboard: !0,
+      slide: !1,
+      pause: "hover",
+      wrap: !0,
+      touch: !0,
+    },
+    en = {
+      interval: "(number|boolean)",
+      keyboard: "boolean",
+      slide: "(boolean|string)",
+      pause: "(string|boolean)",
+      wrap: "boolean",
+      touch: "boolean",
+    },
+    es = "next",
+    er = "prev",
+    eo = "left",
+    ea = "right",
+    el = { ArrowLeft: ea, ArrowRight: eo },
+    ec = `slide${ee}`,
+    ef = `slid${ee}`,
+    eu = `keydown${ee}`,
+    eh = `mouseenter${ee}`,
+    ed = `mouseleave${ee}`,
+    ep = `touchstart${ee}`,
+    em = `touchmove${ee}`,
+    eg = `touchend${ee}`,
+    e8 = `pointerdown${ee}`,
+    ev = `pointerup${ee}`,
+    eb = `dragstart${ee}`,
+    ey = `load${ee}${et}`,
+    e$ = `click${ee}${et}`,
+    eE = "active",
+    ew = ".active.carousel-item";
+  class eA extends B {
+    constructor(e, t) {
+      super(e),
+        (this._items = null),
+        (this._interval = null),
+        (this._activeElement = null),
+        (this._isPaused = !1),
+        (this._isSliding = !1),
+        (this.touchTimeout = null),
+        (this.touchStartX = 0),
+        (this.touchDeltaX = 0),
+        (this._config = this._getConfig(t)),
+        (this._indicatorsElement = G.findOne(
+          ".carousel-indicators",
+          this._element
+        )),
+        (this._touchSupported =
+          "ontouchstart" in document.documentElement ||
+          navigator.maxTouchPoints > 0),
+        (this._pointerEvent = Boolean(window.PointerEvent)),
+        this._addEventListeners();
     }
-
-    return function () {
-      Object.keys(state.elements).forEach(function (name) {
-        var element = state.elements[name];
-        var attributes = state.attributes[name] || {};
-        var styleProperties = Object.keys(
-          state.styles.hasOwnProperty(name)
-            ? state.styles[name]
-            : initialStyles[name]
-        ); // Set all values to an empty string to unset them
-
-        var style = styleProperties.reduce(function (style, property) {
-          style[property] = "";
-          return style;
-        }, {}); // arrow is optional + virtual elements
-
-        if (!isHTMLElement(element) || !getNodeName(element)) {
+    static get Default() {
+      return ei;
+    }
+    static get NAME() {
+      return J;
+    }
+    next() {
+      this._slide(es);
+    }
+    nextWhenVisible() {
+      !document.hidden && f(this._element) && this.next();
+    }
+    prev() {
+      this._slide(er);
+    }
+    pause(e) {
+      e || (this._isPaused = !0),
+        G.findOne(".carousel-item-next, .carousel-item-prev", this._element) &&
+          (o(this._element), this.cycle(!0)),
+        clearInterval(this._interval),
+        (this._interval = null);
+    }
+    cycle(e) {
+      e || (this._isPaused = !1),
+        this._interval &&
+          (clearInterval(this._interval), (this._interval = null)),
+        this._config &&
+          this._config.interval &&
+          !this._isPaused &&
+          (this._updateInterval(),
+          (this._interval = setInterval(
+            (document.visibilityState ? this.nextWhenVisible : this.next).bind(
+              this
+            ),
+            this._config.interval
+          )));
+    }
+    to(e) {
+      this._activeElement = G.findOne(ew, this._element);
+      let t = this._getItemIndex(this._activeElement);
+      if (!(e > this._items.length - 1) && !(e < 0)) {
+        if (this._isSliding) {
+          P.one(this._element, ef, () => this.to(e));
           return;
         }
-
-        Object.assign(element.style, style);
-        Object.keys(attributes).forEach(function (attribute) {
-          element.removeAttribute(attribute);
-        });
+        if (t === e) {
+          this.pause(), this.cycle();
+          return;
+        }
+        this._slide(e > t ? es : er, this._items[e]);
+      }
+    }
+    _getConfig(e) {
+      return (
+        c(
+          J,
+          (e = {
+            ...ei,
+            ...Z.getDataAttributes(this._element),
+            ...("object" == typeof e ? e : {}),
+          }),
+          en
+        ),
+        e
+      );
+    }
+    _handleSwipe() {
+      let e = Math.abs(this.touchDeltaX);
+      if (e <= 40) return;
+      let t = e / this.touchDeltaX;
+      (this.touchDeltaX = 0), t && this._slide(t > 0 ? ea : eo);
+    }
+    _addEventListeners() {
+      this._config.keyboard && P.on(this._element, eu, (e) => this._keydown(e)),
+        "hover" === this._config.pause &&
+          (P.on(this._element, eh, (e) => this.pause(e)),
+          P.on(this._element, ed, (e) => this.cycle(e))),
+        this._config.touch &&
+          this._touchSupported &&
+          this._addTouchEventListeners();
+    }
+    _addTouchEventListeners() {
+      let e = (e) =>
+          this._pointerEvent &&
+          ("pen" === e.pointerType || "touch" === e.pointerType),
+        t = (t) => {
+          e(t)
+            ? (this.touchStartX = t.clientX)
+            : this._pointerEvent || (this.touchStartX = t.touches[0].clientX);
+        },
+        i = (e) => {
+          this.touchDeltaX =
+            e.touches && e.touches.length > 1
+              ? 0
+              : e.touches[0].clientX - this.touchStartX;
+        },
+        n = (t) => {
+          e(t) && (this.touchDeltaX = t.clientX - this.touchStartX),
+            this._handleSwipe(),
+            "hover" === this._config.pause &&
+              (this.pause(),
+              this.touchTimeout && clearTimeout(this.touchTimeout),
+              (this.touchTimeout = setTimeout(
+                (e) => this.cycle(e),
+                500 + this._config.interval
+              )));
+        };
+      G.find(".carousel-item img", this._element).forEach((e) => {
+        P.on(e, eb, (e) => e.preventDefault());
+      }),
+        this._pointerEvent
+          ? (P.on(this._element, e8, (e) => t(e)),
+            P.on(this._element, ev, (e) => n(e)),
+            this._element.classList.add("pointer-event"))
+          : (P.on(this._element, ep, (e) => t(e)),
+            P.on(this._element, em, (e) => i(e)),
+            P.on(this._element, eg, (e) => n(e)));
+    }
+    _keydown(e) {
+      if (/input|textarea/i.test(e.target.tagName)) return;
+      let t = el[e.key];
+      t && (e.preventDefault(), this._slide(t));
+    }
+    _getItemIndex(e) {
+      return (
+        (this._items =
+          e && e.parentNode ? G.find(".carousel-item", e.parentNode) : []),
+        this._items.indexOf(e)
+      );
+    }
+    _getItemByOrder(e, t) {
+      return E(this._items, t, e === es, this._config.wrap);
+    }
+    _triggerSlideEvent(e, t) {
+      let i = this._getItemIndex(e),
+        n = this._getItemIndex(G.findOne(ew, this._element));
+      return P.trigger(this._element, ec, {
+        relatedTarget: e,
+        direction: t,
+        from: n,
+        to: i,
       });
-    };
-  } // eslint-disable-next-line import/no-unused-modules
-
-  const applyStyles$1 = {
-    name: "applyStyles",
-    enabled: true,
-    phase: "write",
-    fn: applyStyles,
-    effect: effect$2,
-    requires: ["computeStyles"],
-  };
-
-  function getBasePlacement(placement) {
-    return placement.split("-")[0];
-  }
-
-  // import { isHTMLElement } from './instanceOf';
-  function getBoundingClientRect(
-    element, // eslint-disable-next-line unused-imports/no-unused-vars
-    includeScale
-  ) {
-    var rect = element.getBoundingClientRect();
-    var scaleX = 1;
-    var scaleY = 1; // FIXME:
-    // `offsetWidth` returns an integer while `getBoundingClientRect`
-    // returns a float. This results in `scaleX` or `scaleY` being
-    // non-1 when it should be for elements that aren't a full pixel in
-    // width or height.
-    // if (isHTMLElement(element) && includeScale) {
-    //   const offsetHeight = element.offsetHeight;
-    //   const offsetWidth = element.offsetWidth;
-    //   // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
-    //   // Fallback to 1 in case both values are `0`
-    //   if (offsetWidth > 0) {
-    //     scaleX = rect.width / offsetWidth || 1;
-    //   }
-    //   if (offsetHeight > 0) {
-    //     scaleY = rect.height / offsetHeight || 1;
-    //   }
-    // }
-
-    return {
-      width: rect.width / scaleX,
-      height: rect.height / scaleY,
-      top: rect.top / scaleY,
-      right: rect.right / scaleX,
-      bottom: rect.bottom / scaleY,
-      left: rect.left / scaleX,
-      x: rect.left / scaleX,
-      y: rect.top / scaleY,
-    };
-  }
-
-  // means it doesn't take into account transforms.
-
-  function getLayoutRect(element) {
-    var clientRect = getBoundingClientRect(element); // Use the clientRect sizes if it's not been transformed.
-    // Fixes https://github.com/popperjs/popper-core/issues/1223
-
-    var width = element.offsetWidth;
-    var height = element.offsetHeight;
-
-    if (Math.abs(clientRect.width - width) <= 1) {
-      width = clientRect.width;
     }
-
-    if (Math.abs(clientRect.height - height) <= 1) {
-      height = clientRect.height;
-    }
-
-    return {
-      x: element.offsetLeft,
-      y: element.offsetTop,
-      width: width,
-      height: height,
-    };
-  }
-
-  function contains(parent, child) {
-    var rootNode = child.getRootNode && child.getRootNode(); // First, attempt with faster native method
-
-    if (parent.contains(child)) {
-      return true;
-    } // then fallback to custom implementation with Shadow DOM support
-    else if (rootNode && isShadowRoot(rootNode)) {
-      var next = child;
-
-      do {
-        if (next && parent.isSameNode(next)) {
-          return true;
-        } // $FlowFixMe[prop-missing]: need a better way to handle this...
-
-        next = next.parentNode || next.host;
-      } while (next);
-    } // Give up, the result is false
-
-    return false;
-  }
-
-  function getComputedStyle$1(element) {
-    return getWindow(element).getComputedStyle(element);
-  }
-
-  function isTableElement(element) {
-    return ["table", "td", "th"].indexOf(getNodeName(element)) >= 0;
-  }
-
-  function getDocumentElement(element) {
-    // $FlowFixMe[incompatible-return]: assume body is always available
-    return (
-      (isElement(element)
-        ? element.ownerDocument // $FlowFixMe[prop-missing]
-        : element.document) || window.document
-    ).documentElement;
-  }
-
-  function getParentNode(element) {
-    if (getNodeName(element) === "html") {
-      return element;
-    }
-
-    return (
-      // this is a quicker (but less type safe) way to save quite some bytes from the bundle
-      // $FlowFixMe[incompatible-return]
-      // $FlowFixMe[prop-missing]
-      element.assignedSlot || // step into the shadow DOM of the parent of a slotted node
-      element.parentNode || // DOM Element detected
-      (isShadowRoot(element) ? element.host : null) || // ShadowRoot detected
-      // $FlowFixMe[incompatible-call]: HTMLElement is a Node
-      getDocumentElement(element) // fallback
-    );
-  }
-
-  function getTrueOffsetParent(element) {
-    if (
-      !isHTMLElement(element) || // https://github.com/popperjs/popper-core/issues/837
-      getComputedStyle$1(element).position === "fixed"
-    ) {
-      return null;
-    }
-
-    return element.offsetParent;
-  } // `.offsetParent` reports `null` for fixed elements, while absolute elements
-  // return the containing block
-
-  function getContainingBlock(element) {
-    var isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") !== -1;
-    var isIE = navigator.userAgent.indexOf("Trident") !== -1;
-
-    if (isIE && isHTMLElement(element)) {
-      // In IE 9, 10 and 11 fixed elements containing block is always established by the viewport
-      var elementCss = getComputedStyle$1(element);
-
-      if (elementCss.position === "fixed") {
-        return null;
+    _setActiveIndicatorElement(e) {
+      if (this._indicatorsElement) {
+        let t = G.findOne(".active", this._indicatorsElement);
+        t.classList.remove(eE), t.removeAttribute("aria-current");
+        let i = G.find("[data-bs-target]", this._indicatorsElement);
+        for (let n = 0; n < i.length; n++)
+          if (
+            Number.parseInt(i[n].getAttribute("data-bs-slide-to"), 10) ===
+            this._getItemIndex(e)
+          ) {
+            i[n].classList.add(eE), i[n].setAttribute("aria-current", "true");
+            break;
+          }
       }
     }
-
-    var currentNode = getParentNode(element);
-
-    while (
-      isHTMLElement(currentNode) &&
-      ["html", "body"].indexOf(getNodeName(currentNode)) < 0
-    ) {
-      var css = getComputedStyle$1(currentNode); // This is non-exhaustive but covers the most common CSS properties that
-      // create a containing block.
-      // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
-
-      if (
-        css.transform !== "none" ||
-        css.perspective !== "none" ||
-        css.contain === "paint" ||
-        ["transform", "perspective"].indexOf(css.willChange) !== -1 ||
-        (isFirefox && css.willChange === "filter") ||
-        (isFirefox && css.filter && css.filter !== "none")
-      ) {
-        return currentNode;
-      } else {
-        currentNode = currentNode.parentNode;
-      }
+    _updateInterval() {
+      let e = this._activeElement || G.findOne(ew, this._element);
+      if (!e) return;
+      let t = Number.parseInt(e.getAttribute("data-bs-interval"), 10);
+      t
+        ? ((this._config.defaultInterval =
+            this._config.defaultInterval || this._config.interval),
+          (this._config.interval = t))
+        : (this._config.interval =
+            this._config.defaultInterval || this._config.interval);
     }
-
-    return null;
-  } // Gets the closest ancestor positioned element. Handles some edge cases,
-  // such as table ancestors and cross browser bugs.
-
-  function getOffsetParent(element) {
-    var window = getWindow(element);
-    var offsetParent = getTrueOffsetParent(element);
-
-    while (
-      offsetParent &&
-      isTableElement(offsetParent) &&
-      getComputedStyle$1(offsetParent).position === "static"
-    ) {
-      offsetParent = getTrueOffsetParent(offsetParent);
-    }
-
-    if (
-      offsetParent &&
-      (getNodeName(offsetParent) === "html" ||
-        (getNodeName(offsetParent) === "body" &&
-          getComputedStyle$1(offsetParent).position === "static"))
-    ) {
-      return window;
-    }
-
-    return offsetParent || getContainingBlock(element) || window;
-  }
-
-  function getMainAxisFromPlacement(placement) {
-    return ["top", "bottom"].indexOf(placement) >= 0 ? "x" : "y";
-  }
-
-  var max = Math.max;
-  var min = Math.min;
-  var round = Math.round;
-
-  function within(min$1, value, max$1) {
-    return max(min$1, min(value, max$1));
-  }
-
-  function getFreshSideObject() {
-    return {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-    };
-  }
-
-  function mergePaddingObject(paddingObject) {
-    return Object.assign({}, getFreshSideObject(), paddingObject);
-  }
-
-  function expandToHashMap(value, keys) {
-    return keys.reduce(function (hashMap, key) {
-      hashMap[key] = value;
-      return hashMap;
-    }, {});
-  }
-
-  var toPaddingObject = function toPaddingObject(padding, state) {
-    padding =
-      typeof padding === "function"
-        ? padding(
-            Object.assign({}, state.rects, {
-              placement: state.placement,
-            })
-          )
-        : padding;
-    return mergePaddingObject(
-      typeof padding !== "number"
-        ? padding
-        : expandToHashMap(padding, basePlacements)
-    );
-  };
-
-  function arrow(_ref) {
-    var _state$modifiersData$;
-
-    var state = _ref.state,
-      name = _ref.name,
-      options = _ref.options;
-    var arrowElement = state.elements.arrow;
-    var popperOffsets = state.modifiersData.popperOffsets;
-    var basePlacement = getBasePlacement(state.placement);
-    var axis = getMainAxisFromPlacement(basePlacement);
-    var isVertical = [left, right].indexOf(basePlacement) >= 0;
-    var len = isVertical ? "height" : "width";
-
-    if (!arrowElement || !popperOffsets) {
-      return;
-    }
-
-    var paddingObject = toPaddingObject(options.padding, state);
-    var arrowRect = getLayoutRect(arrowElement);
-    var minProp = axis === "y" ? top : left;
-    var maxProp = axis === "y" ? bottom : right;
-    var endDiff =
-      state.rects.reference[len] +
-      state.rects.reference[axis] -
-      popperOffsets[axis] -
-      state.rects.popper[len];
-    var startDiff = popperOffsets[axis] - state.rects.reference[axis];
-    var arrowOffsetParent = getOffsetParent(arrowElement);
-    var clientSize = arrowOffsetParent
-      ? axis === "y"
-        ? arrowOffsetParent.clientHeight || 0
-        : arrowOffsetParent.clientWidth || 0
-      : 0;
-    var centerToReference = endDiff / 2 - startDiff / 2; // Make sure the arrow doesn't overflow the popper if the center point is
-    // outside of the popper bounds
-
-    var min = paddingObject[minProp];
-    var max = clientSize - arrowRect[len] - paddingObject[maxProp];
-    var center = clientSize / 2 - arrowRect[len] / 2 + centerToReference;
-    var offset = within(min, center, max); // Prevents breaking syntax highlighting...
-
-    var axisProp = axis;
-    state.modifiersData[name] =
-      ((_state$modifiersData$ = {}),
-      (_state$modifiersData$[axisProp] = offset),
-      (_state$modifiersData$.centerOffset = offset - center),
-      _state$modifiersData$);
-  }
-
-  function effect$1(_ref2) {
-    var state = _ref2.state,
-      options = _ref2.options;
-    var _options$element = options.element,
-      arrowElement =
-        _options$element === void 0 ? "[data-popper-arrow]" : _options$element;
-
-    if (arrowElement == null) {
-      return;
-    } // CSS selector
-
-    if (typeof arrowElement === "string") {
-      arrowElement = state.elements.popper.querySelector(arrowElement);
-
-      if (!arrowElement) {
+    _slide(e, t) {
+      let i = this._directionToOrder(e),
+        n = G.findOne(ew, this._element),
+        s = this._getItemIndex(n),
+        r = t || this._getItemByOrder(i, n),
+        o = this._getItemIndex(r),
+        a = Boolean(this._interval),
+        l = i === es,
+        c = l ? "carousel-item-start" : "carousel-item-end",
+        f = l ? "carousel-item-next" : "carousel-item-prev",
+        u = this._orderToDirection(i);
+      if (r && r.classList.contains(eE)) {
+        this._isSliding = !1;
         return;
       }
+      if (this._isSliding) return;
+      let h = this._triggerSlideEvent(r, u);
+      if (h.defaultPrevented || !n || !r) return;
+      (this._isSliding = !0),
+        a && this.pause(),
+        this._setActiveIndicatorElement(r),
+        (this._activeElement = r);
+      let p = () => {
+        P.trigger(this._element, ef, {
+          relatedTarget: r,
+          direction: u,
+          from: s,
+          to: o,
+        });
+      };
+      if (this._element.classList.contains("slide")) {
+        r.classList.add(f), d(r), n.classList.add(c), r.classList.add(c);
+        let m = () => {
+          r.classList.remove(c, f),
+            r.classList.add(eE),
+            n.classList.remove(eE, f, c),
+            (this._isSliding = !1),
+            setTimeout(p, 0);
+        };
+        this._queueCallback(m, n, !0);
+      } else n.classList.remove(eE), r.classList.add(eE), (this._isSliding = !1), p();
+      a && this.cycle();
     }
-
-    if (!contains(state.elements.popper, arrowElement)) {
-      return;
+    _directionToOrder(e) {
+      return [ea, eo].includes(e)
+        ? v()
+          ? e === eo
+            ? er
+            : es
+          : e === eo
+          ? es
+          : er
+        : e;
     }
-
-    state.elements.arrow = arrowElement;
-  } // eslint-disable-next-line import/no-unused-modules
-
-  const arrow$1 = {
-    name: "arrow",
-    enabled: true,
-    phase: "main",
-    fn: arrow,
-    effect: effect$1,
-    requires: ["popperOffsets"],
-    requiresIfExists: ["preventOverflow"],
-  };
-
-  function getVariation(placement) {
-    return placement.split("-")[1];
-  }
-
-  var unsetSides = {
-    top: "auto",
-    right: "auto",
-    bottom: "auto",
-    left: "auto",
-  }; // Round the offsets to the nearest suitable subpixel based on the DPR.
-  // Zooming can change the DPR, but it seems to report a value that will
-  // cleanly divide the values into the appropriate subpixels.
-
-  function roundOffsetsByDPR(_ref) {
-    var x = _ref.x,
-      y = _ref.y;
-    var win = window;
-    var dpr = win.devicePixelRatio || 1;
-    return {
-      x: round(round(x * dpr) / dpr) || 0,
-      y: round(round(y * dpr) / dpr) || 0,
-    };
-  }
-
-  function mapToStyles(_ref2) {
-    var _Object$assign2;
-
-    var popper = _ref2.popper,
-      popperRect = _ref2.popperRect,
-      placement = _ref2.placement,
-      variation = _ref2.variation,
-      offsets = _ref2.offsets,
-      position = _ref2.position,
-      gpuAcceleration = _ref2.gpuAcceleration,
-      adaptive = _ref2.adaptive,
-      roundOffsets = _ref2.roundOffsets;
-
-    var _ref3 =
-        roundOffsets === true
-          ? roundOffsetsByDPR(offsets)
-          : typeof roundOffsets === "function"
-          ? roundOffsets(offsets)
-          : offsets,
-      _ref3$x = _ref3.x,
-      x = _ref3$x === void 0 ? 0 : _ref3$x,
-      _ref3$y = _ref3.y,
-      y = _ref3$y === void 0 ? 0 : _ref3$y;
-
-    var hasX = offsets.hasOwnProperty("x");
-    var hasY = offsets.hasOwnProperty("y");
-    var sideX = left;
-    var sideY = top;
-    var win = window;
-
-    if (adaptive) {
-      var offsetParent = getOffsetParent(popper);
-      var heightProp = "clientHeight";
-      var widthProp = "clientWidth";
-
-      if (offsetParent === getWindow(popper)) {
-        offsetParent = getDocumentElement(popper);
-
-        if (
-          getComputedStyle$1(offsetParent).position !== "static" &&
-          position === "absolute"
-        ) {
-          heightProp = "scrollHeight";
-          widthProp = "scrollWidth";
-        }
-      } // $FlowFixMe[incompatible-cast]: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
-
-      offsetParent = offsetParent;
-
-      if (
-        placement === top ||
-        ((placement === left || placement === right) && variation === end)
-      ) {
-        sideY = bottom; // $FlowFixMe[prop-missing]
-
-        y -= offsetParent[heightProp] - popperRect.height;
-        y *= gpuAcceleration ? 1 : -1;
-      }
-
-      if (
-        placement === left ||
-        ((placement === top || placement === bottom) && variation === end)
-      ) {
-        sideX = right; // $FlowFixMe[prop-missing]
-
-        x -= offsetParent[widthProp] - popperRect.width;
-        x *= gpuAcceleration ? 1 : -1;
-      }
+    _orderToDirection(e) {
+      return [es, er].includes(e)
+        ? v()
+          ? e === er
+            ? eo
+            : ea
+          : e === er
+          ? ea
+          : eo
+        : e;
     }
-
-    var commonStyles = Object.assign(
-      {
-        position: position,
-      },
-      adaptive && unsetSides
-    );
-
-    if (gpuAcceleration) {
-      var _Object$assign;
-
-      return Object.assign(
-        {},
-        commonStyles,
-        ((_Object$assign = {}),
-        (_Object$assign[sideY] = hasY ? "0" : ""),
-        (_Object$assign[sideX] = hasX ? "0" : ""),
-        (_Object$assign.transform =
-          (win.devicePixelRatio || 1) <= 1
-            ? "translate(" + x + "px, " + y + "px)"
-            : "translate3d(" + x + "px, " + y + "px, 0)"),
-        _Object$assign)
-      );
+    static carouselInterface(e, t) {
+      let i = eA.getOrCreateInstance(e, t),
+        { _config: n } = i;
+      "object" == typeof t && (n = { ...n, ...t });
+      let s = "string" == typeof t ? t : n.slide;
+      if ("number" == typeof t) i.to(t);
+      else if ("string" == typeof s) {
+        if (void 0 === i[s]) throw TypeError(`No method named "${s}"`);
+        i[s]();
+      } else n.interval && n.ride && (i.pause(), i.cycle());
     }
-
-    return Object.assign(
-      {},
-      commonStyles,
-      ((_Object$assign2 = {}),
-      (_Object$assign2[sideY] = hasY ? y + "px" : ""),
-      (_Object$assign2[sideX] = hasX ? x + "px" : ""),
-      (_Object$assign2.transform = ""),
-      _Object$assign2)
-    );
-  }
-
-  function computeStyles(_ref4) {
-    var state = _ref4.state,
-      options = _ref4.options;
-    var _options$gpuAccelerat = options.gpuAcceleration,
-      gpuAcceleration =
-        _options$gpuAccelerat === void 0 ? true : _options$gpuAccelerat,
-      _options$adaptive = options.adaptive,
-      adaptive = _options$adaptive === void 0 ? true : _options$adaptive,
-      _options$roundOffsets = options.roundOffsets,
-      roundOffsets =
-        _options$roundOffsets === void 0 ? true : _options$roundOffsets;
-
-    var commonStyles = {
-      placement: getBasePlacement(state.placement),
-      variation: getVariation(state.placement),
-      popper: state.elements.popper,
-      popperRect: state.rects.popper,
-      gpuAcceleration: gpuAcceleration,
-    };
-
-    if (state.modifiersData.popperOffsets != null) {
-      state.styles.popper = Object.assign(
-        {},
-        state.styles.popper,
-        mapToStyles(
-          Object.assign({}, commonStyles, {
-            offsets: state.modifiersData.popperOffsets,
-            position: state.options.strategy,
-            adaptive: adaptive,
-            roundOffsets: roundOffsets,
-          })
-        )
-      );
-    }
-
-    if (state.modifiersData.arrow != null) {
-      state.styles.arrow = Object.assign(
-        {},
-        state.styles.arrow,
-        mapToStyles(
-          Object.assign({}, commonStyles, {
-            offsets: state.modifiersData.arrow,
-            position: "absolute",
-            adaptive: false,
-            roundOffsets: roundOffsets,
-          })
-        )
-      );
-    }
-
-    state.attributes.popper = Object.assign({}, state.attributes.popper, {
-      "data-popper-placement": state.placement,
-    });
-  } // eslint-disable-next-line import/no-unused-modules
-
-  const computeStyles$1 = {
-    name: "computeStyles",
-    enabled: true,
-    phase: "beforeWrite",
-    fn: computeStyles,
-    data: {},
-  };
-
-  var passive = {
-    passive: true,
-  };
-
-  function effect(_ref) {
-    var state = _ref.state,
-      instance = _ref.instance,
-      options = _ref.options;
-    var _options$scroll = options.scroll,
-      scroll = _options$scroll === void 0 ? true : _options$scroll,
-      _options$resize = options.resize,
-      resize = _options$resize === void 0 ? true : _options$resize;
-    var window = getWindow(state.elements.popper);
-    var scrollParents = [].concat(
-      state.scrollParents.reference,
-      state.scrollParents.popper
-    );
-
-    if (scroll) {
-      scrollParents.forEach(function (scrollParent) {
-        scrollParent.addEventListener("scroll", instance.update, passive);
+    static jQueryInterface(e) {
+      return this.each(function () {
+        eA.carouselInterface(this, e);
       });
     }
-
-    if (resize) {
-      window.addEventListener("resize", instance.update, passive);
+    static dataApiClickHandler(e) {
+      let t = s(this);
+      if (!t || !t.classList.contains("carousel")) return;
+      let i = { ...Z.getDataAttributes(t), ...Z.getDataAttributes(this) },
+        n = this.getAttribute("data-bs-slide-to");
+      n && (i.interval = !1),
+        eA.carouselInterface(t, i),
+        n && eA.getInstance(t).to(n),
+        e.preventDefault();
     }
-
-    return function () {
-      if (scroll) {
-        scrollParents.forEach(function (scrollParent) {
-          scrollParent.removeEventListener("scroll", instance.update, passive);
+  }
+  P.on(
+    document,
+    e$,
+    "[data-bs-slide], [data-bs-slide-to]",
+    eA.dataApiClickHandler
+  ),
+    P.on(window, ey, () => {
+      let e = G.find('[data-bs-ride="carousel"]');
+      for (let t = 0, i = e.length; t < i; t++)
+        eA.carouselInterface(e[t], eA.getInstance(e[t]));
+    }),
+    b(eA),
+    P.on(
+      document,
+      EVENT_CLICK_DATA_API$4,
+      SELECTOR_DATA_TOGGLE$4,
+      function (e) {
+        ("A" === e.target.tagName ||
+          (e.delegateTarget && "A" === e.delegateTarget.tagName)) &&
+          e.preventDefault();
+        let t = n(this),
+          i = G.find(t);
+        i.forEach((e) => {
+          Collapse.getOrCreateInstance(e, { toggle: !1 }).toggle();
         });
       }
-
-      if (resize) {
-        window.removeEventListener("resize", instance.update, passive);
-      }
-    };
-  } // eslint-disable-next-line import/no-unused-modules
-
-  const eventListeners = {
-    name: "eventListeners",
-    enabled: true,
+    ),
+    b(Collapse);
+  var ex = "bottom",
+    eO = "right",
+    eL = "left",
+    ek = "auto",
+    eD = ["top", ex, eO, eL],
+    e9 = "start",
+    eT = "clippingParents",
+    eC = "viewport",
+    eI = "popper",
+    e_ = "reference",
+    eN = eD.reduce(function (e, t) {
+      return e.concat([t + "-" + e9, t + "-end"]);
+    }, []),
+    eS = [].concat(eD, [ek]).reduce(function (e, t) {
+      return e.concat([t, t + "-" + e9, t + "-end"]);
+    }, []),
+    eM = "beforeRead",
+    eH = "read",
+    eP = "afterRead",
+    eW = "beforeMain",
+    eR = "main",
+    eB = "afterMain",
+    ej = "beforeWrite",
+    eq = "write",
+    eV = "afterWrite",
+    eX = [eM, eH, eP, eW, eR, eB, ej, eq, eV];
+  function eF(e) {
+    return e ? (e.nodeName || "").toLowerCase() : null;
+  }
+  function eK(e) {
+    if (null == e) return window;
+    if ("[object Window]" !== e.toString()) {
+      var t = e.ownerDocument;
+      return (t && t.defaultView) || window;
+    }
+    return e;
+  }
+  function ez(e) {
+    var t = eK(e).Element;
+    return e instanceof t || e instanceof Element;
+  }
+  function e0(e) {
+    var t = eK(e).HTMLElement;
+    return e instanceof t || e instanceof HTMLElement;
+  }
+  function eY(e) {
+    if ("undefined" == typeof ShadowRoot) return !1;
+    var t = eK(e).ShadowRoot;
+    return e instanceof t || e instanceof ShadowRoot;
+  }
+  let eU = {
+    name: "applyStyles",
+    enabled: !0,
     phase: "write",
-    fn: function fn() {},
-    effect: effect,
-    data: {},
-  };
-
-  var hash$1 = {
-    left: "right",
-    right: "left",
-    bottom: "top",
-    top: "bottom",
-  };
-  function getOppositePlacement(placement) {
-    return placement.replace(/left|right|bottom|top/g, function (matched) {
-      return hash$1[matched];
-    });
-  }
-
-  var hash = {
-    start: "end",
-    end: "start",
-  };
-  function getOppositeVariationPlacement(placement) {
-    return placement.replace(/start|end/g, function (matched) {
-      return hash[matched];
-    });
-  }
-
-  function getWindowScroll(node) {
-    var win = getWindow(node);
-    var scrollLeft = win.pageXOffset;
-    var scrollTop = win.pageYOffset;
-    return {
-      scrollLeft: scrollLeft,
-      scrollTop: scrollTop,
-    };
-  }
-
-  function getWindowScrollBarX(element) {
-    // If <html> has a CSS width greater than the viewport, then this will be
-    // incorrect for RTL.
-    // Popper 1 is broken in this case and never had a bug report so let's assume
-    // it's not an issue. I don't think anyone ever specifies width on <html>
-    // anyway.
-    // Browsers where the left scrollbar doesn't cause an issue report `0` for
-    // this (e.g. Edge 2019, IE11, Safari)
-    return (
-      getBoundingClientRect(getDocumentElement(element)).left +
-      getWindowScroll(element).scrollLeft
-    );
-  }
-
-  function getViewportRect(element) {
-    var win = getWindow(element);
-    var html = getDocumentElement(element);
-    var visualViewport = win.visualViewport;
-    var width = html.clientWidth;
-    var height = html.clientHeight;
-    var x = 0;
-    var y = 0; // NB: This isn't supported on iOS <= 12. If the keyboard is open, the popper
-    // can be obscured underneath it.
-    // Also, `html.clientHeight` adds the bottom bar height in Safari iOS, even
-    // if it isn't open, so if this isn't available, the popper will be detected
-    // to overflow the bottom of the screen too early.
-
-    if (visualViewport) {
-      width = visualViewport.width;
-      height = visualViewport.height; // Uses Layout Viewport (like Chrome; Safari does not currently)
-      // In Chrome, it returns a value very close to 0 (+/-) but contains rounding
-      // errors due to floating point numbers, so we need to check precision.
-      // Safari returns a number <= 0, usually < -1 when pinch-zoomed
-      // Feature detection fails in mobile emulation mode in Chrome.
-      // Math.abs(win.innerWidth / visualViewport.scale - visualViewport.width) <
-      // 0.001
-      // Fallback here: "Not Safari" userAgent
-
-      if (!/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
-        x = visualViewport.offsetLeft;
-        y = visualViewport.offsetTop;
-      }
-    }
-
-    return {
-      width: width,
-      height: height,
-      x: x + getWindowScrollBarX(element),
-      y: y,
-    };
-  }
-
-  // of the `<html>` and `<body>` rect bounds if horizontally scrollable
-
-  function getDocumentRect(element) {
-    var _element$ownerDocumen;
-
-    var html = getDocumentElement(element);
-    var winScroll = getWindowScroll(element);
-    var body =
-      (_element$ownerDocumen = element.ownerDocument) == null
-        ? void 0
-        : _element$ownerDocumen.body;
-    var width = max(
-      html.scrollWidth,
-      html.clientWidth,
-      body ? body.scrollWidth : 0,
-      body ? body.clientWidth : 0
-    );
-    var height = max(
-      html.scrollHeight,
-      html.clientHeight,
-      body ? body.scrollHeight : 0,
-      body ? body.clientHeight : 0
-    );
-    var x = -winScroll.scrollLeft + getWindowScrollBarX(element);
-    var y = -winScroll.scrollTop;
-
-    if (getComputedStyle$1(body || html).direction === "rtl") {
-      x += max(html.clientWidth, body ? body.clientWidth : 0) - width;
-    }
-
-    return {
-      width: width,
-      height: height,
-      x: x,
-      y: y,
-    };
-  }
-
-  function isScrollParent(element) {
-    // Firefox wants us to check `-x` and `-y` variations as well
-    var _getComputedStyle = getComputedStyle$1(element),
-      overflow = _getComputedStyle.overflow,
-      overflowX = _getComputedStyle.overflowX,
-      overflowY = _getComputedStyle.overflowY;
-
-    return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
-  }
-
-  function getScrollParent(node) {
-    if (["html", "body", "#document"].indexOf(getNodeName(node)) >= 0) {
-      // $FlowFixMe[incompatible-return]: assume body is always available
-      return node.ownerDocument.body;
-    }
-
-    if (isHTMLElement(node) && isScrollParent(node)) {
-      return node;
-    }
-
-    return getScrollParent(getParentNode(node));
-  }
-
-  /*
-  given a DOM element, return the list of all scroll parents, up the list of ancesors
-  until we get to the top window object. This list is what we attach scroll listeners
-  to, because if any of these parent elements scroll, we'll need to re-calculate the
-  reference element's position.
-  */
-
-  function listScrollParents(element, list) {
-    var _element$ownerDocumen;
-
-    if (list === void 0) {
-      list = [];
-    }
-
-    var scrollParent = getScrollParent(element);
-    var isBody =
-      scrollParent ===
-      ((_element$ownerDocumen = element.ownerDocument) == null
-        ? void 0
-        : _element$ownerDocumen.body);
-    var win = getWindow(scrollParent);
-    var target = isBody
-      ? [win].concat(
-          win.visualViewport || [],
-          isScrollParent(scrollParent) ? scrollParent : []
-        )
-      : scrollParent;
-    var updatedList = list.concat(target);
-    return isBody
-      ? updatedList // $FlowFixMe[incompatible-call]: isBody tells us target will be an HTMLElement here
-      : updatedList.concat(listScrollParents(getParentNode(target)));
-  }
-
-  function rectToClientRect(rect) {
-    return Object.assign({}, rect, {
-      left: rect.x,
-      top: rect.y,
-      right: rect.x + rect.width,
-      bottom: rect.y + rect.height,
-    });
-  }
-
-  function getInnerBoundingClientRect(element) {
-    var rect = getBoundingClientRect(element);
-    rect.top = rect.top + element.clientTop;
-    rect.left = rect.left + element.clientLeft;
-    rect.bottom = rect.top + element.clientHeight;
-    rect.right = rect.left + element.clientWidth;
-    rect.width = element.clientWidth;
-    rect.height = element.clientHeight;
-    rect.x = rect.left;
-    rect.y = rect.top;
-    return rect;
-  }
-
-  function getClientRectFromMixedType(element, clippingParent) {
-    return clippingParent === viewport
-      ? rectToClientRect(getViewportRect(element))
-      : isHTMLElement(clippingParent)
-      ? getInnerBoundingClientRect(clippingParent)
-      : rectToClientRect(getDocumentRect(getDocumentElement(element)));
-  } // A "clipping parent" is an overflowable container with the characteristic of
-  // clipping (or hiding) overflowing elements with a position different from
-  // `initial`
-
-  function getClippingParents(element) {
-    var clippingParents = listScrollParents(getParentNode(element));
-    var canEscapeClipping =
-      ["absolute", "fixed"].indexOf(getComputedStyle$1(element).position) >= 0;
-    var clipperElement =
-      canEscapeClipping && isHTMLElement(element)
-        ? getOffsetParent(element)
-        : element;
-
-    if (!isElement(clipperElement)) {
-      return [];
-    } // $FlowFixMe[incompatible-return]: https://github.com/facebook/flow/issues/1414
-
-    return clippingParents.filter(function (clippingParent) {
+    fn: function e(t) {
+      var i = t.state;
+      Object.keys(i.elements).forEach(function (e) {
+        var t = i.styles[e] || {},
+          n = i.attributes[e] || {},
+          s = i.elements[e];
+        e0(s) &&
+          eF(s) &&
+          (Object.assign(s.style, t),
+          Object.keys(n).forEach(function (e) {
+            var t = n[e];
+            !1 === t
+              ? s.removeAttribute(e)
+              : s.setAttribute(e, !0 === t ? "" : t);
+          }));
+      });
+    },
+    effect: function e(t) {
+      var i = t.state,
+        n = {
+          popper: {
+            position: i.options.strategy,
+            left: "0",
+            top: "0",
+            margin: "0",
+          },
+          arrow: { position: "absolute" },
+          reference: {},
+        };
       return (
-        isElement(clippingParent) &&
-        contains(clippingParent, clipperElement) &&
-        getNodeName(clippingParent) !== "body"
+        Object.assign(i.elements.popper.style, n.popper),
+        (i.styles = n),
+        i.elements.arrow && Object.assign(i.elements.arrow.style, n.arrow),
+        function () {
+          Object.keys(i.elements).forEach(function (e) {
+            var t = i.elements[e],
+              s = i.attributes[e] || {},
+              r = Object.keys(
+                i.styles.hasOwnProperty(e) ? i.styles[e] : n[e]
+              ).reduce(function (e, t) {
+                return (e[t] = ""), e;
+              }, {});
+            e0(t) &&
+              eF(t) &&
+              (Object.assign(t.style, r),
+              Object.keys(s).forEach(function (e) {
+                t.removeAttribute(e);
+              }));
+          });
+        }
       );
-    });
-  } // Gets the maximum area that the element is visible in due to any number of
-  // clipping parents
-
-  function getClippingRect(element, boundary, rootBoundary) {
-    var mainClippingParents =
-      boundary === "clippingParents"
-        ? getClippingParents(element)
-        : [].concat(boundary);
-    var clippingParents = [].concat(mainClippingParents, [rootBoundary]);
-    var firstClippingParent = clippingParents[0];
-    var clippingRect = clippingParents.reduce(function (
-      accRect,
-      clippingParent
-    ) {
-      var rect = getClientRectFromMixedType(element, clippingParent);
-      accRect.top = max(rect.top, accRect.top);
-      accRect.right = min(rect.right, accRect.right);
-      accRect.bottom = min(rect.bottom, accRect.bottom);
-      accRect.left = max(rect.left, accRect.left);
-      return accRect;
     },
-    getClientRectFromMixedType(element, firstClippingParent));
-    clippingRect.width = clippingRect.right - clippingRect.left;
-    clippingRect.height = clippingRect.bottom - clippingRect.top;
-    clippingRect.x = clippingRect.left;
-    clippingRect.y = clippingRect.top;
-    return clippingRect;
-  }
-
-  function computeOffsets(_ref) {
-    var reference = _ref.reference,
-      element = _ref.element,
-      placement = _ref.placement;
-    var basePlacement = placement ? getBasePlacement(placement) : null;
-    var variation = placement ? getVariation(placement) : null;
-    var commonX = reference.x + reference.width / 2 - element.width / 2;
-    var commonY = reference.y + reference.height / 2 - element.height / 2;
-    var offsets;
-
-    switch (basePlacement) {
-      case top:
-        offsets = {
-          x: commonX,
-          y: reference.y - element.height,
-        };
-        break;
-
-      case bottom:
-        offsets = {
-          x: commonX,
-          y: reference.y + reference.height,
-        };
-        break;
-
-      case right:
-        offsets = {
-          x: reference.x + reference.width,
-          y: commonY,
-        };
-        break;
-
-      case left:
-        offsets = {
-          x: reference.x - element.width,
-          y: commonY,
-        };
-        break;
-
-      default:
-        offsets = {
-          x: reference.x,
-          y: reference.y,
-        };
-    }
-
-    var mainAxis = basePlacement
-      ? getMainAxisFromPlacement(basePlacement)
-      : null;
-
-    if (mainAxis != null) {
-      var len = mainAxis === "y" ? "height" : "width";
-
-      switch (variation) {
-        case start:
-          offsets[mainAxis] =
-            offsets[mainAxis] - (reference[len] / 2 - element[len] / 2);
-          break;
-
-        case end:
-          offsets[mainAxis] =
-            offsets[mainAxis] + (reference[len] / 2 - element[len] / 2);
-          break;
-      }
-    }
-
-    return offsets;
-  }
-
-  function detectOverflow(state, options) {
-    if (options === void 0) {
-      options = {};
-    }
-
-    var _options = options,
-      _options$placement = _options.placement,
-      placement =
-        _options$placement === void 0 ? state.placement : _options$placement,
-      _options$boundary = _options.boundary,
-      boundary =
-        _options$boundary === void 0 ? clippingParents : _options$boundary,
-      _options$rootBoundary = _options.rootBoundary,
-      rootBoundary =
-        _options$rootBoundary === void 0 ? viewport : _options$rootBoundary,
-      _options$elementConte = _options.elementContext,
-      elementContext =
-        _options$elementConte === void 0 ? popper : _options$elementConte,
-      _options$altBoundary = _options.altBoundary,
-      altBoundary =
-        _options$altBoundary === void 0 ? false : _options$altBoundary,
-      _options$padding = _options.padding,
-      padding = _options$padding === void 0 ? 0 : _options$padding;
-    var paddingObject = mergePaddingObject(
-      typeof padding !== "number"
-        ? padding
-        : expandToHashMap(padding, basePlacements)
-    );
-    var altContext = elementContext === popper ? reference : popper;
-    var popperRect = state.rects.popper;
-    var element = state.elements[altBoundary ? altContext : elementContext];
-    var clippingClientRect = getClippingRect(
-      isElement(element)
-        ? element
-        : element.contextElement || getDocumentElement(state.elements.popper),
-      boundary,
-      rootBoundary
-    );
-    var referenceClientRect = getBoundingClientRect(state.elements.reference);
-    var popperOffsets = computeOffsets({
-      reference: referenceClientRect,
-      element: popperRect,
-      strategy: "absolute",
-      placement: placement,
-    });
-    var popperClientRect = rectToClientRect(
-      Object.assign({}, popperRect, popperOffsets)
-    );
-    var elementClientRect =
-      elementContext === popper ? popperClientRect : referenceClientRect; // positive = overflowing the clipping rect
-    // 0 or negative = within the clipping rect
-
-    var overflowOffsets = {
-      top: clippingClientRect.top - elementClientRect.top + paddingObject.top,
-      bottom:
-        elementClientRect.bottom -
-        clippingClientRect.bottom +
-        paddingObject.bottom,
-      left:
-        clippingClientRect.left - elementClientRect.left + paddingObject.left,
-      right:
-        elementClientRect.right -
-        clippingClientRect.right +
-        paddingObject.right,
-    };
-    var offsetData = state.modifiersData.offset; // Offsets can be applied only to the popper element
-
-    if (elementContext === popper && offsetData) {
-      var offset = offsetData[placement];
-      Object.keys(overflowOffsets).forEach(function (key) {
-        var multiply = [right, bottom].indexOf(key) >= 0 ? 1 : -1;
-        var axis = [top, bottom].indexOf(key) >= 0 ? "y" : "x";
-        overflowOffsets[key] += offset[axis] * multiply;
-      });
-    }
-
-    return overflowOffsets;
-  }
-
-  function computeAutoPlacement(state, options) {
-    if (options === void 0) {
-      options = {};
-    }
-
-    var _options = options,
-      placement = _options.placement,
-      boundary = _options.boundary,
-      rootBoundary = _options.rootBoundary,
-      padding = _options.padding,
-      flipVariations = _options.flipVariations,
-      _options$allowedAutoP = _options.allowedAutoPlacements,
-      allowedAutoPlacements =
-        _options$allowedAutoP === void 0 ? placements : _options$allowedAutoP;
-    var variation = getVariation(placement);
-    var placements$1 = variation
-      ? flipVariations
-        ? variationPlacements
-        : variationPlacements.filter(function (placement) {
-            return getVariation(placement) === variation;
-          })
-      : basePlacements;
-    var allowedPlacements = placements$1.filter(function (placement) {
-      return allowedAutoPlacements.indexOf(placement) >= 0;
-    });
-
-    if (allowedPlacements.length === 0) {
-      allowedPlacements = placements$1;
-    } // $FlowFixMe[incompatible-type]: Flow seems to have problems with two array unions...
-
-    var overflows = allowedPlacements.reduce(function (acc, placement) {
-      acc[placement] = detectOverflow(state, {
-        placement: placement,
-        boundary: boundary,
-        rootBoundary: rootBoundary,
-        padding: padding,
-      })[getBasePlacement(placement)];
-      return acc;
-    }, {});
-    return Object.keys(overflows).sort(function (a, b) {
-      return overflows[a] - overflows[b];
-    });
-  }
-
-  function getExpandedFallbackPlacements(placement) {
-    if (getBasePlacement(placement) === auto) {
-      return [];
-    }
-
-    var oppositePlacement = getOppositePlacement(placement);
-    return [
-      getOppositeVariationPlacement(placement),
-      oppositePlacement,
-      getOppositeVariationPlacement(oppositePlacement),
-    ];
-  }
-
-  function flip(_ref) {
-    var state = _ref.state,
-      options = _ref.options,
-      name = _ref.name;
-
-    if (state.modifiersData[name]._skip) {
-      return;
-    }
-
-    var _options$mainAxis = options.mainAxis,
-      checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis,
-      _options$altAxis = options.altAxis,
-      checkAltAxis = _options$altAxis === void 0 ? true : _options$altAxis,
-      specifiedFallbackPlacements = options.fallbackPlacements,
-      padding = options.padding,
-      boundary = options.boundary,
-      rootBoundary = options.rootBoundary,
-      altBoundary = options.altBoundary,
-      _options$flipVariatio = options.flipVariations,
-      flipVariations =
-        _options$flipVariatio === void 0 ? true : _options$flipVariatio,
-      allowedAutoPlacements = options.allowedAutoPlacements;
-    var preferredPlacement = state.options.placement;
-    var basePlacement = getBasePlacement(preferredPlacement);
-    var isBasePlacement = basePlacement === preferredPlacement;
-    var fallbackPlacements =
-      specifiedFallbackPlacements ||
-      (isBasePlacement || !flipVariations
-        ? [getOppositePlacement(preferredPlacement)]
-        : getExpandedFallbackPlacements(preferredPlacement));
-    var placements = [preferredPlacement]
-      .concat(fallbackPlacements)
-      .reduce(function (acc, placement) {
-        return acc.concat(
-          getBasePlacement(placement) === auto
-            ? computeAutoPlacement(state, {
-                placement: placement,
-                boundary: boundary,
-                rootBoundary: rootBoundary,
-                padding: padding,
-                flipVariations: flipVariations,
-                allowedAutoPlacements: allowedAutoPlacements,
-              })
-            : placement
-        );
-      }, []);
-    var referenceRect = state.rects.reference;
-    var popperRect = state.rects.popper;
-    var checksMap = new Map();
-    var makeFallbackChecks = true;
-    var firstFittingPlacement = placements[0];
-
-    for (var i = 0; i < placements.length; i++) {
-      var placement = placements[i];
-
-      var _basePlacement = getBasePlacement(placement);
-
-      var isStartVariation = getVariation(placement) === start;
-      var isVertical = [top, bottom].indexOf(_basePlacement) >= 0;
-      var len = isVertical ? "width" : "height";
-      var overflow = detectOverflow(state, {
-        placement: placement,
-        boundary: boundary,
-        rootBoundary: rootBoundary,
-        altBoundary: altBoundary,
-        padding: padding,
-      });
-      var mainVariationSide = isVertical
-        ? isStartVariation
-          ? right
-          : left
-        : isStartVariation
-        ? bottom
-        : top;
-
-      if (referenceRect[len] > popperRect[len]) {
-        mainVariationSide = getOppositePlacement(mainVariationSide);
-      }
-
-      var altVariationSide = getOppositePlacement(mainVariationSide);
-      var checks = [];
-
-      if (checkMainAxis) {
-        checks.push(overflow[_basePlacement] <= 0);
-      }
-
-      if (checkAltAxis) {
-        checks.push(
-          overflow[mainVariationSide] <= 0,
-          overflow[altVariationSide] <= 0
-        );
-      }
-
-      if (
-        checks.every(function (check) {
-          return check;
-        })
-      ) {
-        firstFittingPlacement = placement;
-        makeFallbackChecks = false;
-        break;
-      }
-
-      checksMap.set(placement, checks);
-    }
-
-    if (makeFallbackChecks) {
-      // `2` may be desired in some cases – research later
-      var numberOfChecks = flipVariations ? 3 : 1;
-
-      var _loop = function _loop(_i) {
-        var fittingPlacement = placements.find(function (placement) {
-          var checks = checksMap.get(placement);
-
-          if (checks) {
-            return checks.slice(0, _i).every(function (check) {
-              return check;
-            });
-          }
-        });
-
-        if (fittingPlacement) {
-          firstFittingPlacement = fittingPlacement;
-          return "break";
-        }
-      };
-
-      for (var _i = numberOfChecks; _i > 0; _i--) {
-        var _ret = _loop(_i);
-
-        if (_ret === "break") break;
-      }
-    }
-
-    if (state.placement !== firstFittingPlacement) {
-      state.modifiersData[name]._skip = true;
-      state.placement = firstFittingPlacement;
-      state.reset = true;
-    }
-  } // eslint-disable-next-line import/no-unused-modules
-
-  const flip$1 = {
-    name: "flip",
-    enabled: true,
-    phase: "main",
-    fn: flip,
-    requiresIfExists: ["offset"],
-    data: {
-      _skip: false,
-    },
+    requires: ["computeStyles"],
   };
-
-  function getSideOffsets(overflow, rect, preventedOffsets) {
-    if (preventedOffsets === void 0) {
-      preventedOffsets = {
-        x: 0,
-        y: 0,
-      };
-    }
-
+  function eQ(e) {
+    return e.split("-")[0];
+  }
+  function e1(e, t) {
+    var i = e.getBoundingClientRect();
     return {
-      top: overflow.top - rect.height - preventedOffsets.y,
-      right: overflow.right - rect.width + preventedOffsets.x,
-      bottom: overflow.bottom - rect.height + preventedOffsets.y,
-      left: overflow.left - rect.width - preventedOffsets.x,
+      width: i.width / 1,
+      height: i.height / 1,
+      top: i.top / 1,
+      right: i.right / 1,
+      bottom: i.bottom / 1,
+      left: i.left / 1,
+      x: i.left / 1,
+      y: i.top / 1,
     };
   }
-
-  function isAnySideFullyClipped(overflow) {
-    return [top, right, bottom, left].some(function (side) {
-      return overflow[side] >= 0;
-    });
-  }
-
-  function hide(_ref) {
-    var state = _ref.state,
-      name = _ref.name;
-    var referenceRect = state.rects.reference;
-    var popperRect = state.rects.popper;
-    var preventedOffsets = state.modifiersData.preventOverflow;
-    var referenceOverflow = detectOverflow(state, {
-      elementContext: "reference",
-    });
-    var popperAltOverflow = detectOverflow(state, {
-      altBoundary: true,
-    });
-    var referenceClippingOffsets = getSideOffsets(
-      referenceOverflow,
-      referenceRect
+  function e3(e) {
+    var t = e1(e),
+      i = e.offsetWidth,
+      n = e.offsetHeight;
+    return (
+      1 >= Math.abs(t.width - i) && (i = t.width),
+      1 >= Math.abs(t.height - n) && (n = t.height),
+      { x: e.offsetLeft, y: e.offsetTop, width: i, height: n }
     );
-    var popperEscapeOffsets = getSideOffsets(
-      popperAltOverflow,
-      popperRect,
-      preventedOffsets
-    );
-    var isReferenceHidden = isAnySideFullyClipped(referenceClippingOffsets);
-    var hasPopperEscaped = isAnySideFullyClipped(popperEscapeOffsets);
-    state.modifiersData[name] = {
-      referenceClippingOffsets: referenceClippingOffsets,
-      popperEscapeOffsets: popperEscapeOffsets,
-      isReferenceHidden: isReferenceHidden,
-      hasPopperEscaped: hasPopperEscaped,
-    };
-    state.attributes.popper = Object.assign({}, state.attributes.popper, {
-      "data-popper-reference-hidden": isReferenceHidden,
-      "data-popper-escaped": hasPopperEscaped,
-    });
-  } // eslint-disable-next-line import/no-unused-modules
-
-  const hide$1 = {
-    name: "hide",
-    enabled: true,
-    phase: "main",
-    requiresIfExists: ["preventOverflow"],
-    fn: hide,
-  };
-
-  function distanceAndSkiddingToXY(placement, rects, offset) {
-    var basePlacement = getBasePlacement(placement);
-    var invertDistance = [left, top].indexOf(basePlacement) >= 0 ? -1 : 1;
-
-    var _ref =
-        typeof offset === "function"
-          ? offset(
-              Object.assign({}, rects, {
-                placement: placement,
-              })
-            )
-          : offset,
-      skidding = _ref[0],
-      distance = _ref[1];
-
-    skidding = skidding || 0;
-    distance = (distance || 0) * invertDistance;
-    return [left, right].indexOf(basePlacement) >= 0
-      ? {
-          x: distance,
-          y: skidding,
-        }
-      : {
-          x: skidding,
-          y: distance,
-        };
   }
-
-  function offset(_ref2) {
-    var state = _ref2.state,
-      options = _ref2.options,
-      name = _ref2.name;
-    var _options$offset = options.offset,
-      offset = _options$offset === void 0 ? [0, 0] : _options$offset;
-    var data = placements.reduce(function (acc, placement) {
-      acc[placement] = distanceAndSkiddingToXY(placement, state.rects, offset);
-      return acc;
-    }, {});
-    var _data$state$placement = data[state.placement],
-      x = _data$state$placement.x,
-      y = _data$state$placement.y;
-
-    if (state.modifiersData.popperOffsets != null) {
-      state.modifiersData.popperOffsets.x += x;
-      state.modifiersData.popperOffsets.y += y;
+  function e2(e, t) {
+    var i = t.getRootNode && t.getRootNode();
+    if (e.contains(t)) return !0;
+    if (i && eY(i)) {
+      var n = t;
+      do {
+        if (n && e.isSameNode(n)) return !0;
+        n = n.parentNode || n.host;
+      } while (n);
     }
-
-    state.modifiersData[name] = data;
-  } // eslint-disable-next-line import/no-unused-modules
-
-  const offset$1 = {
-    name: "offset",
-    enabled: true,
-    phase: "main",
-    requires: ["popperOffsets"],
-    fn: offset,
-  };
-
-  function popperOffsets(_ref) {
-    var state = _ref.state,
-      name = _ref.name;
-    // Offsets are the actual position the popper needs to have to be
-    // properly positioned near its reference element
-    // This is the most basic placement, and will be adjusted by
-    // the modifiers in the next step
-    state.modifiersData[name] = computeOffsets({
-      reference: state.rects.reference,
-      element: state.rects.popper,
-      strategy: "absolute",
-      placement: state.placement,
-    });
-  } // eslint-disable-next-line import/no-unused-modules
-
-  const popperOffsets$1 = {
-    name: "popperOffsets",
-    enabled: true,
-    phase: "read",
-    fn: popperOffsets,
-    data: {},
-  };
-
-  function getAltAxis(axis) {
-    return axis === "x" ? "y" : "x";
+    return !1;
   }
+  function eZ(e) {
+    return eK(e).getComputedStyle(e);
+  }
+  function e4(e) {
+    return ["table", "td", "th"].indexOf(eF(e)) >= 0;
+  }
+  function e6(e) {
+    return (
+      (ez(e) ? e.ownerDocument : e.document) || window.document
+    ).documentElement;
+  }
+  function eG(e) {
+    return "html" === eF(e)
+      ? e
+      : e.assignedSlot || e.parentNode || (eY(e) ? e.host : null) || e6(e);
+  }
+  function eJ(e) {
+    return e0(e) && "fixed" !== eZ(e).position ? e.offsetParent : null;
+  }
+  function e5(e) {
+    for (var t = eK(e), i = eJ(e); i && e4(i) && "static" === eZ(i).position; )
+      i = eJ(i);
+    return i &&
+      ("html" === eF(i) || ("body" === eF(i) && "static" === eZ(i).position))
+      ? t
+      : i ||
+          (function e(t) {
+            var i = -1 !== navigator.userAgent.toLowerCase().indexOf("firefox");
+            if (
+              -1 !== navigator.userAgent.indexOf("Trident") &&
+              e0(t) &&
+              "fixed" === eZ(t).position
+            )
+              return null;
+            for (
+              var n = eG(t);
+              e0(n) && 0 > ["html", "body"].indexOf(eF(n));
 
-  function preventOverflow(_ref) {
-    var state = _ref.state,
-      options = _ref.options,
-      name = _ref.name;
-    var _options$mainAxis = options.mainAxis,
-      checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis,
-      _options$altAxis = options.altAxis,
-      checkAltAxis = _options$altAxis === void 0 ? false : _options$altAxis,
-      boundary = options.boundary,
-      rootBoundary = options.rootBoundary,
-      altBoundary = options.altBoundary,
-      padding = options.padding,
-      _options$tether = options.tether,
-      tether = _options$tether === void 0 ? true : _options$tether,
-      _options$tetherOffset = options.tetherOffset,
-      tetherOffset =
-        _options$tetherOffset === void 0 ? 0 : _options$tetherOffset;
-    var overflow = detectOverflow(state, {
-      boundary: boundary,
-      rootBoundary: rootBoundary,
-      padding: padding,
-      altBoundary: altBoundary,
-    });
-    var basePlacement = getBasePlacement(state.placement);
-    var variation = getVariation(state.placement);
-    var isBasePlacement = !variation;
-    var mainAxis = getMainAxisFromPlacement(basePlacement);
-    var altAxis = getAltAxis(mainAxis);
-    var popperOffsets = state.modifiersData.popperOffsets;
-    var referenceRect = state.rects.reference;
-    var popperRect = state.rects.popper;
-    var tetherOffsetValue =
-      typeof tetherOffset === "function"
-        ? tetherOffset(
-            Object.assign({}, state.rects, {
-              placement: state.placement,
+            ) {
+              var s = eZ(n);
+              if (
+                "none" !== s.transform ||
+                "none" !== s.perspective ||
+                "paint" === s.contain ||
+                -1 !== ["transform", "perspective"].indexOf(s.willChange) ||
+                (i && "filter" === s.willChange) ||
+                (i && s.filter && "none" !== s.filter)
+              )
+                return n;
+              n = n.parentNode;
+            }
+            return null;
+          })(e) ||
+          t;
+  }
+  function e7(e) {
+    return ["top", "bottom"].indexOf(e) >= 0 ? "x" : "y";
+  }
+  var te = Math.max,
+    tt = Math.min,
+    ti = Math.round;
+  function tn(e, t, i) {
+    return te(e, tt(t, i));
+  }
+  function ts() {
+    return { top: 0, right: 0, bottom: 0, left: 0 };
+  }
+  function tr(e) {
+    return Object.assign({}, ts(), e);
+  }
+  function to(e, t) {
+    return t.reduce(function (t, i) {
+      return (t[i] = e), t;
+    }, {});
+  }
+  let ta = {
+    name: "arrow",
+    enabled: !0,
+    phase: "main",
+    fn: function e(t) {
+      var i,
+        n = t.state,
+        s = t.name,
+        r = t.options,
+        o = n.elements.arrow,
+        a = n.modifiersData.popperOffsets,
+        l = eQ(n.placement),
+        c = e7(l),
+        f = [eL, eO].indexOf(l) >= 0 ? "height" : "width";
+      if (o && a) {
+        var u,
+          h,
+          d =
+            ((u = r.padding),
+            (h = n),
+            tr(
+              "number" !=
+                typeof (u =
+                  "function" == typeof u
+                    ? u(Object.assign({}, h.rects, { placement: h.placement }))
+                    : u)
+                ? u
+                : to(u, eD)
+            )),
+          p = e3(o),
+          m =
+            n.rects.reference[f] +
+            n.rects.reference[c] -
+            a[c] -
+            n.rects.popper[f],
+          g = a[c] - n.rects.reference[c],
+          v = e5(o),
+          b = v ? ("y" === c ? v.clientHeight || 0 : v.clientWidth || 0) : 0,
+          y = d["y" === c ? "top" : eL],
+          $ = b - p[f] - d["y" === c ? ex : eO],
+          E = b / 2 - p[f] / 2 + (m / 2 - g / 2),
+          w = tn(y, E, $),
+          A = c;
+        n.modifiersData[s] = (((i = {})[A] = w), (i.centerOffset = w - E), i);
+      }
+    },
+    effect: function e(t) {
+      var i = t.state,
+        n = t.options.element,
+        s = void 0 === n ? "[data-popper-arrow]" : n;
+      null != s &&
+        ("string" != typeof s || (s = i.elements.popper.querySelector(s))) &&
+        e2(i.elements.popper, s) &&
+        (i.elements.arrow = s);
+    },
+    requires: ["popperOffsets"],
+    requiresIfExists: ["preventOverflow"],
+  };
+  function tl(e) {
+    return e.split("-")[1];
+  }
+  var tc = { top: "auto", right: "auto", bottom: "auto", left: "auto" };
+  function tf(e) {
+    var t,
+      i,
+      n,
+      s,
+      r,
+      o,
+      a = e.popper,
+      l = e.popperRect,
+      c = e.placement,
+      f = e.variation,
+      u = e.offsets,
+      h = e.position,
+      d = e.gpuAcceleration,
+      p = e.adaptive,
+      m = e.roundOffsets,
+      g =
+        !0 === m
+          ? ((s = (n = u).x),
+            (r = n.y),
+            {
+              x: ti(ti(s * (o = window.devicePixelRatio || 1)) / o) || 0,
+              y: ti(ti(r * o) / o) || 0,
+            })
+          : "function" == typeof m
+          ? m(u)
+          : u,
+      v = g.x,
+      b = void 0 === v ? 0 : v,
+      y = g.y,
+      $ = void 0 === y ? 0 : y,
+      E = u.hasOwnProperty("x"),
+      w = u.hasOwnProperty("y"),
+      A = eL,
+      x = "top",
+      O = window;
+    if (p) {
+      var L = e5(a),
+        k = "clientHeight",
+        D = "clientWidth";
+      L === eK(a) &&
+        ((L = e6(a)),
+        "static" !== eZ(L).position &&
+          "absolute" === h &&
+          ((k = "scrollHeight"), (D = "scrollWidth"))),
+        ("top" === c || ((c === eL || c === eO) && "end" === f)) &&
+          ((x = ex), ($ -= L[k] - l.height), ($ *= d ? 1 : -1)),
+        (c === eL || (("top" === c || c === ex) && "end" === f)) &&
+          ((A = eO), (b -= L[D] - l.width), (b *= d ? 1 : -1));
+    }
+    var T = Object.assign({ position: h }, p && tc);
+    return d
+      ? Object.assign(
+          {},
+          T,
+          (((i = {})[x] = w ? "0" : ""),
+          (i[A] = E ? "0" : ""),
+          (i.transform =
+            1 >= (O.devicePixelRatio || 1)
+              ? "translate(" + b + "px, " + $ + "px)"
+              : "translate3d(" + b + "px, " + $ + "px, 0)"),
+          i)
+        )
+      : Object.assign(
+          {},
+          T,
+          (((t = {})[x] = w ? $ + "px" : ""),
+          (t[A] = E ? b + "px" : ""),
+          (t.transform = ""),
+          t)
+        );
+  }
+  let tu = {
+    name: "computeStyles",
+    enabled: !0,
+    phase: "beforeWrite",
+    fn: function e(t) {
+      var i = t.state,
+        n = t.options,
+        s = n.gpuAcceleration,
+        r = n.adaptive,
+        o = n.roundOffsets,
+        a = void 0 === o || o,
+        l = {
+          placement: eQ(i.placement),
+          variation: tl(i.placement),
+          popper: i.elements.popper,
+          popperRect: i.rects.popper,
+          gpuAcceleration: void 0 === s || s,
+        };
+      null != i.modifiersData.popperOffsets &&
+        (i.styles.popper = Object.assign(
+          {},
+          i.styles.popper,
+          tf(
+            Object.assign({}, l, {
+              offsets: i.modifiersData.popperOffsets,
+              position: i.options.strategy,
+              adaptive: void 0 === r || r,
+              roundOffsets: a,
             })
           )
-        : tetherOffset;
-    var data = {
-      x: 0,
-      y: 0,
-    };
-
-    if (!popperOffsets) {
-      return;
-    }
-
-    if (checkMainAxis || checkAltAxis) {
-      var mainSide = mainAxis === "y" ? top : left;
-      var altSide = mainAxis === "y" ? bottom : right;
-      var len = mainAxis === "y" ? "height" : "width";
-      var offset = popperOffsets[mainAxis];
-      var min$1 = popperOffsets[mainAxis] + overflow[mainSide];
-      var max$1 = popperOffsets[mainAxis] - overflow[altSide];
-      var additive = tether ? -popperRect[len] / 2 : 0;
-      var minLen = variation === start ? referenceRect[len] : popperRect[len];
-      var maxLen = variation === start ? -popperRect[len] : -referenceRect[len]; // We need to include the arrow in the calculation so the arrow doesn't go
-      // outside the reference bounds
-
-      var arrowElement = state.elements.arrow;
-      var arrowRect =
-        tether && arrowElement
-          ? getLayoutRect(arrowElement)
-          : {
-              width: 0,
-              height: 0,
-            };
-      var arrowPaddingObject = state.modifiersData["arrow#persistent"]
-        ? state.modifiersData["arrow#persistent"].padding
-        : getFreshSideObject();
-      var arrowPaddingMin = arrowPaddingObject[mainSide];
-      var arrowPaddingMax = arrowPaddingObject[altSide]; // If the reference length is smaller than the arrow length, we don't want
-      // to include its full size in the calculation. If the reference is small
-      // and near the edge of a boundary, the popper can overflow even if the
-      // reference is not overflowing as well (e.g. virtual elements with no
-      // width or height)
-
-      var arrowLen = within(0, referenceRect[len], arrowRect[len]);
-      var minOffset = isBasePlacement
-        ? referenceRect[len] / 2 -
-          additive -
-          arrowLen -
-          arrowPaddingMin -
-          tetherOffsetValue
-        : minLen - arrowLen - arrowPaddingMin - tetherOffsetValue;
-      var maxOffset = isBasePlacement
-        ? -referenceRect[len] / 2 +
-          additive +
-          arrowLen +
-          arrowPaddingMax +
-          tetherOffsetValue
-        : maxLen + arrowLen + arrowPaddingMax + tetherOffsetValue;
-      var arrowOffsetParent =
-        state.elements.arrow && getOffsetParent(state.elements.arrow);
-      var clientOffset = arrowOffsetParent
-        ? mainAxis === "y"
-          ? arrowOffsetParent.clientTop || 0
-          : arrowOffsetParent.clientLeft || 0
-        : 0;
-      var offsetModifierValue = state.modifiersData.offset
-        ? state.modifiersData.offset[state.placement][mainAxis]
-        : 0;
-      var tetherMin =
-        popperOffsets[mainAxis] +
-        minOffset -
-        offsetModifierValue -
-        clientOffset;
-      var tetherMax = popperOffsets[mainAxis] + maxOffset - offsetModifierValue;
-
-      if (checkMainAxis) {
-        var preventedOffset = within(
-          tether ? min(min$1, tetherMin) : min$1,
-          offset,
-          tether ? max(max$1, tetherMax) : max$1
-        );
-        popperOffsets[mainAxis] = preventedOffset;
-        data[mainAxis] = preventedOffset - offset;
-      }
-
-      if (checkAltAxis) {
-        var _mainSide = mainAxis === "x" ? top : left;
-
-        var _altSide = mainAxis === "x" ? bottom : right;
-
-        var _offset = popperOffsets[altAxis];
-
-        var _min = _offset + overflow[_mainSide];
-
-        var _max = _offset - overflow[_altSide];
-
-        var _preventedOffset = within(
-          tether ? min(_min, tetherMin) : _min,
-          _offset,
-          tether ? max(_max, tetherMax) : _max
-        );
-
-        popperOffsets[altAxis] = _preventedOffset;
-        data[altAxis] = _preventedOffset - _offset;
-      }
-    }
-
-    state.modifiersData[name] = data;
-  } // eslint-disable-next-line import/no-unused-modules
-
-  const preventOverflow$1 = {
-    name: "preventOverflow",
-    enabled: true,
-    phase: "main",
-    fn: preventOverflow,
-    requiresIfExists: ["offset"],
-  };
-
-  function getHTMLElementScroll(element) {
-    return {
-      scrollLeft: element.scrollLeft,
-      scrollTop: element.scrollTop,
-    };
-  }
-
-  function getNodeScroll(node) {
-    if (node === getWindow(node) || !isHTMLElement(node)) {
-      return getWindowScroll(node);
-    } else {
-      return getHTMLElementScroll(node);
-    }
-  }
-
-  function isElementScaled(element) {
-    var rect = element.getBoundingClientRect();
-    var scaleX = rect.width / element.offsetWidth || 1;
-    var scaleY = rect.height / element.offsetHeight || 1;
-    return scaleX !== 1 || scaleY !== 1;
-  } // Returns the composite rect of an element relative to its offsetParent.
-  // Composite means it takes into account transforms as well as layout.
-
-  function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
-    if (isFixed === void 0) {
-      isFixed = false;
-    }
-
-    var isOffsetParentAnElement = isHTMLElement(offsetParent);
-    isHTMLElement(offsetParent) && isElementScaled(offsetParent);
-    var documentElement = getDocumentElement(offsetParent);
-    var rect = getBoundingClientRect(elementOrVirtualElement);
-    var scroll = {
-      scrollLeft: 0,
-      scrollTop: 0,
-    };
-    var offsets = {
-      x: 0,
-      y: 0,
-    };
-
-    if (isOffsetParentAnElement || (!isOffsetParentAnElement && !isFixed)) {
-      if (
-        getNodeName(offsetParent) !== "body" || // https://github.com/popperjs/popper-core/issues/1078
-        isScrollParent(documentElement)
-      ) {
-        scroll = getNodeScroll(offsetParent);
-      }
-
-      if (isHTMLElement(offsetParent)) {
-        offsets = getBoundingClientRect(offsetParent);
-        offsets.x += offsetParent.clientLeft;
-        offsets.y += offsetParent.clientTop;
-      } else if (documentElement) {
-        offsets.x = getWindowScrollBarX(documentElement);
-      }
-    }
-
-    return {
-      x: rect.left + scroll.scrollLeft - offsets.x,
-      y: rect.top + scroll.scrollTop - offsets.y,
-      width: rect.width,
-      height: rect.height,
-    };
-  }
-
-  function order(modifiers) {
-    var map = new Map();
-    var visited = new Set();
-    var result = [];
-    modifiers.forEach(function (modifier) {
-      map.set(modifier.name, modifier);
-    }); // On visiting object, check for its dependencies and visit them recursively
-
-    function sort(modifier) {
-      visited.add(modifier.name);
-      var requires = [].concat(
-        modifier.requires || [],
-        modifier.requiresIfExists || []
-      );
-      requires.forEach(function (dep) {
-        if (!visited.has(dep)) {
-          var depModifier = map.get(dep);
-
-          if (depModifier) {
-            sort(depModifier);
-          }
-        }
-      });
-      result.push(modifier);
-    }
-
-    modifiers.forEach(function (modifier) {
-      if (!visited.has(modifier.name)) {
-        // check for visited object
-        sort(modifier);
-      }
-    });
-    return result;
-  }
-
-  function orderModifiers(modifiers) {
-    // order based on dependencies
-    var orderedModifiers = order(modifiers); // order based on phase
-
-    return modifierPhases.reduce(function (acc, phase) {
-      return acc.concat(
-        orderedModifiers.filter(function (modifier) {
-          return modifier.phase === phase;
-        })
-      );
-    }, []);
-  }
-
-  function debounce(fn) {
-    var pending;
-    return function () {
-      if (!pending) {
-        pending = new Promise(function (resolve) {
-          Promise.resolve().then(function () {
-            pending = undefined;
-            resolve(fn());
-          });
-        });
-      }
-
-      return pending;
-    };
-  }
-
-  function mergeByName(modifiers) {
-    var merged = modifiers.reduce(function (merged, current) {
-      var existing = merged[current.name];
-      merged[current.name] = existing
-        ? Object.assign({}, existing, current, {
-            options: Object.assign({}, existing.options, current.options),
-            data: Object.assign({}, existing.data, current.data),
-          })
-        : current;
-      return merged;
-    }, {}); // IE11 does not support Object.values
-
-    return Object.keys(merged).map(function (key) {
-      return merged[key];
-    });
-  }
-
-  var DEFAULT_OPTIONS = {
-    placement: "bottom",
-    modifiers: [],
-    strategy: "absolute",
-  };
-
-  function areValidElements() {
-    for (
-      var _len = arguments.length, args = new Array(_len), _key = 0;
-      _key < _len;
-      _key++
-    ) {
-      args[_key] = arguments[_key];
-    }
-
-    return !args.some(function (element) {
-      return !(element && typeof element.getBoundingClientRect === "function");
-    });
-  }
-
-  function popperGenerator(generatorOptions) {
-    if (generatorOptions === void 0) {
-      generatorOptions = {};
-    }
-
-    var _generatorOptions = generatorOptions,
-      _generatorOptions$def = _generatorOptions.defaultModifiers,
-      defaultModifiers =
-        _generatorOptions$def === void 0 ? [] : _generatorOptions$def,
-      _generatorOptions$def2 = _generatorOptions.defaultOptions,
-      defaultOptions =
-        _generatorOptions$def2 === void 0
-          ? DEFAULT_OPTIONS
-          : _generatorOptions$def2;
-    return function createPopper(reference, popper, options) {
-      if (options === void 0) {
-        options = defaultOptions;
-      }
-
-      var state = {
-        placement: "bottom",
-        orderedModifiers: [],
-        options: Object.assign({}, DEFAULT_OPTIONS, defaultOptions),
-        modifiersData: {},
-        elements: {
-          reference: reference,
-          popper: popper,
-        },
-        attributes: {},
-        styles: {},
-      };
-      var effectCleanupFns = [];
-      var isDestroyed = false;
-      var instance = {
-        state: state,
-        setOptions: function setOptions(setOptionsAction) {
-          var options =
-            typeof setOptionsAction === "function"
-              ? setOptionsAction(state.options)
-              : setOptionsAction;
-          cleanupModifierEffects();
-          state.options = Object.assign(
+        )),
+        null != i.modifiersData.arrow &&
+          (i.styles.arrow = Object.assign(
             {},
-            defaultOptions,
-            state.options,
-            options
-          );
-          state.scrollParents = {
-            reference: isElement(reference)
-              ? listScrollParents(reference)
-              : reference.contextElement
-              ? listScrollParents(reference.contextElement)
-              : [],
-            popper: listScrollParents(popper),
-          }; // Orders the modifiers based on their dependencies and `phase`
-          // properties
-
-          var orderedModifiers = orderModifiers(
-            mergeByName([].concat(defaultModifiers, state.options.modifiers))
-          ); // Strip out disabled modifiers
-
-          state.orderedModifiers = orderedModifiers.filter(function (m) {
-            return m.enabled;
-          }); // Validate the provided modifiers so that the consumer will get warned
-
-          runModifierEffects();
-          return instance.update();
-        },
-        // Sync update – it will always be executed, even if not necessary. This
-        // is useful for low frequency updates where sync behavior simplifies the
-        // logic.
-        // For high frequency updates (e.g. `resize` and `scroll` events), always
-        // prefer the async Popper#update method
-        forceUpdate: function forceUpdate() {
-          if (isDestroyed) {
-            return;
-          }
-
-          var _state$elements = state.elements,
-            reference = _state$elements.reference,
-            popper = _state$elements.popper; // Don't proceed if `reference` or `popper` are not valid elements
-          // anymore
-
-          if (!areValidElements(reference, popper)) {
-            return;
-          } // Store the reference and popper rects to be read by modifiers
-
-          state.rects = {
-            reference: getCompositeRect(
-              reference,
-              getOffsetParent(popper),
-              state.options.strategy === "fixed"
-            ),
-            popper: getLayoutRect(popper),
-          }; // Modifiers have the ability to reset the current update cycle. The
-          // most common use case for this is the `flip` modifier changing the
-          // placement, which then needs to re-run all the modifiers, because the
-          // logic was previously ran for the previous placement and is therefore
-          // stale/incorrect
-
-          state.reset = false;
-          state.placement = state.options.placement; // On each update cycle, the `modifiersData` property for each modifier
-          // is filled with the initial data specified by the modifier. This means
-          // it doesn't persist and is fresh on each update.
-          // To ensure persistent data, use `${name}#persistent`
-
-          state.orderedModifiers.forEach(function (modifier) {
-            return (state.modifiersData[modifier.name] = Object.assign(
-              {},
-              modifier.data
-            ));
-          });
-
-          for (var index = 0; index < state.orderedModifiers.length; index++) {
-            if (state.reset === true) {
-              state.reset = false;
-              index = -1;
-              continue;
-            }
-
-            var _state$orderedModifie = state.orderedModifiers[index],
-              fn = _state$orderedModifie.fn,
-              _state$orderedModifie2 = _state$orderedModifie.options,
-              _options =
-                _state$orderedModifie2 === void 0 ? {} : _state$orderedModifie2,
-              name = _state$orderedModifie.name;
-
-            if (typeof fn === "function") {
-              state =
-                fn({
-                  state: state,
-                  options: _options,
-                  name: name,
-                  instance: instance,
-                }) || state;
-            }
-          }
-        },
-        // Async and optimistically optimized update – it will not be executed if
-        // not necessary (debounced to run at most once-per-tick)
-        update: debounce(function () {
-          return new Promise(function (resolve) {
-            instance.forceUpdate();
-            resolve(state);
-          });
-        }),
-        destroy: function destroy() {
-          cleanupModifierEffects();
-          isDestroyed = true;
-        },
-      };
-
-      if (!areValidElements(reference, popper)) {
-        return instance;
-      }
-
-      instance.setOptions(options).then(function (state) {
-        if (!isDestroyed && options.onFirstUpdate) {
-          options.onFirstUpdate(state);
+            i.styles.arrow,
+            tf(
+              Object.assign({}, l, {
+                offsets: i.modifiersData.arrow,
+                position: "absolute",
+                adaptive: !1,
+                roundOffsets: a,
+              })
+            )
+          )),
+        (i.attributes.popper = Object.assign({}, i.attributes.popper, {
+          "data-popper-placement": i.placement,
+        }));
+    },
+    data: {},
+  };
+  var th = { passive: !0 };
+  let td = {
+    name: "eventListeners",
+    enabled: !0,
+    phase: "write",
+    fn: function e() {},
+    effect: function e(t) {
+      var i = t.state,
+        n = t.instance,
+        s = t.options,
+        r = s.scroll,
+        o = void 0 === r || r,
+        a = s.resize,
+        l = void 0 === a || a,
+        c = eK(i.elements.popper),
+        f = [].concat(i.scrollParents.reference, i.scrollParents.popper);
+      return (
+        o &&
+          f.forEach(function (e) {
+            e.addEventListener("scroll", n.update, th);
+          }),
+        l && c.addEventListener("resize", n.update, th),
+        function () {
+          o &&
+            f.forEach(function (e) {
+              e.removeEventListener("scroll", n.update, th);
+            }),
+            l && c.removeEventListener("resize", n.update, th);
         }
-      }); // Modifiers have the ability to execute arbitrary code before the first
-      // update cycle runs. They will be executed in the same order as the update
-      // cycle. This is useful when a modifier adds some persistent data that
-      // other modifiers need to use, but the modifier is run after the dependent
-      // one.
-
-      function runModifierEffects() {
-        state.orderedModifiers.forEach(function (_ref3) {
-          var name = _ref3.name,
-            _ref3$options = _ref3.options,
-            options = _ref3$options === void 0 ? {} : _ref3$options,
-            effect = _ref3.effect;
-
-          if (typeof effect === "function") {
-            var cleanupFn = effect({
-              state: state,
-              name: name,
-              instance: instance,
-              options: options,
-            });
-
-            var noopFn = function noopFn() {};
-
-            effectCleanupFns.push(cleanupFn || noopFn);
+      );
+    },
+    data: {},
+  };
+  var tp = { left: "right", right: "left", bottom: "top", top: "bottom" };
+  function tm(e) {
+    return e.replace(/left|right|bottom|top/g, function (e) {
+      return tp[e];
+    });
+  }
+  var tg = { start: "end", end: "start" };
+  function t8(e) {
+    return e.replace(/start|end/g, function (e) {
+      return tg[e];
+    });
+  }
+  function tv(e) {
+    var t,
+      i = eK(e);
+    return { scrollLeft: i.pageXOffset, scrollTop: i.pageYOffset };
+  }
+  function tb(e) {
+    return e1(e6(e)).left + tv(e).scrollLeft;
+  }
+  function ty(e) {
+    var t = eZ(e),
+      i = t.overflow,
+      n = t.overflowX,
+      s = t.overflowY;
+    return /auto|scroll|overlay|hidden/.test(i + s + n);
+  }
+  function t$(e, t) {
+    void 0 === t && (t = []);
+    var i,
+      n = (function e(t) {
+        return ["html", "body", "#document"].indexOf(eF(t)) >= 0
+          ? t.ownerDocument.body
+          : e0(t) && ty(t)
+          ? t
+          : e(eG(t));
+      })(e),
+      s = n === (null == (i = e.ownerDocument) ? void 0 : i.body),
+      r = eK(n),
+      o = s ? [r].concat(r.visualViewport || [], ty(n) ? n : []) : n,
+      a = t.concat(o);
+    return s ? a : a.concat(t$(eG(o)));
+  }
+  function tE(e) {
+    return Object.assign({}, e, {
+      left: e.x,
+      top: e.y,
+      right: e.x + e.width,
+      bottom: e.y + e.height,
+    });
+  }
+  function tw(e, t) {
+    var i, n, s, r, o, a, l, c, f, u, h, d, p, m, g, v, b, y, $;
+    return t === eC
+      ? tE(
+          ((n = eK((i = e))),
+          (s = e6(i)),
+          (r = n.visualViewport),
+          (o = s.clientWidth),
+          (a = s.clientHeight),
+          (l = 0),
+          (c = 0),
+          r &&
+            ((o = r.width),
+            (a = r.height),
+            /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ||
+              ((l = r.offsetLeft), (c = r.offsetTop))),
+          { width: o, height: a, x: l + tb(i), y: c })
+        )
+      : e0(t)
+      ? (((u = e1((f = t))).top = u.top + f.clientTop),
+        (u.left = u.left + f.clientLeft),
+        (u.bottom = u.top + f.clientHeight),
+        (u.right = u.left + f.clientWidth),
+        (u.width = f.clientWidth),
+        (u.height = f.clientHeight),
+        (u.x = u.left),
+        (u.y = u.top),
+        u)
+      : tE(
+          ((h = e6(e)),
+          (p = e6(h)),
+          (m = tv(h)),
+          (g = null == (d = h.ownerDocument) ? void 0 : d.body),
+          (v = te(
+            p.scrollWidth,
+            p.clientWidth,
+            g ? g.scrollWidth : 0,
+            g ? g.clientWidth : 0
+          )),
+          (b = te(
+            p.scrollHeight,
+            p.clientHeight,
+            g ? g.scrollHeight : 0,
+            g ? g.clientHeight : 0
+          )),
+          (y = -m.scrollLeft + tb(h)),
+          ($ = -m.scrollTop),
+          "rtl" === eZ(g || p).direction &&
+            (y += te(p.clientWidth, g ? g.clientWidth : 0) - v),
+          { width: v, height: b, x: y, y: $ })
+        );
+  }
+  function tA(e) {
+    var t,
+      i = e.reference,
+      n = e.element,
+      s = e.placement,
+      r = s ? eQ(s) : null,
+      o = s ? tl(s) : null,
+      a = i.x + i.width / 2 - n.width / 2,
+      l = i.y + i.height / 2 - n.height / 2;
+    switch (r) {
+      case "top":
+        t = { x: a, y: i.y - n.height };
+        break;
+      case ex:
+        t = { x: a, y: i.y + i.height };
+        break;
+      case eO:
+        t = { x: i.x + i.width, y: l };
+        break;
+      case eL:
+        t = { x: i.x - n.width, y: l };
+        break;
+      default:
+        t = { x: i.x, y: i.y };
+    }
+    var c = r ? e7(r) : null;
+    if (null != c) {
+      var f = "y" === c ? "height" : "width";
+      switch (o) {
+        case e9:
+          t[c] = t[c] - (i[f] / 2 - n[f] / 2);
+          break;
+        case "end":
+          t[c] = t[c] + (i[f] / 2 - n[f] / 2);
+      }
+    }
+    return t;
+  }
+  function tx(e, t) {
+    void 0 === t && (t = {});
+    var i,
+      n,
+      s,
+      r,
+      o,
+      a,
+      l,
+      c,
+      f,
+      u = t,
+      h = u.placement,
+      d = void 0 === h ? e.placement : h,
+      p = u.boundary,
+      m = u.rootBoundary,
+      g = u.elementContext,
+      v = void 0 === g ? eI : g,
+      b = u.altBoundary,
+      y = u.padding,
+      $ = void 0 === y ? 0 : y,
+      E = tr("number" != typeof $ ? $ : to($, eD)),
+      w = e.rects.popper,
+      A = e.elements[void 0 !== b && b ? (v === eI ? e_ : eI) : v],
+      x =
+        ((i = ez(A) ? A : A.contextElement || e6(e.elements.popper)),
+        (n = void 0 === p ? eT : p),
+        (s = void 0 === m ? eC : m),
+        (c = (l = [].concat(
+          "clippingParents" === n
+            ? ((r = i),
+              (o = t$(eG(r))),
+              (a =
+                ["absolute", "fixed"].indexOf(eZ(r).position) >= 0 && e0(r)
+                  ? e5(r)
+                  : r),
+              ez(a)
+                ? o.filter(function (e) {
+                    return ez(e) && e2(e, a) && "body" !== eF(e);
+                  })
+                : [])
+            : [].concat(n),
+          [s]
+        ))[0]),
+        ((f = l.reduce(function (e, t) {
+          var n = tw(i, t);
+          return (
+            (e.top = te(n.top, e.top)),
+            (e.right = tt(n.right, e.right)),
+            (e.bottom = tt(n.bottom, e.bottom)),
+            (e.left = te(n.left, e.left)),
+            e
+          );
+        }, tw(i, c))).width = f.right - f.left),
+        (f.height = f.bottom - f.top),
+        (f.x = f.left),
+        (f.y = f.top),
+        f),
+      O = e1(e.elements.reference),
+      L = tA({ reference: O, element: w, strategy: "absolute", placement: d }),
+      k = tE(Object.assign({}, w, L)),
+      D = v === eI ? k : O,
+      T = {
+        top: x.top - D.top + E.top,
+        bottom: D.bottom - x.bottom + E.bottom,
+        left: x.left - D.left + E.left,
+        right: D.right - x.right + E.right,
+      },
+      C = e.modifiersData.offset;
+    if (v === eI && C) {
+      var I = C[d];
+      Object.keys(T).forEach(function (e) {
+        var t = [eO, ex].indexOf(e) >= 0 ? 1 : -1,
+          i = ["top", ex].indexOf(e) >= 0 ? "y" : "x";
+        T[e] += I[i] * t;
+      });
+    }
+    return T;
+  }
+  let tO = {
+    name: "flip",
+    enabled: !0,
+    phase: "main",
+    fn: function e(t) {
+      var i = t.state,
+        n = t.options,
+        s = t.name;
+      if (!i.modifiersData[s]._skip) {
+        for (
+          var r = n.mainAxis,
+            o = void 0 === r || r,
+            a = n.altAxis,
+            l = void 0 === a || a,
+            c = n.fallbackPlacements,
+            f = n.padding,
+            u = n.boundary,
+            h = n.rootBoundary,
+            d = n.altBoundary,
+            p = n.flipVariations,
+            m = void 0 === p || p,
+            g = n.allowedAutoPlacements,
+            v = i.options.placement,
+            b = eQ(v),
+            y = [v]
+              .concat(
+                c ||
+                  (b !== v && m
+                    ? (function e(t) {
+                        if (eQ(t) === ek) return [];
+                        var i = tm(t);
+                        return [t8(t), i, t8(i)];
+                      })(v)
+                    : [tm(v)])
+              )
+              .reduce(function (e, t) {
+                var n, s, r, o, a, l, c, d, p, v, b, y, $, E;
+                return e.concat(
+                  eQ(t) === ek
+                    ? ((n = i),
+                      (s = {
+                        placement: t,
+                        boundary: u,
+                        rootBoundary: h,
+                        padding: f,
+                        flipVariations: m,
+                        allowedAutoPlacements: g,
+                      }),
+                      (o = (r = s).placement),
+                      (a = r.boundary),
+                      (l = r.rootBoundary),
+                      (c = r.padding),
+                      (d = r.flipVariations),
+                      (v = void 0 === (p = r.allowedAutoPlacements) ? eS : p),
+                      0 ===
+                        ($ = (y = (b = tl(o))
+                          ? d
+                            ? eN
+                            : eN.filter(function (e) {
+                                return tl(e) === b;
+                              })
+                          : eD).filter(function (e) {
+                          return v.indexOf(e) >= 0;
+                        })).length && ($ = y),
+                      Object.keys(
+                        (E = $.reduce(function (e, t) {
+                          return (
+                            (e[t] = tx(n, {
+                              placement: t,
+                              boundary: a,
+                              rootBoundary: l,
+                              padding: c,
+                            })[eQ(t)]),
+                            e
+                          );
+                        }, {}))
+                      ).sort(function (e, t) {
+                        return E[e] - E[t];
+                      }))
+                    : t
+                );
+              }, []),
+            $ = i.rects.reference,
+            E = i.rects.popper,
+            w = new Map(),
+            A = !0,
+            x = y[0],
+            O = 0;
+          O < y.length;
+          O++
+        ) {
+          var L = y[O],
+            k = eQ(L),
+            D = tl(L) === e9,
+            T = ["top", ex].indexOf(k) >= 0,
+            C = T ? "width" : "height",
+            I = tx(i, {
+              placement: L,
+              boundary: u,
+              rootBoundary: h,
+              altBoundary: d,
+              padding: f,
+            }),
+            _ = T ? (D ? eO : eL) : D ? ex : "top";
+          $[C] > E[C] && (_ = tm(_));
+          var N = tm(_),
+            S = [];
+          if (
+            (o && S.push(I[k] <= 0),
+            l && S.push(I[_] <= 0, I[N] <= 0),
+            S.every(function (e) {
+              return e;
+            }))
+          ) {
+            (x = L), (A = !1);
+            break;
           }
-        });
+          w.set(L, S);
+        }
+        if (A)
+          for (
+            var M = m ? 3 : 1,
+              H = function e(t) {
+                var i = y.find(function (e) {
+                  var i = w.get(e);
+                  if (i)
+                    return i.slice(0, t).every(function (e) {
+                      return e;
+                    });
+                });
+                if (i) return (x = i), "break";
+              },
+              P = M;
+            P > 0 && "break" !== H(P);
+            P--
+          );
+        i.placement !== x &&
+          ((i.modifiersData[s]._skip = !0), (i.placement = x), (i.reset = !0));
       }
-
-      function cleanupModifierEffects() {
-        effectCleanupFns.forEach(function (fn) {
-          return fn();
-        });
-        effectCleanupFns = [];
+    },
+    requiresIfExists: ["offset"],
+    data: { _skip: !1 },
+  };
+  function tL(e, t, i) {
+    return (
+      void 0 === i && (i = { x: 0, y: 0 }),
+      {
+        top: e.top - t.height - i.y,
+        right: e.right - t.width + i.x,
+        bottom: e.bottom - t.height + i.y,
+        left: e.left - t.width - i.x,
       }
-
-      return instance;
+    );
+  }
+  function tk(e) {
+    return ["top", eO, ex, eL].some(function (t) {
+      return e[t] >= 0;
+    });
+  }
+  let tD = {
+      name: "hide",
+      enabled: !0,
+      phase: "main",
+      requiresIfExists: ["preventOverflow"],
+      fn: function e(t) {
+        var i = t.state,
+          n = t.name,
+          s = i.rects.reference,
+          r = i.rects.popper,
+          o = i.modifiersData.preventOverflow,
+          a = tx(i, { elementContext: "reference" }),
+          l = tx(i, { altBoundary: !0 }),
+          c = tL(a, s),
+          f = tL(l, r, o),
+          u = tk(c),
+          h = tk(f);
+        (i.modifiersData[n] = {
+          referenceClippingOffsets: c,
+          popperEscapeOffsets: f,
+          isReferenceHidden: u,
+          hasPopperEscaped: h,
+        }),
+          (i.attributes.popper = Object.assign({}, i.attributes.popper, {
+            "data-popper-reference-hidden": u,
+            "data-popper-escaped": h,
+          }));
+      },
+    },
+    t9 = {
+      name: "offset",
+      enabled: !0,
+      phase: "main",
+      requires: ["popperOffsets"],
+      fn: function e(t) {
+        var i = t.state,
+          n = t.options,
+          s = t.name,
+          r = n.offset,
+          o = void 0 === r ? [0, 0] : r,
+          a = eS.reduce(function (e, t) {
+            var n, s, r, a, l, c, f, u;
+            return (
+              (e[t] =
+                ((n = t),
+                (s = i.rects),
+                (r = o),
+                (l = [eL, "top"].indexOf((a = eQ(n))) >= 0 ? -1 : 1),
+                (f = (c =
+                  "function" == typeof r
+                    ? r(Object.assign({}, s, { placement: n }))
+                    : r)[0]),
+                (u = c[1]),
+                (f = f || 0),
+                (u = (u || 0) * l),
+                [eL, eO].indexOf(a) >= 0 ? { x: u, y: f } : { x: f, y: u })),
+              e
+            );
+          }, {}),
+          l = a[i.placement],
+          c = l.x,
+          f = l.y;
+        null != i.modifiersData.popperOffsets &&
+          ((i.modifiersData.popperOffsets.x += c),
+          (i.modifiersData.popperOffsets.y += f)),
+          (i.modifiersData[s] = a);
+      },
+    },
+    tT = {
+      name: "popperOffsets",
+      enabled: !0,
+      phase: "read",
+      fn: function e(t) {
+        var i = t.state,
+          n = t.name;
+        i.modifiersData[n] = tA({
+          reference: i.rects.reference,
+          element: i.rects.popper,
+          strategy: "absolute",
+          placement: i.placement,
+        });
+      },
+      data: {},
+    },
+    tC = {
+      name: "preventOverflow",
+      enabled: !0,
+      phase: "main",
+      fn: function e(t) {
+        var i,
+          n = t.state,
+          s = t.options,
+          r = t.name,
+          o = s.mainAxis,
+          a = void 0 === o || o,
+          l = s.altAxis,
+          c = void 0 !== l && l,
+          f = s.boundary,
+          u = s.rootBoundary,
+          h = s.altBoundary,
+          d = s.padding,
+          p = s.tether,
+          m = void 0 === p || p,
+          g = s.tetherOffset,
+          v = void 0 === g ? 0 : g,
+          b = tx(n, {
+            boundary: f,
+            rootBoundary: u,
+            padding: d,
+            altBoundary: h,
+          }),
+          y = eQ(n.placement),
+          $ = tl(n.placement),
+          E = !$,
+          w = e7(y),
+          A = "x" === (i = w) ? "y" : "x",
+          x = n.modifiersData.popperOffsets,
+          O = n.rects.reference,
+          L = n.rects.popper,
+          k =
+            "function" == typeof v
+              ? v(Object.assign({}, n.rects, { placement: n.placement }))
+              : v,
+          D = { x: 0, y: 0 };
+        if (x) {
+          if (a || c) {
+            var T = "y" === w ? "top" : eL,
+              C = "y" === w ? ex : eO,
+              I = "y" === w ? "height" : "width",
+              _ = x[w],
+              N = x[w] + b[T],
+              S = x[w] - b[C],
+              M = m ? -L[I] / 2 : 0,
+              H = $ === e9 ? O[I] : L[I],
+              P = $ === e9 ? -L[I] : -O[I],
+              W = n.elements.arrow,
+              R = m && W ? e3(W) : { width: 0, height: 0 },
+              B = n.modifiersData["arrow#persistent"]
+                ? n.modifiersData["arrow#persistent"].padding
+                : ts(),
+              j = B[T],
+              q = B[C],
+              V = tn(0, O[I], R[I]),
+              X = E ? O[I] / 2 - M - V - j - k : H - V - j - k,
+              F = E ? -O[I] / 2 + M + V + q + k : P + V + q + k,
+              K = n.elements.arrow && e5(n.elements.arrow),
+              z = K ? ("y" === w ? K.clientTop || 0 : K.clientLeft || 0) : 0,
+              Y = n.modifiersData.offset
+                ? n.modifiersData.offset[n.placement][w]
+                : 0,
+              U = x[w] + X - Y - z,
+              Q = x[w] + F - Y;
+            if (a) {
+              var Z = tn(m ? tt(N, U) : N, _, m ? te(S, Q) : S);
+              (x[w] = Z), (D[w] = Z - _);
+            }
+            if (c) {
+              var G = x[A],
+                J = G + b["x" === w ? "top" : eL],
+                ee = G - b["x" === w ? ex : eO],
+                et = tn(m ? tt(J, U) : J, G, m ? te(ee, Q) : ee);
+              (x[A] = et), (D[A] = et - G);
+            }
+          }
+          n.modifiersData[r] = D;
+        }
+      },
+      requiresIfExists: ["offset"],
+    };
+  var tI = { placement: "bottom", modifiers: [], strategy: "absolute" };
+  function t_() {
+    for (var e = arguments.length, t = Array(e), i = 0; i < e; i++)
+      t[i] = arguments[i];
+    return !t.some(function (e) {
+      return !(e && "function" == typeof e.getBoundingClientRect);
+    });
+  }
+  function tN(e) {
+    void 0 === e && (e = {});
+    var t = e,
+      i = t.defaultModifiers,
+      n = void 0 === i ? [] : i,
+      s = t.defaultOptions,
+      r = void 0 === s ? tI : s;
+    return function e(t, i, s) {
+      void 0 === s && (s = r);
+      var o,
+        a,
+        l = {
+          placement: "bottom",
+          orderedModifiers: [],
+          options: Object.assign({}, tI, r),
+          modifiersData: {},
+          elements: { reference: t, popper: i },
+          attributes: {},
+          styles: {},
+        },
+        c = [],
+        f = !1,
+        u = {
+          state: l,
+          setOptions: function e(s) {
+            var o,
+              a,
+              f,
+              d,
+              p,
+              m,
+              g,
+              v,
+              b = "function" == typeof s ? s(l.options) : s;
+            h(),
+              (l.options = Object.assign({}, r, l.options, b)),
+              (l.scrollParents = {
+                reference: ez(t)
+                  ? t$(t)
+                  : t.contextElement
+                  ? t$(t.contextElement)
+                  : [],
+                popper: t$(i),
+              });
+            var y =
+              ((v =
+                ((d = f =
+                  Object.keys(
+                    (a = (o = [].concat(n, l.options.modifiers)).reduce(
+                      function (e, t) {
+                        var i = e[t.name];
+                        return (
+                          (e[t.name] = i
+                            ? Object.assign({}, i, t, {
+                                options: Object.assign(
+                                  {},
+                                  i.options,
+                                  t.options
+                                ),
+                                data: Object.assign({}, i.data, t.data),
+                              })
+                            : t),
+                          e
+                        );
+                      },
+                      {}
+                    ))
+                  ).map(function (e) {
+                    return a[e];
+                  })),
+                (p = new Map()),
+                (m = new Set()),
+                (g = []),
+                d.forEach(function (e) {
+                  p.set(e.name, e);
+                }),
+                d.forEach(function (e) {
+                  m.has(e.name) ||
+                    (function e(t) {
+                      m.add(t.name),
+                        []
+                          .concat(t.requires || [], t.requiresIfExists || [])
+                          .forEach(function (t) {
+                            if (!m.has(t)) {
+                              var i = p.get(t);
+                              i && e(i);
+                            }
+                          }),
+                        g.push(t);
+                    })(e);
+                }),
+                g)),
+              eX.reduce(function (e, t) {
+                return e.concat(
+                  v.filter(function (e) {
+                    return e.phase === t;
+                  })
+                );
+              }, []));
+            return (
+              (l.orderedModifiers = y.filter(function (e) {
+                return e.enabled;
+              })),
+              l.orderedModifiers.forEach(function (e) {
+                var t = e.name,
+                  i = e.options,
+                  n = e.effect;
+                if ("function" == typeof n) {
+                  var s = n({
+                      state: l,
+                      name: t,
+                      instance: u,
+                      options: void 0 === i ? {} : i,
+                    }),
+                    r = function e() {};
+                  c.push(s || r);
+                }
+              }),
+              u.update()
+            );
+          },
+          forceUpdate: function e() {
+            if (!f) {
+              var t,
+                i,
+                n,
+                s,
+                r,
+                o,
+                a,
+                c,
+                h,
+                d,
+                p,
+                m,
+                g,
+                v,
+                b = l.elements,
+                y = b.reference,
+                $ = b.popper;
+              if (t_(y, $)) {
+                (l.rects = {
+                  reference:
+                    ((n = y),
+                    (s = e5($)),
+                    (r = "fixed" === l.options.strategy),
+                    (o = e0(s)),
+                    e0(s) &&
+                      ((h =
+                        (c = (a = s).getBoundingClientRect()).width /
+                          a.offsetWidth || 1),
+                      c.height,
+                      a.offsetHeight),
+                    (p = e6(s)),
+                    (m = e1(n)),
+                    (g = { scrollLeft: 0, scrollTop: 0 }),
+                    (v = { x: 0, y: 0 }),
+                    (o || (!o && !r)) &&
+                      (("body" !== eF(s) || ty(p)) &&
+                        (g =
+                          ((t = s),
+                          t !== eK(t) && e0(t)
+                            ? {
+                                scrollLeft: (i = t).scrollLeft,
+                                scrollTop: i.scrollTop,
+                              }
+                            : tv(t))),
+                      e0(s)
+                        ? ((v = e1(s)),
+                          (v.x += s.clientLeft),
+                          (v.y += s.clientTop))
+                        : p && (v.x = tb(p))),
+                    {
+                      x: m.left + g.scrollLeft - v.x,
+                      y: m.top + g.scrollTop - v.y,
+                      width: m.width,
+                      height: m.height,
+                    }),
+                  popper: e3($),
+                }),
+                  (l.reset = !1),
+                  (l.placement = l.options.placement),
+                  l.orderedModifiers.forEach(function (e) {
+                    return (l.modifiersData[e.name] = Object.assign(
+                      {},
+                      e.data
+                    ));
+                  });
+                for (var E = 0; E < l.orderedModifiers.length; E++) {
+                  if (!0 === l.reset) {
+                    (l.reset = !1), (E = -1);
+                    continue;
+                  }
+                  var w = l.orderedModifiers[E],
+                    A = w.fn,
+                    x = w.options,
+                    O = void 0 === x ? {} : x,
+                    L = w.name;
+                  "function" == typeof A &&
+                    (l =
+                      A({ state: l, options: O, name: L, instance: u }) || l);
+                }
+              }
+            }
+          },
+          update:
+            ((o = function () {
+              return new Promise(function (e) {
+                u.forceUpdate(), e(l);
+              });
+            }),
+            function () {
+              return (
+                a ||
+                  (a = new Promise(function (e) {
+                    Promise.resolve().then(function () {
+                      (a = void 0), e(o());
+                    });
+                  })),
+                a
+              );
+            }),
+          destroy: function e() {
+            h(), (f = !0);
+          },
+        };
+      if (!t_(t, i)) return u;
+      function h() {
+        c.forEach(function (e) {
+          return e();
+        }),
+          (c = []);
+      }
+      return (
+        u.setOptions(s).then(function (e) {
+          !f && s.onFirstUpdate && s.onFirstUpdate(e);
+        }),
+        u
+      );
     };
   }
-  var createPopper$2 = /*#__PURE__*/ popperGenerator(); // eslint-disable-next-line import/no-unused-modules
-
-  var defaultModifiers$1 = [
-    eventListeners,
-    popperOffsets$1,
-    computeStyles$1,
-    applyStyles$1,
-  ];
-  var createPopper$1 = /*#__PURE__*/ popperGenerator({
-    defaultModifiers: defaultModifiers$1,
-  }); // eslint-disable-next-line import/no-unused-modules
-
-  var defaultModifiers = [
-    eventListeners,
-    popperOffsets$1,
-    computeStyles$1,
-    applyStyles$1,
-    offset$1,
-    flip$1,
-    preventOverflow$1,
-    arrow$1,
-    hide$1,
-  ];
-  var createPopper = /*#__PURE__*/ popperGenerator({
-    defaultModifiers: defaultModifiers,
-  }); // eslint-disable-next-line import/no-unused-modules
-
-  const Popper = /*#__PURE__*/ Object.freeze({
+  var tS = tN(),
+    tM = tN({ defaultModifiers: [td, tT, tu, eU] }),
+    tH = tN({ defaultModifiers: [td, tT, tu, eU, t9, tO, tC, ta, tD] });
+  Object.freeze({
     __proto__: null,
-    popperGenerator,
-    detectOverflow,
-    createPopperBase: createPopper$2,
-    createPopper,
-    createPopperLite: createPopper$1,
-    top,
-    bottom,
-    right,
-    left,
-    auto,
-    basePlacements,
-    start,
-    end,
-    clippingParents,
-    viewport,
-    popper,
-    reference,
-    variationPlacements,
-    placements,
-    beforeRead,
-    read,
-    afterRead,
-    beforeMain,
-    main,
-    afterMain,
-    beforeWrite,
-    write,
-    afterWrite,
-    modifierPhases,
-    applyStyles: applyStyles$1,
-    arrow: arrow$1,
-    computeStyles: computeStyles$1,
-    eventListeners,
-    flip: flip$1,
-    hide: hide$1,
-    offset: offset$1,
-    popperOffsets: popperOffsets$1,
-    preventOverflow: preventOverflow$1,
-  });
-
-  /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
-   */
-
-  EventHandler.on(
-    document,
-    EVENT_KEYDOWN_DATA_API,
-    SELECTOR_DATA_TOGGLE$3,
-    Dropdown.dataApiKeydownHandler
-  );
-  EventHandler.on(
-    document,
-    EVENT_KEYDOWN_DATA_API,
-    SELECTOR_MENU,
-    Dropdown.dataApiKeydownHandler
-  );
-  EventHandler.on(document, EVENT_CLICK_DATA_API$3, Dropdown.clearMenus);
-  EventHandler.on(document, EVENT_KEYUP_DATA_API, Dropdown.clearMenus);
-  EventHandler.on(
-    document,
-    EVENT_CLICK_DATA_API$3,
-    SELECTOR_DATA_TOGGLE$3,
-    function (event) {
-      event.preventDefault();
-      Dropdown.getOrCreateInstance(this).toggle();
-    }
-  );
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Dropdown to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Dropdown);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/scrollBar.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  const SELECTOR_FIXED_CONTENT =
-    ".fixed-top, .fixed-bottom, .is-fixed, .sticky-top";
-  const SELECTOR_STICKY_CONTENT = ".sticky-top";
-
-  class ScrollBarHelper {
+    popperGenerator: tN,
+    detectOverflow: tx,
+    createPopperBase: tS,
+    createPopper: tH,
+    createPopperLite: tM,
+    top: "top",
+    bottom: ex,
+    right: eO,
+    left: eL,
+    auto: ek,
+    basePlacements: eD,
+    start: e9,
+    end: "end",
+    clippingParents: eT,
+    viewport: eC,
+    popper: eI,
+    reference: e_,
+    variationPlacements: eN,
+    placements: eS,
+    beforeRead: eM,
+    read: eH,
+    afterRead: eP,
+    beforeMain: eW,
+    main: eR,
+    afterMain: eB,
+    beforeWrite: ej,
+    write: eq,
+    afterWrite: eV,
+    modifierPhases: eX,
+    applyStyles: eU,
+    arrow: ta,
+    computeStyles: tu,
+    eventListeners: td,
+    flip: tO,
+    hide: tD,
+    offset: t9,
+    popperOffsets: tT,
+    preventOverflow: tC,
+  }),
+    P.on(
+      document,
+      EVENT_KEYDOWN_DATA_API,
+      SELECTOR_DATA_TOGGLE$3,
+      Dropdown.dataApiKeydownHandler
+    ),
+    P.on(
+      document,
+      EVENT_KEYDOWN_DATA_API,
+      SELECTOR_MENU,
+      Dropdown.dataApiKeydownHandler
+    ),
+    P.on(document, EVENT_CLICK_DATA_API$3, Dropdown.clearMenus),
+    P.on(document, EVENT_KEYUP_DATA_API, Dropdown.clearMenus),
+    P.on(
+      document,
+      EVENT_CLICK_DATA_API$3,
+      SELECTOR_DATA_TOGGLE$3,
+      function (e) {
+        e.preventDefault(), Dropdown.getOrCreateInstance(this).toggle();
+      }
+    ),
+    b(Dropdown);
+  let tP = ".fixed-top, .fixed-bottom, .is-fixed, .sticky-top",
+    tW = ".sticky-top";
+  class tR {
     constructor() {
       this._element = document.body;
     }
-
     getWidth() {
-      // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerWidth#usage_notes
-      const documentWidth = document.documentElement.clientWidth;
-      return Math.abs(window.innerWidth - documentWidth);
+      let e = document.documentElement.clientWidth;
+      return Math.abs(window.innerWidth - e);
     }
-
     hide() {
-      const width = this.getWidth();
-
-      this._disableOverFlow(); // give padding to element to balance the hidden scrollbar width
-
-      this._setElementAttributes(
-        this._element,
-        "paddingRight",
-        (calculatedValue) => calculatedValue + width
-      ); // trick: We adjust positive paddingRight and negative marginRight to sticky-top elements to keep showing fullwidth
-
-      this._setElementAttributes(
-        SELECTOR_FIXED_CONTENT,
-        "paddingRight",
-        (calculatedValue) => calculatedValue + width
-      );
-
-      this._setElementAttributes(
-        SELECTOR_STICKY_CONTENT,
-        "marginRight",
-        (calculatedValue) => calculatedValue - width
-      );
+      let e = this.getWidth();
+      this._disableOverFlow(),
+        this._setElementAttributes(this._element, "paddingRight", (t) => t + e),
+        this._setElementAttributes(tP, "paddingRight", (t) => t + e),
+        this._setElementAttributes(tW, "marginRight", (t) => t - e);
     }
-
     _disableOverFlow() {
-      this._saveInitialAttribute(this._element, "overflow");
-
-      this._element.style.overflow = "hidden";
+      this._saveInitialAttribute(this._element, "overflow"),
+        (this._element.style.overflow = "hidden");
     }
-
-    _setElementAttributes(selector, styleProp, callback) {
-      const scrollbarWidth = this.getWidth();
-
-      const manipulationCallBack = (element) => {
-        if (
-          element !== this._element &&
-          window.innerWidth > element.clientWidth + scrollbarWidth
-        ) {
-          return;
-        }
-
-        this._saveInitialAttribute(element, styleProp);
-
-        const calculatedValue = window.getComputedStyle(element)[styleProp];
-        element.style[styleProp] = `${callback(
-          Number.parseFloat(calculatedValue)
-        )}px`;
-      };
-
-      this._applyManipulationCallback(selector, manipulationCallBack);
+    _setElementAttributes(e, t, i) {
+      let n = this.getWidth(),
+        s = (e) => {
+          if (e !== this._element && window.innerWidth > e.clientWidth + n)
+            return;
+          this._saveInitialAttribute(e, t);
+          let s = window.getComputedStyle(e)[t];
+          e.style[t] = `${i(Number.parseFloat(s))}px`;
+        };
+      this._applyManipulationCallback(e, s);
     }
-
     reset() {
-      this._resetElementAttributes(this._element, "overflow");
-
-      this._resetElementAttributes(this._element, "paddingRight");
-
-      this._resetElementAttributes(SELECTOR_FIXED_CONTENT, "paddingRight");
-
-      this._resetElementAttributes(SELECTOR_STICKY_CONTENT, "marginRight");
+      this._resetElementAttributes(this._element, "overflow"),
+        this._resetElementAttributes(this._element, "paddingRight"),
+        this._resetElementAttributes(tP, "paddingRight"),
+        this._resetElementAttributes(tW, "marginRight");
     }
-
-    _saveInitialAttribute(element, styleProp) {
-      const actualValue = element.style[styleProp];
-
-      if (actualValue) {
-        Manipulator.setDataAttribute(element, styleProp, actualValue);
-      }
+    _saveInitialAttribute(e, t) {
+      let i = e.style[t];
+      i && Z.setDataAttribute(e, t, i);
     }
-
-    _resetElementAttributes(selector, styleProp) {
-      const manipulationCallBack = (element) => {
-        const value = Manipulator.getDataAttribute(element, styleProp);
-
-        if (typeof value === "undefined") {
-          element.style.removeProperty(styleProp);
-        } else {
-          Manipulator.removeDataAttribute(element, styleProp);
-          element.style[styleProp] = value;
-        }
+    _resetElementAttributes(e, t) {
+      let i = (e) => {
+        let i = Z.getDataAttribute(e, t);
+        void 0 === i
+          ? e.style.removeProperty(t)
+          : (Z.removeDataAttribute(e, t), (e.style[t] = i));
       };
-
-      this._applyManipulationCallback(selector, manipulationCallBack);
+      this._applyManipulationCallback(e, i);
     }
-
-    _applyManipulationCallback(selector, callBack) {
-      if (isElement$1(selector)) {
-        callBack(selector);
-      } else {
-        SelectorEngine.find(selector, this._element).forEach(callBack);
-      }
+    _applyManipulationCallback(e, t) {
+      a(e) ? t(e) : G.find(e, this._element).forEach(t);
     }
-
     isOverflowing() {
       return this.getWidth() > 0;
     }
   }
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/backdrop.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  const Default$7 = {
-    className: "modal-backdrop",
-    isVisible: true,
-    // if false, we use the backdrop helper without adding any element to the dom
-    isAnimated: false,
-    rootElement: "body",
-    // give the choice to place backdrop under different elements
-    clickCallback: null,
-  };
-  const DefaultType$7 = {
-    className: "string",
-    isVisible: "boolean",
-    isAnimated: "boolean",
-    rootElement: "(element|string)",
-    clickCallback: "(function|null)",
-  };
-  const NAME$8 = "backdrop";
-  const CLASS_NAME_FADE$4 = "fade";
-  const CLASS_NAME_SHOW$5 = "show";
-  const EVENT_MOUSEDOWN = `mousedown.bs.${NAME$8}`;
-
-  class Backdrop {
-    constructor(config) {
-      this._config = this._getConfig(config);
-      this._isAppended = false;
-      this._element = null;
+  let tB = {
+      className: "modal-backdrop",
+      isVisible: !0,
+      isAnimated: !1,
+      rootElement: "body",
+      clickCallback: null,
+    },
+    tj = {
+      className: "string",
+      isVisible: "boolean",
+      isAnimated: "boolean",
+      rootElement: "(element|string)",
+      clickCallback: "(function|null)",
+    },
+    tq = "backdrop",
+    tV = "show",
+    tX = `mousedown.bs.${tq}`;
+  class tF {
+    constructor(e) {
+      (this._config = this._getConfig(e)),
+        (this._isAppended = !1),
+        (this._element = null);
     }
-
-    show(callback) {
+    show(e) {
       if (!this._config.isVisible) {
-        execute(callback);
+        y(e);
         return;
       }
-
-      this._append();
-
-      if (this._config.isAnimated) {
-        reflow(this._getElement());
-      }
-
-      this._getElement().classList.add(CLASS_NAME_SHOW$5);
-
-      this._emulateAnimation(() => {
-        execute(callback);
-      });
+      this._append(),
+        this._config.isAnimated && d(this._getElement()),
+        this._getElement().classList.add(tV),
+        this._emulateAnimation(() => {
+          y(e);
+        });
     }
-
-    hide(callback) {
+    hide(e) {
       if (!this._config.isVisible) {
-        execute(callback);
+        y(e);
         return;
       }
-
-      this._getElement().classList.remove(CLASS_NAME_SHOW$5);
-
-      this._emulateAnimation(() => {
-        this.dispose();
-        execute(callback);
-      });
-    } // Private
-
+      this._getElement().classList.remove(tV),
+        this._emulateAnimation(() => {
+          this.dispose(), y(e);
+        });
+    }
     _getElement() {
       if (!this._element) {
-        const backdrop = document.createElement("div");
-        backdrop.className = this._config.className;
-
-        if (this._config.isAnimated) {
-          backdrop.classList.add(CLASS_NAME_FADE$4);
-        }
-
-        this._element = backdrop;
+        let e = document.createElement("div");
+        (e.className = this._config.className),
+          this._config.isAnimated && e.classList.add("fade"),
+          (this._element = e);
       }
-
       return this._element;
     }
-
-    _getConfig(config) {
-      config = { ...Default$7, ...(typeof config === "object" ? config : {}) }; // use getElement() with the default "body" to get a fresh Element on each instantiation
-
-      config.rootElement = getElement(config.rootElement);
-      typeCheckConfig(NAME$8, config, DefaultType$7);
-      return config;
+    _getConfig(e) {
+      return (
+        ((e = { ...tB, ...("object" == typeof e ? e : {}) }).rootElement = l(
+          e.rootElement
+        )),
+        c(tq, e, tj),
+        e
+      );
     }
-
     _append() {
-      if (this._isAppended) {
-        return;
-      }
-
-      this._config.rootElement.append(this._getElement());
-
-      EventHandler.on(this._getElement(), EVENT_MOUSEDOWN, () => {
-        execute(this._config.clickCallback);
-      });
-      this._isAppended = true;
+      !this._isAppended &&
+        (this._config.rootElement.append(this._getElement()),
+        P.on(this._getElement(), tX, () => {
+          y(this._config.clickCallback);
+        }),
+        (this._isAppended = !0));
     }
-
     dispose() {
-      if (!this._isAppended) {
-        return;
-      }
-
-      EventHandler.off(this._element, EVENT_MOUSEDOWN);
-
-      this._element.remove();
-
-      this._isAppended = false;
+      this._isAppended &&
+        (P.off(this._element, tX),
+        this._element.remove(),
+        (this._isAppended = !1));
     }
-
-    _emulateAnimation(callback) {
-      executeAfterTransition(
-        callback,
-        this._getElement(),
-        this._config.isAnimated
-      );
+    _emulateAnimation(e) {
+      $(e, this._getElement(), this._config.isAnimated);
     }
   }
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/focustrap.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  const Default$6 = {
-    trapElement: null,
-    // The element to trap focus inside of
-    autofocus: true,
-  };
-  const DefaultType$6 = {
-    trapElement: "element",
-    autofocus: "boolean",
-  };
-  const NAME$7 = "focustrap";
-  const DATA_KEY$7 = "bs.focustrap";
-  const EVENT_KEY$7 = `.${DATA_KEY$7}`;
-  const EVENT_FOCUSIN$1 = `focusin${EVENT_KEY$7}`;
-  const EVENT_KEYDOWN_TAB = `keydown.tab${EVENT_KEY$7}`;
-  const TAB_KEY = "Tab";
-  const TAB_NAV_FORWARD = "forward";
-  const TAB_NAV_BACKWARD = "backward";
-
-  class FocusTrap {
-    constructor(config) {
-      this._config = this._getConfig(config);
-      this._isActive = false;
-      this._lastTabNavDirection = null;
+  let tK = { trapElement: null, autofocus: !0 },
+    tz = { trapElement: "element", autofocus: "boolean" },
+    t0 = ".bs.focustrap",
+    tY = `focusin${t0}`,
+    tU = `keydown.tab${t0}`,
+    tQ = "backward";
+  class t1 {
+    constructor(e) {
+      (this._config = this._getConfig(e)),
+        (this._isActive = !1),
+        (this._lastTabNavDirection = null);
     }
-
     activate() {
-      const { trapElement, autofocus } = this._config;
-
-      if (this._isActive) {
-        return;
-      }
-
-      if (autofocus) {
-        trapElement.focus();
-      }
-
-      EventHandler.off(document, EVENT_KEY$7); // guard against infinite focus loop
-
-      EventHandler.on(document, EVENT_FOCUSIN$1, (event) =>
-        this._handleFocusin(event)
-      );
-      EventHandler.on(document, EVENT_KEYDOWN_TAB, (event) =>
-        this._handleKeydown(event)
-      );
-      this._isActive = true;
+      let { trapElement: e, autofocus: t } = this._config;
+      !this._isActive &&
+        (t && e.focus(),
+        P.off(document, t0),
+        P.on(document, tY, (e) => this._handleFocusin(e)),
+        P.on(document, tU, (e) => this._handleKeydown(e)),
+        (this._isActive = !0));
     }
-
     deactivate() {
-      if (!this._isActive) {
-        return;
-      }
-
-      this._isActive = false;
-      EventHandler.off(document, EVENT_KEY$7);
-    } // Private
-
-    _handleFocusin(event) {
-      const { target } = event;
-      const { trapElement } = this._config;
-
-      if (
-        target === document ||
-        target === trapElement ||
-        trapElement.contains(target)
-      ) {
-        return;
-      }
-
-      const elements = SelectorEngine.focusableChildren(trapElement);
-
-      if (elements.length === 0) {
-        trapElement.focus();
-      } else if (this._lastTabNavDirection === TAB_NAV_BACKWARD) {
-        elements[elements.length - 1].focus();
-      } else {
-        elements[0].focus();
-      }
+      this._isActive && ((this._isActive = !1), P.off(document, t0));
     }
-
-    _handleKeydown(event) {
-      if (event.key !== TAB_KEY) {
-        return;
-      }
-
-      this._lastTabNavDirection = event.shiftKey
-        ? TAB_NAV_BACKWARD
-        : TAB_NAV_FORWARD;
+    _handleFocusin(e) {
+      let { target: t } = e,
+        { trapElement: i } = this._config;
+      if (t === document || t === i || i.contains(t)) return;
+      let n = G.focusableChildren(i);
+      0 === n.length
+        ? i.focus()
+        : this._lastTabNavDirection === tQ
+        ? n[n.length - 1].focus()
+        : n[0].focus();
     }
-
-    _getConfig(config) {
-      config = { ...Default$6, ...(typeof config === "object" ? config : {}) };
-      typeCheckConfig(NAME$7, config, DefaultType$6);
-      return config;
+    _handleKeydown(e) {
+      "Tab" === e.key &&
+        (this._lastTabNavDirection = e.shiftKey ? tQ : "forward");
+    }
+    _getConfig(e) {
+      return (
+        c("focustrap", (e = { ...tK, ...("object" == typeof e ? e : {}) }), tz),
+        e
+      );
     }
   }
-
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Modal to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Modal);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): offcanvas.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const NAME$5 = "offcanvas";
-  const DATA_KEY$5 = "bs.offcanvas";
-  const EVENT_KEY$5 = `.${DATA_KEY$5}`;
-  const DATA_API_KEY$2 = ".data-api";
-  const EVENT_LOAD_DATA_API$1 = `load${EVENT_KEY$5}${DATA_API_KEY$2}`;
-  const ESCAPE_KEY = "Escape";
-  const Default$4 = {
-    backdrop: true,
-    keyboard: true,
-    scroll: false,
-  };
-  const DefaultType$4 = {
-    backdrop: "boolean",
-    keyboard: "boolean",
-    scroll: "boolean",
-  };
-  const CLASS_NAME_SHOW$3 = "show";
-  const CLASS_NAME_BACKDROP = "offcanvas-backdrop";
-  const OPEN_SELECTOR = ".offcanvas.show";
-  const EVENT_SHOW$2 = `show${EVENT_KEY$5}`;
-  const EVENT_SHOWN$2 = `shown${EVENT_KEY$5}`;
-  const EVENT_HIDE$2 = `hide${EVENT_KEY$5}`;
-  const EVENT_HIDDEN$2 = `hidden${EVENT_KEY$5}`;
-  const EVENT_CLICK_DATA_API$1 = `click${EVENT_KEY$5}${DATA_API_KEY$2}`;
-  const EVENT_KEYDOWN_DISMISS = `keydown.dismiss${EVENT_KEY$5}`;
-  const SELECTOR_DATA_TOGGLE$1 = '[data-bs-toggle="offcanvas"]';
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
-
-  class Offcanvas extends BaseComponent {
-    constructor(element, config) {
-      super(element);
-      this._config = this._getConfig(config);
-      this._isShown = false;
-      this._backdrop = this._initializeBackDrop();
-      this._focustrap = this._initializeFocusTrap();
-
-      this._addEventListeners();
-    } // Getters
-
+  b(Modal);
+  let t3 = "offcanvas",
+    t2 = ".bs.offcanvas",
+    tZ = ".data-api",
+    t4 = `load${t2}${tZ}`,
+    t6 = { backdrop: !0, keyboard: !0, scroll: !1 },
+    tG = { backdrop: "boolean", keyboard: "boolean", scroll: "boolean" },
+    tJ = "show",
+    t5 = ".offcanvas.show",
+    t7 = `show${t2}`,
+    ie = `shown${t2}`,
+    it = `hide${t2}`,
+    ii = `hidden${t2}`,
+    is = `click${t2}${tZ}`,
+    ir = `keydown.dismiss${t2}`;
+  class io extends B {
+    constructor(e, t) {
+      super(e),
+        (this._config = this._getConfig(t)),
+        (this._isShown = !1),
+        (this._backdrop = this._initializeBackDrop()),
+        (this._focustrap = this._initializeFocusTrap()),
+        this._addEventListeners();
+    }
     static get NAME() {
-      return NAME$5;
+      return t3;
     }
-
     static get Default() {
-      return Default$4;
-    } // Public
-
-    toggle(relatedTarget) {
-      return this._isShown ? this.hide() : this.show(relatedTarget);
+      return t6;
     }
-
-    show(relatedTarget) {
-      if (this._isShown) {
-        return;
-      }
-
-      const showEvent = EventHandler.trigger(this._element, EVENT_SHOW$2, {
-        relatedTarget,
-      });
-
-      if (showEvent.defaultPrevented) {
-        return;
-      }
-
-      this._isShown = true;
-      this._element.style.visibility = "visible";
-
-      this._backdrop.show();
-
-      if (!this._config.scroll) {
-        new ScrollBarHelper().hide();
-      }
-
-      this._element.removeAttribute("aria-hidden");
-
-      this._element.setAttribute("aria-modal", true);
-
-      this._element.setAttribute("role", "dialog");
-
-      this._element.classList.add(CLASS_NAME_SHOW$3);
-
-      const completeCallBack = () => {
-        if (!this._config.scroll) {
-          this._focustrap.activate();
-        }
-
-        EventHandler.trigger(this._element, EVENT_SHOWN$2, {
-          relatedTarget,
-        });
+    toggle(e) {
+      return this._isShown ? this.hide() : this.show(e);
+    }
+    show(e) {
+      if (this._isShown) return;
+      let t = P.trigger(this._element, t7, { relatedTarget: e });
+      if (t.defaultPrevented) return;
+      (this._isShown = !0),
+        (this._element.style.visibility = "visible"),
+        this._backdrop.show(),
+        this._config.scroll || new tR().hide(),
+        this._element.removeAttribute("aria-hidden"),
+        this._element.setAttribute("aria-modal", !0),
+        this._element.setAttribute("role", "dialog"),
+        this._element.classList.add(tJ);
+      let i = () => {
+        this._config.scroll || this._focustrap.activate(),
+          P.trigger(this._element, ie, { relatedTarget: e });
       };
-
-      this._queueCallback(completeCallBack, this._element, true);
+      this._queueCallback(i, this._element, !0);
     }
-
     hide() {
-      if (!this._isShown) {
-        return;
-      }
-
-      const hideEvent = EventHandler.trigger(this._element, EVENT_HIDE$2);
-
-      if (hideEvent.defaultPrevented) {
-        return;
-      }
-
-      this._focustrap.deactivate();
-
-      this._element.blur();
-
-      this._isShown = false;
-
-      this._element.classList.remove(CLASS_NAME_SHOW$3);
-
-      this._backdrop.hide();
-
-      const completeCallback = () => {
-        this._element.setAttribute("aria-hidden", true);
-
-        this._element.removeAttribute("aria-modal");
-
-        this._element.removeAttribute("role");
-
-        this._element.style.visibility = "hidden";
-
-        if (!this._config.scroll) {
-          new ScrollBarHelper().reset();
-        }
-
-        EventHandler.trigger(this._element, EVENT_HIDDEN$2);
+      if (!this._isShown) return;
+      let e = P.trigger(this._element, it);
+      if (e.defaultPrevented) return;
+      this._focustrap.deactivate(),
+        this._element.blur(),
+        (this._isShown = !1),
+        this._element.classList.remove(tJ),
+        this._backdrop.hide();
+      let t = () => {
+        this._element.setAttribute("aria-hidden", !0),
+          this._element.removeAttribute("aria-modal"),
+          this._element.removeAttribute("role"),
+          (this._element.style.visibility = "hidden"),
+          this._config.scroll || new tR().reset(),
+          P.trigger(this._element, ii);
       };
-
-      this._queueCallback(completeCallback, this._element, true);
+      this._queueCallback(t, this._element, !0);
     }
-
     dispose() {
-      this._backdrop.dispose();
-
-      this._focustrap.deactivate();
-
-      super.dispose();
-    } // Private
-
-    _getConfig(config) {
-      config = {
-        ...Default$4,
-        ...Manipulator.getDataAttributes(this._element),
-        ...(typeof config === "object" ? config : {}),
-      };
-      typeCheckConfig(NAME$5, config, DefaultType$4);
-      return config;
+      this._backdrop.dispose(), this._focustrap.deactivate(), super.dispose();
     }
-
+    _getConfig(e) {
+      return (
+        c(
+          t3,
+          (e = {
+            ...t6,
+            ...Z.getDataAttributes(this._element),
+            ...("object" == typeof e ? e : {}),
+          }),
+          tG
+        ),
+        e
+      );
+    }
     _initializeBackDrop() {
-      return new Backdrop({
-        className: CLASS_NAME_BACKDROP,
+      return new tF({
+        className: "offcanvas-backdrop",
         isVisible: this._config.backdrop,
-        isAnimated: true,
+        isAnimated: !0,
         rootElement: this._element.parentNode,
         clickCallback: () => this.hide(),
       });
     }
-
     _initializeFocusTrap() {
-      return new FocusTrap({
-        trapElement: this._element,
+      return new t1({ trapElement: this._element });
+    }
+    _addEventListeners() {
+      P.on(this._element, ir, (e) => {
+        this._config.keyboard && "Escape" === e.key && this.hide();
       });
     }
-
-    _addEventListeners() {
-      EventHandler.on(this._element, EVENT_KEYDOWN_DISMISS, (event) => {
-        if (this._config.keyboard && event.key === ESCAPE_KEY) {
-          this.hide();
-        }
-      });
-    } // Static
-
-    static jQueryInterface(config) {
+    static jQueryInterface(e) {
       return this.each(function () {
-        const data = Offcanvas.getOrCreateInstance(this, config);
-
-        if (typeof config !== "string") {
-          return;
+        let t = io.getOrCreateInstance(this, e);
+        if ("string" == typeof e) {
+          if (void 0 === t[e] || e.startsWith("_") || "constructor" === e)
+            throw TypeError(`No method named "${e}"`);
+          t[e](this);
         }
-
-        if (
-          data[config] === undefined ||
-          config.startsWith("_") ||
-          config === "constructor"
-        ) {
-          throw new TypeError(`No method named "${config}"`);
-        }
-
-        data[config](this);
       });
     }
   }
-  /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
-   */
-
-  EventHandler.on(
-    document,
-    EVENT_CLICK_DATA_API$1,
-    SELECTOR_DATA_TOGGLE$1,
-    function (event) {
-      const target = getElementFromSelector(this);
-
-      if (["A", "AREA"].includes(this.tagName)) {
-        event.preventDefault();
-      }
-
-      if (isDisabled(this)) {
-        return;
-      }
-
-      EventHandler.one(target, EVENT_HIDDEN$2, () => {
-        // focus on trigger when it is closed
-        if (isVisible(this)) {
-          this.focus();
-        }
-      }); // avoid conflict when clicking a toggler of an offcanvas, while another is open
-
-      const allReadyOpen = SelectorEngine.findOne(OPEN_SELECTOR);
-
-      if (allReadyOpen && allReadyOpen !== target) {
-        Offcanvas.getInstance(allReadyOpen).hide();
-      }
-
-      const data = Offcanvas.getOrCreateInstance(target);
-      data.toggle(this);
-    }
-  );
-  EventHandler.on(window, EVENT_LOAD_DATA_API$1, () =>
-    SelectorEngine.find(OPEN_SELECTOR).forEach((el) =>
-      Offcanvas.getOrCreateInstance(el).show()
-    )
-  );
-  enableDismissTrigger(Offcanvas);
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   */
-
-  defineJQueryPlugin(Offcanvas);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/sanitizer.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  const uriAttributes = new Set([
-    "background",
-    "cite",
-    "href",
-    "itemtype",
-    "longdesc",
-    "poster",
-    "src",
-    "xlink:href",
-  ]);
-  const ARIA_ATTRIBUTE_PATTERN = /^aria-[\w-]*$/i;
-  /**
-   * A pattern that recognizes a commonly useful subset of URLs that are safe.
-   *
-   * Shoutout to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
-   */
-
-  const SAFE_URL_PATTERN =
-    /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^#&/:?]*(?:[#/?]|$))/i;
-  /**
-   * A pattern that matches safe data URLs. Only matches image, video and audio types.
-   *
-   * Shoutout to Angular https://github.com/angular/angular/blob/12.2.x/packages/core/src/sanitization/url_sanitizer.ts
-   */
-
-  const DATA_URL_PATTERN =
-    /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[\d+/a-z]+=*$/i;
-
-  const allowedAttribute = (attribute, allowedAttributeList) => {
-    const attributeName = attribute.nodeName.toLowerCase();
-
-    if (allowedAttributeList.includes(attributeName)) {
-      if (uriAttributes.has(attributeName)) {
-        return Boolean(
-          SAFE_URL_PATTERN.test(attribute.nodeValue) ||
-            DATA_URL_PATTERN.test(attribute.nodeValue)
+  P.on(document, is, '[data-bs-toggle="offcanvas"]', function (e) {
+    let t = s(this);
+    if ((["A", "AREA"].includes(this.tagName) && e.preventDefault(), u(this)))
+      return;
+    P.one(t, ii, () => {
+      f(this) && this.focus();
+    });
+    let i = G.findOne(t5);
+    i && i !== t && io.getInstance(i).hide();
+    let n = io.getOrCreateInstance(t);
+    n.toggle(this);
+  }),
+    P.on(window, t4, () =>
+      G.find(t5).forEach((e) => io.getOrCreateInstance(e).show())
+    ),
+    j(io),
+    b(io);
+  let ia = new Set([
+      "background",
+      "cite",
+      "href",
+      "itemtype",
+      "longdesc",
+      "poster",
+      "src",
+      "xlink:href",
+    ]),
+    il = /^(?:(?:https?|mailto|ftp|tel|file|sms):|[^#&/:?]*(?:[#/?]|$))/i,
+    ic =
+      /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[\d+/a-z]+=*$/i,
+    iu = (e, t) => {
+      let i = e.nodeName.toLowerCase();
+      if (t.includes(i))
+        return (
+          !ia.has(i) || Boolean(il.test(e.nodeValue) || ic.test(e.nodeValue))
         );
-      }
-
-      return true;
-    }
-
-    const regExp = allowedAttributeList.filter(
-      (attributeRegex) => attributeRegex instanceof RegExp
-    ); // Check if a regular expression validates the attribute.
-
-    for (let i = 0, len = regExp.length; i < len; i++) {
-      if (regExp[i].test(attributeName)) {
-        return true;
-      }
-    }
-
-    return false;
-  };
-
-  const DefaultAllowlist = {
-    // Global attributes allowed on any supplied element below.
-    "*": ["class", "dir", "id", "lang", "role", ARIA_ATTRIBUTE_PATTERN],
-    a: ["target", "href", "title", "rel"],
-    area: [],
-    b: [],
-    br: [],
-    col: [],
-    code: [],
-    div: [],
-    em: [],
-    hr: [],
-    h1: [],
-    h2: [],
-    h3: [],
-    h4: [],
-    h5: [],
-    h6: [],
-    i: [],
-    img: ["src", "srcset", "alt", "title", "width", "height"],
-    li: [],
-    ol: [],
-    p: [],
-    pre: [],
-    s: [],
-    small: [],
-    span: [],
-    sub: [],
-    sup: [],
-    strong: [],
-    u: [],
-    ul: [],
-  };
-  function sanitizeHtml(unsafeHtml, allowList, sanitizeFn) {
-    if (!unsafeHtml.length) {
-      return unsafeHtml;
-    }
-
-    if (sanitizeFn && typeof sanitizeFn === "function") {
-      return sanitizeFn(unsafeHtml);
-    }
-
-    const domParser = new window.DOMParser();
-    const createdDocument = domParser.parseFromString(unsafeHtml, "text/html");
-    const elements = [].concat(...createdDocument.body.querySelectorAll("*"));
-
-    for (let i = 0, len = elements.length; i < len; i++) {
-      const element = elements[i];
-      const elementName = element.nodeName.toLowerCase();
-
-      if (!Object.keys(allowList).includes(elementName)) {
-        element.remove();
+      let n = t.filter((e) => e instanceof RegExp);
+      for (let s = 0, r = n.length; s < r; s++) if (n[s].test(i)) return !0;
+      return !1;
+    };
+  function ih(e, t, i) {
+    if (!e.length) return e;
+    if (i && "function" == typeof i) return i(e);
+    let n = new window.DOMParser(),
+      s = n.parseFromString(e, "text/html"),
+      r = [].concat(...s.body.querySelectorAll("*"));
+    for (let o = 0, a = r.length; o < a; o++) {
+      let l = r[o],
+        c = l.nodeName.toLowerCase();
+      if (!Object.keys(t).includes(c)) {
+        l.remove();
         continue;
       }
-
-      const attributeList = [].concat(...element.attributes);
-      const allowedAttributes = [].concat(
-        allowList["*"] || [],
-        allowList[elementName] || []
-      );
-      attributeList.forEach((attribute) => {
-        if (!allowedAttribute(attribute, allowedAttributes)) {
-          element.removeAttribute(attribute.nodeName);
-        }
+      let f = [].concat(...l.attributes),
+        u = [].concat(t["*"] || [], t[c] || []);
+      f.forEach((e) => {
+        iu(e, u) || l.removeAttribute(e.nodeName);
       });
     }
-
-    return createdDocument.body.innerHTML;
+    return s.body.innerHTML;
   }
-
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Tooltip to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Tooltip);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): popover.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const NAME$3 = "popover";
-  const DATA_KEY$3 = "bs.popover";
-  const EVENT_KEY$3 = `.${DATA_KEY$3}`;
-  const CLASS_PREFIX = "bs-popover";
-  const Default$2 = {
-    ...Tooltip.Default,
-    placement: "right",
-    offset: [0, 8],
-    trigger: "click",
-    content: "",
-    template:
-      '<div class="popover" role="tooltip">' +
-      '<div class="popover-arrow"></div>' +
-      '<h3 class="popover-header"></h3>' +
-      '<div class="popover-body"></div>' +
-      "</div>",
-  };
-  const DefaultType$2 = {
-    ...Tooltip.DefaultType,
-    content: "(string|element|function)",
-  };
-  const Event$1 = {
-    HIDE: `hide${EVENT_KEY$3}`,
-    HIDDEN: `hidden${EVENT_KEY$3}`,
-    SHOW: `show${EVENT_KEY$3}`,
-    SHOWN: `shown${EVENT_KEY$3}`,
-    INSERTED: `inserted${EVENT_KEY$3}`,
-    CLICK: `click${EVENT_KEY$3}`,
-    FOCUSIN: `focusin${EVENT_KEY$3}`,
-    FOCUSOUT: `focusout${EVENT_KEY$3}`,
-    MOUSEENTER: `mouseenter${EVENT_KEY$3}`,
-    MOUSELEAVE: `mouseleave${EVENT_KEY$3}`,
-  };
-  const SELECTOR_TITLE = ".popover-header";
-  const SELECTOR_CONTENT = ".popover-body";
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
-
-  class Popover extends Tooltip {
-    // Getters
+  b(Tooltip);
+  let id = ".bs.popover",
+    ip = {
+      ...Tooltip.Default,
+      placement: "right",
+      offset: [0, 8],
+      trigger: "click",
+      content: "",
+      template:
+        '<div class="popover" role="tooltip"><div class="popover-arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
+    },
+    im = { ...Tooltip.DefaultType, content: "(string|element|function)" },
+    ig = {
+      HIDE: `hide${id}`,
+      HIDDEN: `hidden${id}`,
+      SHOW: `show${id}`,
+      SHOWN: `shown${id}`,
+      INSERTED: `inserted${id}`,
+      CLICK: `click${id}`,
+      FOCUSIN: `focusin${id}`,
+      FOCUSOUT: `focusout${id}`,
+      MOUSEENTER: `mouseenter${id}`,
+      MOUSELEAVE: `mouseleave${id}`,
+    };
+  class i8 extends Tooltip {
     static get Default() {
-      return Default$2;
+      return ip;
     }
-
     static get NAME() {
-      return NAME$3;
+      return "popover";
     }
-
     static get Event() {
-      return Event$1;
+      return ig;
     }
-
     static get DefaultType() {
-      return DefaultType$2;
-    } // Overrides
-
+      return im;
+    }
     isWithContent() {
       return this.getTitle() || this._getContent();
     }
-
-    setContent(tip) {
-      this._sanitizeAndSetContent(tip, this.getTitle(), SELECTOR_TITLE);
-
-      this._sanitizeAndSetContent(tip, this._getContent(), SELECTOR_CONTENT);
-    } // Private
-
+    setContent(e) {
+      this._sanitizeAndSetContent(e, this.getTitle(), ".popover-header"),
+        this._sanitizeAndSetContent(e, this._getContent(), ".popover-body");
+    }
     _getContent() {
       return this._resolvePossibleFunction(this._config.content);
     }
-
     _getBasicClassPrefix() {
-      return CLASS_PREFIX;
-    } // Static
-
-    static jQueryInterface(config) {
+      return "bs-popover";
+    }
+    static jQueryInterface(e) {
       return this.each(function () {
-        const data = Popover.getOrCreateInstance(this, config);
-
-        if (typeof config === "string") {
-          if (typeof data[config] === "undefined") {
-            throw new TypeError(`No method named "${config}"`);
-          }
-
-          data[config]();
+        let t = i8.getOrCreateInstance(this, e);
+        if ("string" == typeof e) {
+          if (void 0 === t[e]) throw TypeError(`No method named "${e}"`);
+          t[e]();
         }
       });
     }
   }
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Popover to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Popover);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): scrollspy.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const NAME$2 = "scrollspy";
-  const DATA_KEY$2 = "bs.scrollspy";
-  const EVENT_KEY$2 = `.${DATA_KEY$2}`;
-  const DATA_API_KEY$1 = ".data-api";
-  const Default$1 = {
-    offset: 10,
-    method: "auto",
-    target: "",
-  };
-  const DefaultType$1 = {
-    offset: "number",
-    method: "string",
-    target: "(string|element)",
-  };
-  const EVENT_ACTIVATE = `activate${EVENT_KEY$2}`;
-  const EVENT_SCROLL = `scroll${EVENT_KEY$2}`;
-  const EVENT_LOAD_DATA_API = `load${EVENT_KEY$2}${DATA_API_KEY$1}`;
-  const CLASS_NAME_DROPDOWN_ITEM = "dropdown-item";
-  const CLASS_NAME_ACTIVE$1 = "active";
-  const SELECTOR_DATA_SPY = '[data-bs-spy="scroll"]';
-  const SELECTOR_NAV_LIST_GROUP$1 = ".nav, .list-group";
-  const SELECTOR_NAV_LINKS = ".nav-link";
-  const SELECTOR_NAV_ITEMS = ".nav-item";
-  const SELECTOR_LIST_ITEMS = ".list-group-item";
-  const SELECTOR_LINK_ITEMS = `${SELECTOR_NAV_LINKS}, ${SELECTOR_LIST_ITEMS}, .${CLASS_NAME_DROPDOWN_ITEM}`;
-  const SELECTOR_DROPDOWN$1 = ".dropdown";
-  const SELECTOR_DROPDOWN_TOGGLE$1 = ".dropdown-toggle";
-  const METHOD_OFFSET = "offset";
-  const METHOD_POSITION = "position";
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
-
-  class ScrollSpy extends BaseComponent {
-    constructor(element, config) {
-      super(element);
-      this._scrollElement =
-        this._element.tagName === "BODY" ? window : this._element;
-      this._config = this._getConfig(config);
-      this._offsets = [];
-      this._targets = [];
-      this._activeTarget = null;
-      this._scrollHeight = 0;
-      EventHandler.on(this._scrollElement, EVENT_SCROLL, () => this._process());
-      this.refresh();
-
-      this._process();
-    } // Getters
-
-    static get Default() {
-      return Default$1;
+  b(i8);
+  let iv = "scrollspy",
+    ib = ".bs.scrollspy",
+    iy = { offset: 10, method: "auto", target: "" },
+    i$ = { offset: "number", method: "string", target: "(string|element)" },
+    iE = `activate${ib}`,
+    iw = `scroll${ib}`,
+    iA = `load${ib}.data-api`,
+    ix = "dropdown-item",
+    iO = "active",
+    iL = ".nav-link",
+    ik = ".list-group-item",
+    iD = `${iL}, ${ik}, .${ix}`,
+    i9 = "position";
+  class iT extends B {
+    constructor(e, t) {
+      super(e),
+        (this._scrollElement =
+          "BODY" === this._element.tagName ? window : this._element),
+        (this._config = this._getConfig(t)),
+        (this._offsets = []),
+        (this._targets = []),
+        (this._activeTarget = null),
+        (this._scrollHeight = 0),
+        P.on(this._scrollElement, iw, () => this._process()),
+        this.refresh(),
+        this._process();
     }
-
+    static get Default() {
+      return iy;
+    }
     static get NAME() {
-      return NAME$2;
-    } // Public
-
+      return iv;
+    }
     refresh() {
-      const autoMethod =
-        this._scrollElement === this._scrollElement.window
-          ? METHOD_OFFSET
-          : METHOD_POSITION;
-      const offsetMethod =
-        this._config.method === "auto" ? autoMethod : this._config.method;
-      const offsetBase =
-        offsetMethod === METHOD_POSITION ? this._getScrollTop() : 0;
-      this._offsets = [];
-      this._targets = [];
-      this._scrollHeight = this._getScrollHeight();
-      const targets = SelectorEngine.find(
-        SELECTOR_LINK_ITEMS,
-        this._config.target
-      );
-      targets
-        .map((element) => {
-          const targetSelector = getSelectorFromElement(element);
-          const target = targetSelector
-            ? SelectorEngine.findOne(targetSelector)
-            : null;
-
-          if (target) {
-            const targetBCR = target.getBoundingClientRect();
-
-            if (targetBCR.width || targetBCR.height) {
-              return [
-                Manipulator[offsetMethod](target).top + offsetBase,
-                targetSelector,
-              ];
-            }
-          }
-
-          return null;
-        })
-        .filter((item) => item)
-        .sort((a, b) => a[0] - b[0])
-        .forEach((item) => {
-          this._offsets.push(item[0]);
-
-          this._targets.push(item[1]);
+      let e =
+          this._scrollElement === this._scrollElement.window ? "offset" : i9,
+        t = "auto" === this._config.method ? e : this._config.method,
+        i = t === i9 ? this._getScrollTop() : 0;
+      (this._offsets = []),
+        (this._targets = []),
+        (this._scrollHeight = this._getScrollHeight());
+      let s = G.find(iD, this._config.target);
+      s.map((e) => {
+        let s = n(e),
+          r = s ? G.findOne(s) : null;
+        if (r) {
+          let o = r.getBoundingClientRect();
+          if (o.width || o.height) return [Z[t](r).top + i, s];
+        }
+        return null;
+      })
+        .filter((e) => e)
+        .sort((e, t) => e[0] - t[0])
+        .forEach((e) => {
+          this._offsets.push(e[0]), this._targets.push(e[1]);
         });
     }
-
     dispose() {
-      EventHandler.off(this._scrollElement, EVENT_KEY$2);
-      super.dispose();
-    } // Private
-
-    _getConfig(config) {
-      config = {
-        ...Default$1,
-        ...Manipulator.getDataAttributes(this._element),
-        ...(typeof config === "object" && config ? config : {}),
-      };
-      config.target = getElement(config.target) || document.documentElement;
-      typeCheckConfig(NAME$2, config, DefaultType$1);
-      return config;
+      P.off(this._scrollElement, ib), super.dispose();
     }
-
+    _getConfig(e) {
+      return (
+        ((e = {
+          ...iy,
+          ...Z.getDataAttributes(this._element),
+          ...("object" == typeof e && e ? e : {}),
+        }).target = l(e.target) || document.documentElement),
+        c(iv, e, i$),
+        e
+      );
+    }
     _getScrollTop() {
       return this._scrollElement === window
         ? this._scrollElement.pageYOffset
         : this._scrollElement.scrollTop;
     }
-
     _getScrollHeight() {
       return (
         this._scrollElement.scrollHeight ||
@@ -5034,621 +2748,303 @@
         )
       );
     }
-
     _getOffsetHeight() {
       return this._scrollElement === window
         ? window.innerHeight
         : this._scrollElement.getBoundingClientRect().height;
     }
-
     _process() {
-      const scrollTop = this._getScrollTop() + this._config.offset;
-
-      const scrollHeight = this._getScrollHeight();
-
-      const maxScroll =
-        this._config.offset + scrollHeight - this._getOffsetHeight();
-
-      if (this._scrollHeight !== scrollHeight) {
-        this.refresh();
-      }
-
-      if (scrollTop >= maxScroll) {
-        const target = this._targets[this._targets.length - 1];
-
-        if (this._activeTarget !== target) {
-          this._activate(target);
-        }
-
+      let e = this._getScrollTop() + this._config.offset,
+        t = this._getScrollHeight(),
+        i = this._config.offset + t - this._getOffsetHeight();
+      if ((this._scrollHeight !== t && this.refresh(), e >= i)) {
+        let n = this._targets[this._targets.length - 1];
+        this._activeTarget !== n && this._activate(n);
         return;
       }
-
-      if (
-        this._activeTarget &&
-        scrollTop < this._offsets[0] &&
-        this._offsets[0] > 0
-      ) {
-        this._activeTarget = null;
-
-        this._clear();
-
+      if (this._activeTarget && e < this._offsets[0] && this._offsets[0] > 0) {
+        (this._activeTarget = null), this._clear();
         return;
       }
-
-      for (let i = this._offsets.length; i--; ) {
-        const isActiveTarget =
-          this._activeTarget !== this._targets[i] &&
-          scrollTop >= this._offsets[i] &&
-          (typeof this._offsets[i + 1] === "undefined" ||
-            scrollTop < this._offsets[i + 1]);
-
-        if (isActiveTarget) {
-          this._activate(this._targets[i]);
-        }
+      for (let s = this._offsets.length; s--; ) {
+        let r =
+          this._activeTarget !== this._targets[s] &&
+          e >= this._offsets[s] &&
+          (void 0 === this._offsets[s + 1] || e < this._offsets[s + 1]);
+        r && this._activate(this._targets[s]);
       }
     }
-
-    _activate(target) {
-      this._activeTarget = target;
-
-      this._clear();
-
-      const queries = SELECTOR_LINK_ITEMS.split(",").map(
-        (selector) =>
-          `${selector}[data-bs-target="${target}"],${selector}[href="${target}"]`
-      );
-      const link = SelectorEngine.findOne(
-        queries.join(","),
-        this._config.target
-      );
-      link.classList.add(CLASS_NAME_ACTIVE$1);
-
-      if (link.classList.contains(CLASS_NAME_DROPDOWN_ITEM)) {
-        SelectorEngine.findOne(
-          SELECTOR_DROPDOWN_TOGGLE$1,
-          link.closest(SELECTOR_DROPDOWN$1)
-        ).classList.add(CLASS_NAME_ACTIVE$1);
-      } else {
-        SelectorEngine.parents(link, SELECTOR_NAV_LIST_GROUP$1).forEach(
-          (listGroup) => {
-            // Set triggered links parents as active
-            // With both <ul> and <nav> markup a parent is the previous sibling of any nav ancestor
-            SelectorEngine.prev(
-              listGroup,
-              `${SELECTOR_NAV_LINKS}, ${SELECTOR_LIST_ITEMS}`
-            ).forEach((item) => item.classList.add(CLASS_NAME_ACTIVE$1)); // Handle special case when .nav-link is inside .nav-item
-
-            SelectorEngine.prev(listGroup, SELECTOR_NAV_ITEMS).forEach(
-              (navItem) => {
-                SelectorEngine.children(navItem, SELECTOR_NAV_LINKS).forEach(
-                  (item) => item.classList.add(CLASS_NAME_ACTIVE$1)
-                );
-              }
-            );
-          }
-        );
-      }
-
-      EventHandler.trigger(this._scrollElement, EVENT_ACTIVATE, {
-        relatedTarget: target,
-      });
+    _activate(e) {
+      (this._activeTarget = e), this._clear();
+      let t = iD
+          .split(",")
+          .map((t) => `${t}[data-bs-target="${e}"],${t}[href="${e}"]`),
+        i = G.findOne(t.join(","), this._config.target);
+      i.classList.add(iO),
+        i.classList.contains(ix)
+          ? G.findOne(".dropdown-toggle", i.closest(".dropdown")).classList.add(
+              iO
+            )
+          : G.parents(i, ".nav, .list-group").forEach((e) => {
+              G.prev(e, `${iL}, ${ik}`).forEach((e) => e.classList.add(iO)),
+                G.prev(e, ".nav-item").forEach((e) => {
+                  G.children(e, iL).forEach((e) => e.classList.add(iO));
+                });
+            }),
+        P.trigger(this._scrollElement, iE, { relatedTarget: e });
     }
-
     _clear() {
-      SelectorEngine.find(SELECTOR_LINK_ITEMS, this._config.target)
-        .filter((node) => node.classList.contains(CLASS_NAME_ACTIVE$1))
-        .forEach((node) => node.classList.remove(CLASS_NAME_ACTIVE$1));
-    } // Static
-
-    static jQueryInterface(config) {
+      G.find(iD, this._config.target)
+        .filter((e) => e.classList.contains(iO))
+        .forEach((e) => e.classList.remove(iO));
+    }
+    static jQueryInterface(e) {
       return this.each(function () {
-        const data = ScrollSpy.getOrCreateInstance(this, config);
-
-        if (typeof config !== "string") {
-          return;
+        let t = iT.getOrCreateInstance(this, e);
+        if ("string" == typeof e) {
+          if (void 0 === t[e]) throw TypeError(`No method named "${e}"`);
+          t[e]();
         }
-
-        if (typeof data[config] === "undefined") {
-          throw new TypeError(`No method named "${config}"`);
-        }
-
-        data[config]();
       });
     }
   }
-  /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
-   */
-
-  EventHandler.on(window, EVENT_LOAD_DATA_API, () => {
-    SelectorEngine.find(SELECTOR_DATA_SPY).forEach((spy) => new ScrollSpy(spy));
-  });
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .ScrollSpy to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(ScrollSpy);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): tab.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const NAME$1 = "tab";
-  const DATA_KEY$1 = "bs.tab";
-  const EVENT_KEY$1 = `.${DATA_KEY$1}`;
-  const DATA_API_KEY = ".data-api";
-  const EVENT_HIDE$1 = `hide${EVENT_KEY$1}`;
-  const EVENT_HIDDEN$1 = `hidden${EVENT_KEY$1}`;
-  const EVENT_SHOW$1 = `show${EVENT_KEY$1}`;
-  const EVENT_SHOWN$1 = `shown${EVENT_KEY$1}`;
-  const EVENT_CLICK_DATA_API = `click${EVENT_KEY$1}${DATA_API_KEY}`;
-  const CLASS_NAME_DROPDOWN_MENU = "dropdown-menu";
-  const CLASS_NAME_ACTIVE = "active";
-  const CLASS_NAME_FADE$1 = "fade";
-  const CLASS_NAME_SHOW$1 = "show";
-  const SELECTOR_DROPDOWN = ".dropdown";
-  const SELECTOR_NAV_LIST_GROUP = ".nav, .list-group";
-  const SELECTOR_ACTIVE = ".active";
-  const SELECTOR_ACTIVE_UL = ":scope > li > .active";
-  const SELECTOR_DATA_TOGGLE =
-    '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]';
-  const SELECTOR_DROPDOWN_TOGGLE = ".dropdown-toggle";
-  const SELECTOR_DROPDOWN_ACTIVE_CHILD = ":scope > .dropdown-menu .active";
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
-
-  class Tab extends BaseComponent {
-    // Getters
+  P.on(window, iA, () => {
+    G.find('[data-bs-spy="scroll"]').forEach((e) => new iT(e));
+  }),
+    b(iT);
+  let iC = ".bs.tab",
+    iI = `hide${iC}`,
+    i_ = `hidden${iC}`,
+    iN = `show${iC}`,
+    iS = `shown${iC}`,
+    iM = `click${iC}.data-api`,
+    iH = "active",
+    iP = "fade",
+    iW = "show",
+    iR = ".active",
+    iB = ":scope > li > .active";
+  class ij extends B {
     static get NAME() {
-      return NAME$1;
-    } // Public
-
+      return "tab";
+    }
     show() {
       if (
         this._element.parentNode &&
         this._element.parentNode.nodeType === Node.ELEMENT_NODE &&
-        this._element.classList.contains(CLASS_NAME_ACTIVE)
-      ) {
+        this._element.classList.contains(iH)
+      )
         return;
+      let e,
+        t = s(this._element),
+        i = this._element.closest(".nav, .list-group");
+      if (i) {
+        let n = "UL" === i.nodeName || "OL" === i.nodeName ? iB : iR;
+        e = (e = G.find(n, i))[e.length - 1];
       }
-
-      let previous;
-      const target = getElementFromSelector(this._element);
-
-      const listElement = this._element.closest(SELECTOR_NAV_LIST_GROUP);
-
-      if (listElement) {
-        const itemSelector =
-          listElement.nodeName === "UL" || listElement.nodeName === "OL"
-            ? SELECTOR_ACTIVE_UL
-            : SELECTOR_ACTIVE;
-        previous = SelectorEngine.find(itemSelector, listElement);
-        previous = previous[previous.length - 1];
-      }
-
-      const hideEvent = previous
-        ? EventHandler.trigger(previous, EVENT_HIDE$1, {
-            relatedTarget: this._element,
-          })
-        : null;
-      const showEvent = EventHandler.trigger(this._element, EVENT_SHOW$1, {
-        relatedTarget: previous,
-      });
-
-      if (
-        showEvent.defaultPrevented ||
-        (hideEvent !== null && hideEvent.defaultPrevented)
-      ) {
-        return;
-      }
-
-      this._activate(this._element, listElement);
-
-      const complete = () => {
-        EventHandler.trigger(previous, EVENT_HIDDEN$1, {
-          relatedTarget: this._element,
-        });
-        EventHandler.trigger(this._element, EVENT_SHOWN$1, {
-          relatedTarget: previous,
-        });
+      let r = e ? P.trigger(e, iI, { relatedTarget: this._element }) : null,
+        o = P.trigger(this._element, iN, { relatedTarget: e });
+      if (o.defaultPrevented || (null !== r && r.defaultPrevented)) return;
+      this._activate(this._element, i);
+      let a = () => {
+        P.trigger(e, i_, { relatedTarget: this._element }),
+          P.trigger(this._element, iS, { relatedTarget: e });
       };
-
-      if (target) {
-        this._activate(target, target.parentNode, complete);
-      } else {
-        complete();
-      }
-    } // Private
-
-    _activate(element, container, callback) {
-      const activeElements =
-        container &&
-        (container.nodeName === "UL" || container.nodeName === "OL")
-          ? SelectorEngine.find(SELECTOR_ACTIVE_UL, container)
-          : SelectorEngine.children(container, SELECTOR_ACTIVE);
-      const active = activeElements[0];
-      const isTransitioning =
-        callback && active && active.classList.contains(CLASS_NAME_FADE$1);
-
-      const complete = () =>
-        this._transitionComplete(element, active, callback);
-
-      if (active && isTransitioning) {
-        active.classList.remove(CLASS_NAME_SHOW$1);
-
-        this._queueCallback(complete, element, true);
-      } else {
-        complete();
-      }
+      t ? this._activate(t, t.parentNode, a) : a();
     }
-
-    _transitionComplete(element, active, callback) {
-      if (active) {
-        active.classList.remove(CLASS_NAME_ACTIVE);
-        const dropdownChild = SelectorEngine.findOne(
-          SELECTOR_DROPDOWN_ACTIVE_CHILD,
-          active.parentNode
-        );
-
-        if (dropdownChild) {
-          dropdownChild.classList.remove(CLASS_NAME_ACTIVE);
-        }
-
-        if (active.getAttribute("role") === "tab") {
-          active.setAttribute("aria-selected", false);
-        }
+    _activate(e, t, i) {
+      let n =
+          t && ("UL" === t.nodeName || "OL" === t.nodeName)
+            ? G.find(iB, t)
+            : G.children(t, iR),
+        s = n[0],
+        r = i && s && s.classList.contains(iP),
+        o = () => this._transitionComplete(e, s, i);
+      s && r ? (s.classList.remove(iW), this._queueCallback(o, e, !0)) : o();
+    }
+    _transitionComplete(e, t, i) {
+      if (t) {
+        t.classList.remove(iH);
+        let n = G.findOne(":scope > .dropdown-menu .active", t.parentNode);
+        n && n.classList.remove(iH),
+          "tab" === t.getAttribute("role") &&
+            t.setAttribute("aria-selected", !1);
       }
-
-      element.classList.add(CLASS_NAME_ACTIVE);
-
-      if (element.getAttribute("role") === "tab") {
-        element.setAttribute("aria-selected", true);
+      e.classList.add(iH),
+        "tab" === e.getAttribute("role") && e.setAttribute("aria-selected", !0),
+        d(e),
+        e.classList.contains(iP) && e.classList.add(iW);
+      let s = e.parentNode;
+      if (
+        (s && "LI" === s.nodeName && (s = s.parentNode),
+        s && s.classList.contains("dropdown-menu"))
+      ) {
+        let r = e.closest(".dropdown");
+        r && G.find(".dropdown-toggle", r).forEach((e) => e.classList.add(iH)),
+          e.setAttribute("aria-expanded", !0);
       }
-
-      reflow(element);
-
-      if (element.classList.contains(CLASS_NAME_FADE$1)) {
-        element.classList.add(CLASS_NAME_SHOW$1);
-      }
-
-      let parent = element.parentNode;
-
-      if (parent && parent.nodeName === "LI") {
-        parent = parent.parentNode;
-      }
-
-      if (parent && parent.classList.contains(CLASS_NAME_DROPDOWN_MENU)) {
-        const dropdownElement = element.closest(SELECTOR_DROPDOWN);
-
-        if (dropdownElement) {
-          SelectorEngine.find(
-            SELECTOR_DROPDOWN_TOGGLE,
-            dropdownElement
-          ).forEach((dropdown) => dropdown.classList.add(CLASS_NAME_ACTIVE));
-        }
-
-        element.setAttribute("aria-expanded", true);
-      }
-
-      if (callback) {
-        callback();
-      }
-    } // Static
-
-    static jQueryInterface(config) {
+      i && i();
+    }
+    static jQueryInterface(e) {
       return this.each(function () {
-        const data = Tab.getOrCreateInstance(this);
-
-        if (typeof config === "string") {
-          if (typeof data[config] === "undefined") {
-            throw new TypeError(`No method named "${config}"`);
-          }
-
-          data[config]();
+        let t = ij.getOrCreateInstance(this);
+        if ("string" == typeof e) {
+          if (void 0 === t[e]) throw TypeError(`No method named "${e}"`);
+          t[e]();
         }
       });
     }
   }
-  /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
-   */
-
-  EventHandler.on(
+  P.on(
     document,
-    EVENT_CLICK_DATA_API,
-    SELECTOR_DATA_TOGGLE,
-    function (event) {
-      if (["A", "AREA"].includes(this.tagName)) {
-        event.preventDefault();
-      }
-
-      if (isDisabled(this)) {
+    iM,
+    '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]',
+    function (e) {
+      if ((["A", "AREA"].includes(this.tagName) && e.preventDefault(), u(this)))
         return;
-      }
-
-      const data = Tab.getOrCreateInstance(this);
-      data.show();
+      let t = ij.getOrCreateInstance(this);
+      t.show();
     }
-  );
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Tab to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Tab);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): toast.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const NAME = "toast";
-  const DATA_KEY = "bs.toast";
-  const EVENT_KEY = `.${DATA_KEY}`;
-  const EVENT_MOUSEOVER = `mouseover${EVENT_KEY}`;
-  const EVENT_MOUSEOUT = `mouseout${EVENT_KEY}`;
-  const EVENT_FOCUSIN = `focusin${EVENT_KEY}`;
-  const EVENT_FOCUSOUT = `focusout${EVENT_KEY}`;
-  const EVENT_HIDE = `hide${EVENT_KEY}`;
-  const EVENT_HIDDEN = `hidden${EVENT_KEY}`;
-  const EVENT_SHOW = `show${EVENT_KEY}`;
-  const EVENT_SHOWN = `shown${EVENT_KEY}`;
-  const CLASS_NAME_FADE = "fade";
-  const CLASS_NAME_HIDE = "hide"; // @deprecated - kept here only for backwards compatibility
-
-  const CLASS_NAME_SHOW = "show";
-  const CLASS_NAME_SHOWING = "showing";
-  const DefaultType = {
-    animation: "boolean",
-    autohide: "boolean",
-    delay: "number",
-  };
-  const Default = {
-    animation: true,
-    autohide: true,
-    delay: 5000,
-  };
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
-
-  class Toast extends BaseComponent {
-    constructor(element, config) {
-      super(element);
-      this._config = this._getConfig(config);
-      this._timeout = null;
-      this._hasMouseInteraction = false;
-      this._hasKeyboardInteraction = false;
-
-      this._setListeners();
-    } // Getters
-
+  ),
+    b(ij);
+  let iq = "toast",
+    iV = ".bs.toast",
+    iX = `mouseover${iV}`,
+    iF = `mouseout${iV}`,
+    iK = `focusin${iV}`,
+    iz = `focusout${iV}`,
+    i0 = `hide${iV}`,
+    iY = `hidden${iV}`,
+    iU = `show${iV}`,
+    iQ = `shown${iV}`,
+    i1 = "hide",
+    i3 = "show",
+    i2 = "showing",
+    iZ = { animation: "boolean", autohide: "boolean", delay: "number" },
+    i4 = { animation: !0, autohide: !0, delay: 5e3 };
+  class i6 extends B {
+    constructor(e, t) {
+      super(e),
+        (this._config = this._getConfig(t)),
+        (this._timeout = null),
+        (this._hasMouseInteraction = !1),
+        (this._hasKeyboardInteraction = !1),
+        this._setListeners();
+    }
     static get DefaultType() {
-      return DefaultType;
+      return iZ;
     }
-
     static get Default() {
-      return Default;
+      return i4;
     }
-
     static get NAME() {
-      return NAME;
-    } // Public
-
+      return iq;
+    }
     show() {
-      const showEvent = EventHandler.trigger(this._element, EVENT_SHOW);
-
-      if (showEvent.defaultPrevented) {
-        return;
-      }
-
-      this._clearTimeout();
-
-      if (this._config.animation) {
-        this._element.classList.add(CLASS_NAME_FADE);
-      }
-
-      const complete = () => {
-        this._element.classList.remove(CLASS_NAME_SHOWING);
-
-        EventHandler.trigger(this._element, EVENT_SHOWN);
-
-        this._maybeScheduleHide();
+      let e = P.trigger(this._element, iU);
+      if (e.defaultPrevented) return;
+      this._clearTimeout(),
+        this._config.animation && this._element.classList.add("fade");
+      let t = () => {
+        this._element.classList.remove(i2),
+          P.trigger(this._element, iQ),
+          this._maybeScheduleHide();
       };
-
-      this._element.classList.remove(CLASS_NAME_HIDE); // @deprecated
-
-      reflow(this._element);
-
-      this._element.classList.add(CLASS_NAME_SHOW);
-
-      this._element.classList.add(CLASS_NAME_SHOWING);
-
-      this._queueCallback(complete, this._element, this._config.animation);
+      this._element.classList.remove(i1),
+        d(this._element),
+        this._element.classList.add(i3),
+        this._element.classList.add(i2),
+        this._queueCallback(t, this._element, this._config.animation);
     }
-
     hide() {
-      if (!this._element.classList.contains(CLASS_NAME_SHOW)) {
-        return;
-      }
-
-      const hideEvent = EventHandler.trigger(this._element, EVENT_HIDE);
-
-      if (hideEvent.defaultPrevented) {
-        return;
-      }
-
-      const complete = () => {
-        this._element.classList.add(CLASS_NAME_HIDE); // @deprecated
-
-        this._element.classList.remove(CLASS_NAME_SHOWING);
-
-        this._element.classList.remove(CLASS_NAME_SHOW);
-
-        EventHandler.trigger(this._element, EVENT_HIDDEN);
+      if (!this._element.classList.contains(i3)) return;
+      let e = P.trigger(this._element, i0);
+      if (e.defaultPrevented) return;
+      let t = () => {
+        this._element.classList.add(i1),
+          this._element.classList.remove(i2),
+          this._element.classList.remove(i3),
+          P.trigger(this._element, iY);
       };
-
-      this._element.classList.add(CLASS_NAME_SHOWING);
-
-      this._queueCallback(complete, this._element, this._config.animation);
+      this._element.classList.add(i2),
+        this._queueCallback(t, this._element, this._config.animation);
     }
-
     dispose() {
-      this._clearTimeout();
-
-      if (this._element.classList.contains(CLASS_NAME_SHOW)) {
-        this._element.classList.remove(CLASS_NAME_SHOW);
-      }
-
-      super.dispose();
-    } // Private
-
-    _getConfig(config) {
-      config = {
-        ...Default,
-        ...Manipulator.getDataAttributes(this._element),
-        ...(typeof config === "object" && config ? config : {}),
-      };
-      typeCheckConfig(NAME, config, this.constructor.DefaultType);
-      return config;
+      this._clearTimeout(),
+        this._element.classList.contains(i3) &&
+          this._element.classList.remove(i3),
+        super.dispose();
     }
-
+    _getConfig(e) {
+      return (
+        c(
+          iq,
+          (e = {
+            ...i4,
+            ...Z.getDataAttributes(this._element),
+            ...("object" == typeof e && e ? e : {}),
+          }),
+          this.constructor.DefaultType
+        ),
+        e
+      );
+    }
     _maybeScheduleHide() {
-      if (!this._config.autohide) {
-        return;
-      }
-
-      if (this._hasMouseInteraction || this._hasKeyboardInteraction) {
-        return;
-      }
-
-      this._timeout = setTimeout(() => {
-        this.hide();
-      }, this._config.delay);
+      this._config.autohide &&
+        !this._hasMouseInteraction &&
+        !this._hasKeyboardInteraction &&
+        (this._timeout = setTimeout(() => {
+          this.hide();
+        }, this._config.delay));
     }
-
-    _onInteraction(event, isInteracting) {
-      switch (event.type) {
+    _onInteraction(e, t) {
+      switch (e.type) {
         case "mouseover":
         case "mouseout":
-          this._hasMouseInteraction = isInteracting;
+          this._hasMouseInteraction = t;
           break;
-
         case "focusin":
         case "focusout":
-          this._hasKeyboardInteraction = isInteracting;
-          break;
+          this._hasKeyboardInteraction = t;
       }
-
-      if (isInteracting) {
+      if (t) {
         this._clearTimeout();
-
         return;
       }
-
-      const nextElement = event.relatedTarget;
-
-      if (
-        this._element === nextElement ||
-        this._element.contains(nextElement)
-      ) {
-        return;
-      }
-
-      this._maybeScheduleHide();
+      let i = e.relatedTarget;
+      !(this._element === i || this._element.contains(i)) &&
+        this._maybeScheduleHide();
     }
-
     _setListeners() {
-      EventHandler.on(this._element, EVENT_MOUSEOVER, (event) =>
-        this._onInteraction(event, true)
-      );
-      EventHandler.on(this._element, EVENT_MOUSEOUT, (event) =>
-        this._onInteraction(event, false)
-      );
-      EventHandler.on(this._element, EVENT_FOCUSIN, (event) =>
-        this._onInteraction(event, true)
-      );
-      EventHandler.on(this._element, EVENT_FOCUSOUT, (event) =>
-        this._onInteraction(event, false)
-      );
+      P.on(this._element, iX, (e) => this._onInteraction(e, !0)),
+        P.on(this._element, iF, (e) => this._onInteraction(e, !1)),
+        P.on(this._element, iK, (e) => this._onInteraction(e, !0)),
+        P.on(this._element, iz, (e) => this._onInteraction(e, !1));
     }
-
     _clearTimeout() {
-      clearTimeout(this._timeout);
-      this._timeout = null;
-    } // Static
-
-    static jQueryInterface(config) {
+      clearTimeout(this._timeout), (this._timeout = null);
+    }
+    static jQueryInterface(e) {
       return this.each(function () {
-        const data = Toast.getOrCreateInstance(this, config);
-
-        if (typeof config === "string") {
-          if (typeof data[config] === "undefined") {
-            throw new TypeError(`No method named "${config}"`);
-          }
-
-          data[config](this);
+        let t = i6.getOrCreateInstance(this, e);
+        if ("string" == typeof e) {
+          if (void 0 === t[e]) throw TypeError(`No method named "${e}"`);
+          t[e](this);
         }
       });
     }
   }
-
-  enableDismissTrigger(Toast);
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Toast to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Toast);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): index.umd.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  const index_umd = {
-    Alert,
-    Button,
-    Carousel,
-    Offcanvas,
-    Popover,
-    ScrollSpy,
-    Tab,
-    Toast,
-  };
-
-  return index_umd;
+  return (
+    j(i6),
+    b(i6),
+    {
+      Alert: F,
+      Button: Y,
+      Carousel: eA,
+      Offcanvas: io,
+      Popover: i8,
+      ScrollSpy: iT,
+      Tab: ij,
+      Toast: i6,
+    }
+  );
 });
-//# sourceMappingURL=bootstrap.bundle.js.map
