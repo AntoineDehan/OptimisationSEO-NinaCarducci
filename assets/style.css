@@ -220,7 +220,7 @@ body {
   height: 100%;
 }
 
-.content-info span {
+.content-info .bold-text {
   font-weight: bold;
 }
 
