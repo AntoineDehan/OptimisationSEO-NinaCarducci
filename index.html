@@ -303,15 +303,26 @@
           referrerpolicy="no-referrer-when-downgrade"
         ></iframe>
       </div>
-      <div class="local-contact-content">
+      <div
+        class="local-contact-content"
+        itemscope
+        itemtype="https://schema.org/LocalBusiness"
+      >
         <div class="content-info">
-          <p>
-            <span>Adresse :</span> 68 avenue Alsace-Lorraine, 33200 Bordeaux
+          <h2><span itemprop="name">Nina Carducci photographe</span></h2>
+          <p
+            itemprop="address"
+            itemscope
+            itemtype="https://schema.org/PostalAddress"
+          >
+            <span>Adresse:</span> 68 avenue Alsace-Lorraine, 33200 Bordeaux
           </p>
-          <p><span>Numéro de téléphone :</span> 05 56 67 78 89</p>
-          <p><span>Horaires :</span> lundi - vendredi 10h - 19h</p>
+          <p itemprop="telephone">
+            <span>Numéro de téléphone:</span> 05 56 67 78 89
+          </p>
+          <p><span>Horaires:</span> lundi-vendredi 10h-19h</p>
         </div>
-        <div class="content-description">
+        <div class="content-description" itemprop="description">
           <p>
             Mon studio photo se trouve dans une maison en pierre bordelaise
             facile d'accès depuis l'avenue Alsace Lorraine, sonner et entrer!
