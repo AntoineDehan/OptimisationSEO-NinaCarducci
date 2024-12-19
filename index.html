@@ -13,16 +13,45 @@
     <meta charset="UTF-8" />
     <title>Nina Carducci - Photographe Professionnelle</title>
     <link rel="icon" href="./assets/images/icon.png" />
+    <meta name="language" content="fr-FR" />
     <meta
       name="description"
       content="Passionée et Professionnelle, Nica Carducci propose des shootings et séances photos, sur Bordeaux et ses alentours, pour capturer un moment ou une émotion"
     />
+    <meta property="og:site_name" content="Nina Carduccci" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ninacarducci.github.io" />
+    <meta
+      property="og:title"
+      content="Nina Carducci - Photographe Professionnelle"
+    />
+    <meta
+      property="og:description"
+      content="Passionée et Professionnelle, Nica Carducci propose des shootings et séances photos, sur Bordeaux et ses alentours, pour capturer un moment ou une émotion"
+    />
+    <meta
+      property="og:image"
+      content="https://ninacarducci.github.io/assets/images/nina.png"
+    />
+    <meta name="twitter:site" content="@monCompteTwitter" />
+    <meta
+      name="twitter:title"
+      content="Nina Carducci - Photographe Professionnelle"
+    />
+    <meta
+      name="twitter:description"
+      content="Passionée et Professionnelle, Nica Carducci propose des shootings et séances photos, sur Bordeaux et ses alentours, pour capturer un moment ou une émotion"
+    />
+    <meta
+      name="twitter:image"
+      content="https://ninacarducci.github.io/assets/images/nina.png"
+    />
+    <meta name="twitter:url" content="https://ninacarducci.github.io" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://ninacarducci.github.io" />
   </head>
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://ninacarducci.github.io" />
-
   <body>
-    <div class="top-header">
+    <header class="top-header">
       <h3 class="name">Nina Carducci</h3>
       <div class="nav">
         <ul>
@@ -42,7 +71,7 @@
           </li>
         </ul>
       </div>
-    </div>
+    </header>
     <div id="header">
       <div
         id="carouselExampleIndicators"
@@ -81,7 +110,7 @@
                 ./assets/images/slider/ryoji-iwata-wUZjnOv7t0g-unsplash.webp       801w
               "
               class="d-block w-100"
-              alt="Personne en tenue professionnelle en tant qu'élèment central, son costume et chemise étant mis en avant par la même uniformité et couleurs que le passage piéton qu'il traverse"
+              alt="Personne en tenue professionnelle de bureau traversant un passage piéton"
             />
           </div>
           <div class="carousel-item">
@@ -105,7 +134,7 @@
                 ./assets/images/slider/edward-cisneros-3_h6-1NPDGw-unsplash.webp       801w
               "
               class="d-block w-100"
-              alt="Un couple de jeune marié s'embrassant pendant leur mariage entourés des invités qui les applaudissent"
+              alt="Un couple de jeune marié s'embrassant entourés des invités qui les applaudissent"
             />
           </div>
         </div>
@@ -168,7 +197,7 @@
             data-gallery-tag="Concert"
             class="gallery-item"
             src="./assets/images/gallery/concerts/aaron-paul-wnX-fXzB6Cw-unsplash.jpg"
-            alt="Photo d'un concert prise depuis la foule avec le haut de la scene et les mains en l'air des spectateurs"
+            alt="Photo d'un concert prise depuis la foule et les mains en l'air des spectateurs"
           />
           <img
             data-gallery-tag="Entreprises"
@@ -210,7 +239,7 @@
             data-gallery-tag="Concert"
             class="gallery-item"
             src="./assets/images/gallery/concerts/austin-neill-hgO1wFPXl3I-unsplash.jpg"
-            alt="Un chanteur sur scene en tant qu'élèment principal de la photo avec uniquement les artifices derrière lui"
+            alt="Un chanteur sur scene en tant qu'élèment principal de la photo levant la main"
           />
           <img
             data-gallery-tag="Entreprises"
@@ -291,9 +320,10 @@
         <figcaption class="quote__author">- Richard Avedon</figcaption>
       </figure>
     </div>
-    <div class="local-contact">
+    <div class="local-contact" id="local">
       <div class="map-container" itemprop="hasMap">
         <iframe
+          title="Carte Google Maps pour accèder au studio de Nina Carduccci"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1048.0682489728767!2d-0.6067416602735626!3d44.84636049403474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd54d9879cd8b791%3A0xab1f22abe3b0995c!2sNina%20Carducci!5e1!3m2!1sfr!2sfr!4v1734512459249!5m2!1sfr!2sfr"
           width="400"
           height="300"
@@ -350,11 +380,11 @@
             N’hésitez pas à m’écrire ! Je vous répondrais en moins de 24 heures
           </p>
           <form action="" method="post">
-            <label>Nom</label>
+            <label for="nom">Nom</label>
             <input type="text" name="nom" id="nom" />
-            <label>Email</label>
+            <label for="email">Email</label>
             <input type="email" name="email" id="email" />
-            <label>Message</label>
+            <label for="message">Message</label>
             <textarea
               name="message"
               id="message"

@@ -99,7 +99,7 @@ body {
 }
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
-  color: #fff;
+  color: black;
   background-color: #beb45a;
   border-radius: 0;
 }
@@ -195,10 +195,9 @@ body {
 }
 
 .local-contact {
-  padding: 100px;
+  padding: 50px;
   display: flex;
   justify-content: center;
-  border-bottom: #beb45a solid 5px;
   background-color: #d8d3a8;
   gap: 5%;
 }
@@ -270,10 +269,16 @@ input[type="submit"] {
   padding: 0.5em 1em;
 }
 
+.visually-hidden {
+  color: red;
+  background-color: red;
+}
+
 @media all and (max-width: 1180px) {
   .picture {
     flex: 2;
   }
+
   #about,
   #contact .container {
     align-items: center;
@@ -292,6 +297,7 @@ input[type="submit"] {
   #about {
     flex-direction: column;
   }
+
   .picture {
     width: 50%;
   }
@@ -344,6 +350,17 @@ input[type="submit"] {
     right: 0;
     z-index: -1;
   }
+
+  .local-contact {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .map-container {
+    width: 350px;
+    height: 275px;
+    margin-bottom: 20px;
+  }
 }
 
 @media all and (max-width: 650px) {
@@ -381,5 +398,22 @@ input[type="submit"] {
   }
   .picture {
     width: 80%;
+  }
+
+  .local-contact {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .map-container {
+    width: 300px;
+    height: 200px;
+    margin-bottom: 25px;
   }
 }
