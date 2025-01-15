@@ -923,21 +923,16 @@
         eA.carouselInterface(e[t], eA.getInstance(e[t]));
     }),
     b(eA),
-    P.on(
-      document,
-      EVENT_CLICK_DATA_API$4,
-      SELECTOR_DATA_TOGGLE$4,
-      function (e) {
-        ("A" === e.target.tagName ||
-          (e.delegateTarget && "A" === e.delegateTarget.tagName)) &&
-          e.preventDefault();
-        let t = n(this),
-          i = G.find(t);
-        i.forEach((e) => {
-          Collapse.getOrCreateInstance(e, { toggle: !1 }).toggle();
-        });
-      }
-    ),
+    P.on(document, function (e) {
+      ("A" === e.target.tagName ||
+        (e.delegateTarget && "A" === e.delegateTarget.tagName)) &&
+        e.preventDefault();
+      let t = n(this),
+        i = G.find(t);
+      i.forEach((e) => {
+        Collapse.getOrCreateInstance(e, { toggle: !1 }).toggle();
+      });
+    }),
     b(Collapse);
   var ex = "bottom",
     eO = "right",
